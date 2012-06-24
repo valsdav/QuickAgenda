@@ -1,0 +1,263 @@
+package it.valsecchi.quickagenda.windows;
+
+import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.component.Session;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JTable;
+import com.toedter.calendar.JYearChooser;
+import com.toedter.calendar.JMonthChooser;
+import com.toedter.calendar.JDayChooser;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import com.toedter.calendar.JCalendar;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
+import javax.swing.JSeparator;
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class MainWindow extends JFrame {
+
+	private static final long serialVersionUID = -2881568803908491595L;
+	private JPanel contentPane;
+	private DataManager data;
+	private JTable table;
+	private JCalendar calendar;
+	private JToolBar toolBar;
+	private JButton btnClienti;
+	private JButton btnLavori;
+	private JButton btnNewSession;
+	private JButton btnChiudi;
+	private JButton btnInfo;
+	private JButton btnOpzioni;
+	private JButton btnSalva;
+	private JSeparator separator;
+
+	public MainWindow(DataManager _data) {
+		addWindowListener(new ThisWindowListener());
+		setBackground(Color.WHITE);
+		setTitle("Quick Agenda");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/ico_small/agenda.png")));
+		// si memorizza la fonte dati
+		data = _data;
+		// si inizializzano i componenti
+		initComponent();
+	}
+
+	private void initComponent() {
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setBounds(100, 100, 1279, 586);
+		contentPane = new JPanel();
+		contentPane.setBackground(UIManager.getColor("Panel.background"));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+
+		// si ricavano i dati per la tabella
+		AbstractTableModel model = this.getTableModel(GregorianCalendar
+				.getInstance());
+		table = new JTable(model);
+		table.addMouseListener(new TableMouseListener());
+		table.setAutoCreateColumnsFromModel(true);
+		calendar = new JCalendar();
+		calendar.addPropertyChangeListener(new CalendarPropertyChangeListener());
+		calendar.getMonthChooser().getComboBox()
+				.setFont(new Font("Tahoma", Font.BOLD, 13));
+		
+		toolBar = new JToolBar();
+		toolBar.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+		toolBar.setFloatable(false);
+		toolBar.setOrientation(SwingConstants.VERTICAL);
+		
+		btnNewSession = new JButton("Aggiungi Nuova Sessione...");
+		btnNewSession.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnNewSession.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/add1.png")));
+		separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 3, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 385, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNewSession))
+					.addGap(28)
+					.addComponent(table, GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(toolBar, GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(table, GroupLayout.PREFERRED_SIZE, 473, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 339, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnNewSession)))
+					.addContainerGap(17, Short.MAX_VALUE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		{
+			btnClienti = new JButton("Gestione Clienti");
+			btnClienti.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+			btnClienti.setFont(new Font("Tahoma", Font.BOLD, 14));
+			btnClienti.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btnClienti.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnClienti.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/users.png")));
+			toolBar.add(btnClienti);
+		}
+		{
+			toolBar.addSeparator();
+			btnLavori = new JButton("Gestione Lavori");
+			btnLavori.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+			btnLavori.setFont(new Font("Tahoma", Font.BOLD, 14));
+			btnLavori.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnLavori.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btnLavori.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/work2.png")));
+			toolBar.add(btnLavori);
+		}
+		
+		btnChiudi = new JButton("Chiudi");
+		btnChiudi.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+		btnChiudi.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnChiudi.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/shutdown_box_red.png")));
+		
+		btnOpzioni = new JButton("Opzioni");
+		btnOpzioni.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+		btnOpzioni.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/option.png")));
+		btnOpzioni.setFont(new Font("Tahoma", Font.BOLD, 14));
+		
+		btnSalva = new JButton("Salva");
+		btnSalva.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+		btnSalva.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnSalva.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/save.png")));
+		toolBar.addSeparator();
+		toolBar.add(btnSalva);
+		toolBar.addSeparator();
+		toolBar.add(btnOpzioni);
+		toolBar.addSeparator();
+		
+		btnInfo = new JButton("Info");
+		btnInfo.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
+		btnInfo.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnInfo.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/info_box_blue.png")));
+		toolBar.add(btnInfo);
+		toolBar.addSeparator();
+		toolBar.add(btnChiudi);
+		contentPane.setLayout(gl_contentPane);
+	}
+
+	private AbstractTableModel getTableModel(Calendar calendar2) {
+		// si deve creare un table model con le Session della data passata come
+		// parametro
+		// si imposta la data nel modo giusto
+		calendar2.set(Calendar.HOUR_OF_DAY, 12);
+		final Calendar current = calendar2;
+		
+		// si crea il data model
+		return new AbstractTableModel() {
+			private static final long serialVersionUID = -8582114483485505968L;
+			//dati
+			// si recuperano le session
+			List<Session> sessions = data.querySessionsByDate(current);
+			// colonne
+			String[] columns = { "ID", "ID del Lavoro", "ID del Cliente",
+					"N° di ore", "Spesa", "Materiali" };
+			
+			@Override
+			public int getRowCount() {
+				return sessions.size();
+			}
+
+			@Override
+			public int getColumnCount() {
+				return columns.length;
+			}
+
+			@Override
+			public Object getValueAt(int row, int column) {
+				switch (column) {
+				case 0:
+					return sessions.get(row).getID();
+				case 1:
+					return sessions.get(row).getWorkID();
+				case 2:
+					return sessions.get(row).getCostumerID();
+				case 3:
+					return sessions.get(row).getHours();
+				case 4:
+					return sessions.get(row).getSpesa();
+				case 5:
+					StringBuilder build = new StringBuilder();
+					for (String s : sessions.get(row).getMateriali()) {
+						build.append(s + ", ");
+					}
+					return build.toString();
+				default:
+					return null;
+				}
+			}
+
+			/**
+			 * Sono editabili i campi n° di ore, spesa e
+			 */
+			@Override
+			public boolean isCellEditable(int a, int b) {
+				return false;
+			}
+		};
+	}
+
+	private class TableMouseListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			//si ricava la riga selezionata
+		}
+	}
+	
+	private class CalendarPropertyChangeListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent arg0) {
+			// si ricava la data selezionata
+						Calendar c = calendar.getCalendar();
+						c.set(Calendar.HOUR_OF_DAY, 12);
+						// si aggiorna la tabella
+						table = new JTable(getTableModel(c));
+		}
+	}
+	private class ThisWindowListener extends WindowAdapter {
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+		}
+	}
+}
