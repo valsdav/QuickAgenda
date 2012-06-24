@@ -225,6 +225,23 @@ public class CostumersManager {
 	}
 
 	/**
+	 * Metodo che verifica l'esistenza di un Costumer identificato dall'id
+	 * passato come parametro.
+	 * 
+	 * @param ID
+	 *            id da controllare
+	 * @return restituisce True se esiste un costumer con l'id passato come
+	 *         parametro
+	 */
+	public boolean exists(String ID) {
+		if (costumersMap.containsKey(ID)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Metodo che restituisce un ID valido da utilizzare. Il metodo genera ID
 	 * finchè non ne trova uno non ancora utilizzato e lo restituisce
 	 */
@@ -254,7 +271,7 @@ public class CostumersManager {
 			String azienda, String indirizzo, String tel, String email) {
 		// a seconda dei parametri si ricerca.
 		// lista di tutti i costumers
-		Collection<Costumer> temp =  costumersMap.values();
+		Collection<Costumer> temp = costumersMap.values();
 		if (nome != null && nome != "") {
 			// allora si ricerca per nome
 			temp = this.queryByNome(nome, temp);

@@ -60,7 +60,7 @@ public class WorksManager {
 			if (worksMap.containsKey(work.getID())) {
 				// se lo contiene già si lancia l'eccezione
 				throw new IDAlreadyExistsException(ElementType.Work,
-						work.getID(),work);
+						work.getID(), work);
 			} else {
 				// si aggiunge
 				worksMap.put(work.getID(), work);
@@ -213,11 +213,28 @@ public class WorksManager {
 		}
 	}
 
-	/**Metodo che restituisce tutti gli Work contenuti nei dati*/
-	public Collection<Work> getAllWorks(){
+	/** Metodo che restituisce tutti gli Work contenuti nei dati */
+	public Collection<Work> getAllWorks() {
 		return worksMap.values();
 	}
-	
+
+	/**
+	 * Metodo che verifica l'esistenza di un Work identificato dall'id passato
+	 * come parametro.
+	 * 
+	 * @param ID
+	 *            id da controllare
+	 * @return restituisce True se esiste un Work con l'id passato come
+	 *         parametro
+	 */
+	public boolean exists(String ID) {
+		if (worksMap.containsKey(ID)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Metodo che restituisce un ID valido da utilizzare. Il metodo genera ID
 	 * finchè non ne trova uno non ancora utilizzato e lo restituisce
@@ -253,9 +270,9 @@ public class WorksManager {
 	 *            stato di completamento
 	 * @return ritorna la lista di Work che corrisponde a tutti i parametri
 	 */
-	public Collection<Work> queryByArguments(String costumerid, String indirizzo,
-			GregorianCalendar iniziolavori, GregorianCalendar finelavori,
-			boolean completed) {
+	public Collection<Work> queryByArguments(String costumerid,
+			String indirizzo, GregorianCalendar iniziolavori,
+			GregorianCalendar finelavori, boolean completed) {
 		// Si ricavano tutti i work tra cui cercare
 		Collection<Work> temp = worksMap.values();
 		// si ricerca
@@ -311,7 +328,7 @@ public class WorksManager {
 	 *            lista di work tra i quali cercare
 	 * @return ritorna i Work che corrispondono ai criteri di ricerca
 	 */
-	private List<Work> queryByIndirizzo(String indirizzo,Collection<Work> set) {
+	private List<Work> queryByIndirizzo(String indirizzo, Collection<Work> set) {
 		List<Work> found = new ArrayList<>();
 		for (Work wk : set) {
 			if (wk.getIndirizzo().contains(indirizzo)) {
@@ -324,7 +341,7 @@ public class WorksManager {
 	/** Metodo pubblico che filtra gli work con l'indirizzo */
 	public List<Work> queryByIndirizzo(String indirizzo) {
 		// Si ricavano tutti i work tra cui cercare
-		return this.queryByIndirizzo(indirizzo,worksMap.values());
+		return this.queryByIndirizzo(indirizzo, worksMap.values());
 	}
 
 	/**
@@ -350,7 +367,7 @@ public class WorksManager {
 	/** Metodo pubblico che filtra gli work con l'inizio lavori */
 	public List<Work> queryByInizioLavori(GregorianCalendar iniziolavori) {
 		// Si ricavano tutti i work tra cui cercare
-		return this.queryByInizioLavori(iniziolavori,worksMap.values());
+		return this.queryByInizioLavori(iniziolavori, worksMap.values());
 	}
 
 	/**

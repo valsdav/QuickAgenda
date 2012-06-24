@@ -1,5 +1,6 @@
 package it.valsecchi.quickagenda.data.component;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import it.valsecchi.quickagenda.data.Utility;
@@ -25,7 +26,7 @@ public class Session {
 	/** ID del cliente a cui appartiene la sessione */
 	private String costumerID;
 	/** Data della sessione */
-	private GregorianCalendar sessionData;
+	private Calendar sessionData;
 	/** Numero di ore della sessione */
 	private int hours;
 	/** Spese della sessione */
@@ -50,7 +51,7 @@ public class Session {
 
 	/** Costruttore di Session con Hash fornita */
 	public Session(String id, String _hash, String workid, String costumerid,
-			GregorianCalendar sessiondata, int _hours, int _spesa,
+			Calendar sessiondata, int _hours, int _spesa,
 			List<String> _materiali) {
 		ID = id;
 		hash = _hash;
@@ -67,11 +68,11 @@ public class Session {
 	 * dati parametro.
 	 */
 	public static String calculateSessionHash(String workid, String costumerid,
-			GregorianCalendar sessiondata) {
-		return Utility.getHash(workid + costumerid + sessiondata.toString());
+			Calendar sessiondata2) {
+		return Utility.getHash(workid + costumerid + sessiondata2.toString());
 	}
 
-	public GregorianCalendar getSessionData() {
+	public Calendar getSessionData() {
 		return sessionData;
 	}
 

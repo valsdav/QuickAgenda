@@ -34,6 +34,10 @@ import org.jdom2.JDOMException;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import javax.swing.JProgressBar;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
  * Finestra che permette la scelta di un file dati e l'inserimento della
@@ -72,7 +76,7 @@ public class OpenDataWindow extends JFrame {
 
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 622, 379);
+		setBounds(100, 100, 622, 391);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -81,6 +85,7 @@ public class OpenDataWindow extends JFrame {
 		// si ricava la lista di path
 		String[] paths = SettingsManager.getDataPaths();
 		cbPath = new JComboBox(paths);
+		cbPath.addItemListener(new CbPathItemListener());
 
 		JLabel lblimmagine = new JLabel("");
 		lblimmagine.setIcon(new ImageIcon(OpenDataWindow.class
@@ -137,161 +142,63 @@ public class OpenDataWindow extends JFrame {
 		progressBar.setIndeterminate(true);
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap(
-												GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(10)
-																										.addComponent(
-																												lblimmagine))
-																						.addComponent(
-																								lblPass,
-																								GroupLayout.PREFERRED_SIZE,
-																								79,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING,
-																								false)
-																						.addComponent(
-																								txtPass)
-																						.addComponent(
-																								cbPath,
-																								0,
-																								336,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								lblLog,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								progressBar,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				confirmImage)
-																		.addGap(137)))
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING,
-																false)
-														.addComponent(
-																btnNext,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																btnSfoglia,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE))
-										.addGap(114)));
-		gl_contentPane
-				.setVerticalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addContainerGap()
-																										.addComponent(
-																												lblimmagine))
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(22)
-																										.addGroup(
-																												gl_contentPane
-																														.createParallelGroup(
-																																Alignment.BASELINE)
-																														.addComponent(
-																																cbPath,
-																																GroupLayout.PREFERRED_SIZE,
-																																GroupLayout.DEFAULT_SIZE,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addComponent(
-																																btnSfoglia))))
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								gl_contentPane
-																										.createParallelGroup(
-																												Alignment.BASELINE)
-																										.addComponent(
-																												lblPass)
-																										.addComponent(
-																												txtPass,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE))
-																						.addComponent(
-																								btnNext))
-																		.addGap(117))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addContainerGap(
-																				136,
-																				Short.MAX_VALUE)
-																		.addComponent(
-																				confirmImage)))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(lblLog)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(progressBar,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap()));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(10)
+									.addComponent(lblimmagine))
+								.addComponent(lblPass, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(txtPass)
+								.addComponent(cbPath, 0, 336, Short.MAX_VALUE)
+								.addComponent(lblLog, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(confirmImage)
+							.addGap(135)))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnNext, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnSfoglia, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(114))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(lblimmagine))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(22)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+										.addComponent(cbPath, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnSfoglia))))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblPass)
+									.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnNext))
+							.addGap(125))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap(137, Short.MAX_VALUE)
+							.addComponent(confirmImage)
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblLog)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+					.addGap(11))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -308,7 +215,7 @@ public class OpenDataWindow extends JFrame {
 				confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
 						.getResource("/ico_128/refresh.png")));
 				lblLog.setText("Caricamento in corso...");
-				timer1 = new Timer(2000, new ActionListener() {
+				timer1 = new Timer(1500, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						timer1.stop();
@@ -400,6 +307,14 @@ public class OpenDataWindow extends JFrame {
 				// si aggiunge alle preferenze
 				SettingsManager.addDataPath(newPath);
 			}
+		}
+	}
+	private class CbPathItemListener implements ItemListener {
+		public void itemStateChanged(ItemEvent arg0) {
+			//si imposta l'icona giusta
+			confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
+					.getResource("/ico_128/lock_pass.png")));
+			lblLog.setText("Scegli un file, inserisci la password e premi la freccia");
 		}
 	}
 }

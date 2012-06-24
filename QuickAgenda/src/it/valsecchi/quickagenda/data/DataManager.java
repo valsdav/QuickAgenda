@@ -24,7 +24,9 @@ import it.valsecchi.quickagenda.data.component.SessionsManager;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.WorksManager;
 import it.valsecchi.quickagenda.data.component.exception.CostumerAlreadyExistsException;
+import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDAlreadyExistsException;
+import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.WorkAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
@@ -46,7 +48,7 @@ import it.valsecchi.quickagenda.data.interfaces.*;
  * @version 1.0
  * 
  */
-public class DataManager implements AddCostumerInterface {
+public class DataManager implements AddCostumerInterface, AddSessionInterface {
 
 	private CostumersManager costumersMan;
 	private WorksManager worksMan;
@@ -462,6 +464,7 @@ public class DataManager implements AddCostumerInterface {
 
 	/**
 	 * Metodo di collegamento con il costumersManager. Il metodo aggiunge un
+	 * 
 	 * costumer ai dati, richiedendo come parametri le varie caratteristiche del
 	 * costumer.
 	 * 
@@ -476,6 +479,7 @@ public class DataManager implements AddCostumerInterface {
 	 *             eccezione lanciata in caso di insufficienza di parametri. Il
 	 *             minimo sono nome e cognome.
 	 */
+	@Override
 	public void addCostumer(String nome, String cognome, String azienda,
 			String indirizzo, String tel, String email)
 			throws CostumerAlreadyExistsException, InsufficientDataException {
@@ -510,6 +514,34 @@ public class DataManager implements AddCostumerInterface {
 	 */
 	public List<Session> querySessionsByDate(Calendar calendar2) {
 		return sessionsMan.queryBySessionData(calendar2);
+	}
+
+	@Override
+	public void addSession(String workid, String costumerid,
+			Calendar sessiondata, int hours, int spesa,
+			List<String> materiali) throws SessionAlreadyExistsException,
+			InsufficientDataException, IDNotFoundException {
+		// si controlla che workid,costumerid,sessiondata non siano
+		// nulli
+		if ((workid == null || workid.equals(""))
+				|| (costumerid == null || costumerid.equals(""))
+				|| (sessiondata == null)) {
+			// si lancia una InsufficientDataException
+			throw new InsufficientDataException("DataManager.addSession", "",
+					"parametri insufficiente");
+		}else{
+			//si controlla l'esistenza di cliente e work
+			if(!costumersMan.exists(costumerid)){
+				//si lancia l'eccezione
+				throw new IDNotFoundException(ElementType.Costumer,costumerid);
+			}
+			if(!worksMan.exists(workid)){
+				//si lancia l'eccezione
+				throw new IDNotFoundException(ElementType.Work,workid);
+			}
+			//si chiama il metodo
+			sessionsMan.addSession(workid, costumerid, sessiondata, hours, spesa, materiali);
+		}
 	}
 
 }

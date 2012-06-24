@@ -15,7 +15,7 @@ import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 public interface AddCostumerInterface {
 
 	/**
-	 * Unico metodo dell'interfaccia che prevede la possibiltà di aggiungere un
+	 * Metodo dell'interfaccia che prevede la possibiltà di aggiungere un
 	 * costumer utilizzando i parametri passati. Il nome e il cognome sono
 	 * necessari e sufficiente e se non vengono fornite verrà lanciata una
 	 * InsufficientDataException.
@@ -32,5 +32,4 @@ public interface AddCostumerInterface {
 	public void addCostumer(String nome, String cognome, String azienda,
 			String indirizzo, String tel, String email)
 			throws CostumerAlreadyExistsException, InsufficientDataException;
-
 }

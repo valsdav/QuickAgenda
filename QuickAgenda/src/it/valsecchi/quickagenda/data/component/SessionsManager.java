@@ -100,7 +100,7 @@ public class SessionsManager {
 	 *             esiste già-
 	 */
 	public void addSession(String workid, String costumerid,
-			GregorianCalendar sessiondata, int hours, int spesa,
+			Calendar sessiondata, int hours, int spesa,
 			List<String> materiali) throws SessionAlreadyExistsException {
 		// si ricava un id valido
 		String id = this.getValidID();
@@ -212,6 +212,19 @@ public class SessionsManager {
 	/** Metodo che restituisce tutte le Session nei dati*/
 	public Collection<Session> getAllSessions(){
 		return sessionsMap.values();
+	}
+	
+	/**
+	 * Metodo che verifica l'esistenza di una Session identificata dall'id passato come parametro.
+	 * @param ID id da controllare
+	 * @return restituisce True se esiste la session con l'id passato come parametro
+	 */
+	public boolean exists(String ID) {
+		if (sessionsMap.containsKey(ID)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
