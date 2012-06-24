@@ -25,10 +25,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.Font;
 
-public class CreateNewDataFileForm extends JFrame {
+public class CreateNewDataFileWindow extends JFrame {
 
 	private static final long serialVersionUID = 1581007532616177256L;
 
@@ -43,9 +45,9 @@ public class CreateNewDataFileForm extends JFrame {
 	private DataManager newData;
 	private Timer time1;
 
-	public CreateNewDataFileForm() {
+	public CreateNewDataFileWindow() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				CreateNewDataFileForm.class
+				CreateNewDataFileWindow.class
 						.getResource("/ico_small/agenda.png")));
 		setTitle("Nuovo file dati");
 		initComponent();
@@ -59,7 +61,7 @@ public class CreateNewDataFileForm extends JFrame {
 		setContentPane(contentPane);
 		currentFrame = this;
 		btnSfoglia = new JButton("Sfoglia...");
-		btnSfoglia.setIcon(new ImageIcon(CreateNewDataFileForm.class
+		btnSfoglia.setIcon(new ImageIcon(CreateNewDataFileWindow.class
 				.getResource("/ico_small/folder.png")));
 		btnSfoglia.addActionListener(new SfogliaClickHandler());
 
@@ -67,7 +69,7 @@ public class CreateNewDataFileForm extends JFrame {
 		lblPath.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		immagine1 = new JLabel("");
-		immagine1.setIcon(new ImageIcon(CreateNewDataFileForm.class
+		immagine1.setIcon(new ImageIcon(CreateNewDataFileWindow.class
 				.getResource("/ico_small/document_new.png")));
 
 		txtPass = new JPasswordField();
@@ -92,11 +94,11 @@ public class CreateNewDataFileForm extends JFrame {
 		btnNext = new JButton("");
 		btnNext.addActionListener(new NextClickHandler());
 		btnNext.setEnabled(false);
-		btnNext.setIcon(new ImageIcon(CreateNewDataFileForm.class
+		btnNext.setIcon(new ImageIcon(CreateNewDataFileWindow.class
 				.getResource("/ico_small/right (1).png")));
 
 		immagine2 = new JLabel("");
-		immagine2.setIcon(new ImageIcon(CreateNewDataFileForm.class
+		immagine2.setIcon(new ImageIcon(CreateNewDataFileWindow.class
 				.getResource("/ico_128/edit.png")));
 		
 		//eventi finestra
@@ -105,7 +107,7 @@ public class CreateNewDataFileForm extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				//si riapre la finestra di inizio
 				Log.info("riapertura finestra di avvio");
-				StartForm form = new StartForm();
+				StartWindow form = new StartWindow();
 				form.setVisible(true);
 				//si chiude questa finestra
 				dispose();
@@ -183,8 +185,6 @@ public class CreateNewDataFileForm extends JFrame {
 				lblPath.setText(newPath);
 				//si abilita il campo password
                 txtPass.setEnabled(true);
-				//si aggiunge alle preferenze
-				SettingsManager.addDataPath(newPath);
 			}
 		}
 	}
@@ -197,10 +197,19 @@ public class CreateNewDataFileForm extends JFrame {
 				// allora si recupera la password e la path
 				String path = (String) lblPath.getText();
 				//nuovo DataManager
-				newData = DataManager.createVoidDataManager(path,txtPass.getPassword());
+				try {
+					newData = DataManager.createVoidDataManager(path,txtPass.getPassword());
+				} catch (IOException e1) {
+					immagine2.setIcon(new ImageIcon(CreateNewDataFileWindow.class
+				.getResource("/ico_128/attention.png")));
+					lblPath.setText("Errore! Scegliere un'altro percorso!");
+					return;
+				}
 				//si imposta l'immagine
-				immagine2.setIcon(new ImageIcon(CreateNewDataFileForm.class
+				immagine2.setIcon(new ImageIcon(CreateNewDataFileWindow.class
 				.getResource("/ico_128/yes.png")));
+				//si aggiunge alle preferenze
+				SettingsManager.addDataPath(path);
 				time1 = new Timer(1000,new ActionListener(){
 
 					@Override

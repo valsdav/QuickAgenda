@@ -44,7 +44,7 @@ import javax.swing.JProgressBar;
  * @version 1.0
  * 
  */
-public class OpenDataForm extends JFrame {
+public class OpenDataWindow extends JFrame {
 
 	private static final long serialVersionUID = -8839774040611149890L;
 
@@ -63,9 +63,9 @@ public class OpenDataForm extends JFrame {
 	private String path;
 	private DataManager data;
 
-	public OpenDataForm() {
+	public OpenDataWindow() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				OpenDataForm.class.getResource("/ico_small/agenda.png")));
+				OpenDataWindow.class.getResource("/ico_small/agenda.png")));
 		setTitle("Carica dati...");
 		initComponent();
 	}
@@ -83,7 +83,7 @@ public class OpenDataForm extends JFrame {
 		cbPath = new JComboBox(paths);
 
 		JLabel lblimmagine = new JLabel("");
-		lblimmagine.setIcon(new ImageIcon(OpenDataForm.class
+		lblimmagine.setIcon(new ImageIcon(OpenDataWindow.class
 				.getResource("/ico_small/folder.png")));
 
 		btnSfoglia = new JButton("Sfoglia...");
@@ -107,12 +107,12 @@ public class OpenDataForm extends JFrame {
 
 		btnNext = new JButton("");
 		btnNext.setEnabled(false);
-		btnNext.setIcon(new ImageIcon(OpenDataForm.class
+		btnNext.setIcon(new ImageIcon(OpenDataWindow.class
 				.getResource("/ico_small/next.png")));
 		btnNext.addActionListener(new NextClickHandler());
 
 		confirmImage = new JLabel("");
-		confirmImage.setIcon(new ImageIcon(OpenDataForm.class
+		confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
 				.getResource("/ico_128/lock_pass.png")));
 
 		lblLog = new JLabel(
@@ -126,7 +126,7 @@ public class OpenDataForm extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				// si riapre il form di inizio
 				Log.info("riapertura finestra di avvio");
-				StartForm form = new StartForm();
+				StartWindow form = new StartWindow();
 				form.setVisible(true);
 				// si chiude questa finestra
 				dispose();
@@ -305,7 +305,7 @@ public class OpenDataForm extends JFrame {
 				path = (String) cbPath.getSelectedItem();
 				// nuovo DataManager
 				// si imposta l'immagine di inizio
-				confirmImage.setIcon(new ImageIcon(OpenDataForm.class
+				confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
 						.getResource("/ico_128/refresh.png")));
 				lblLog.setText("Caricamento in corso...");
 				timer1 = new Timer(2000, new ActionListener() {
@@ -317,7 +317,7 @@ public class OpenDataForm extends JFrame {
 							data = DataManager.loadDataManager(path,
 									txtPass.getPassword());
 							confirmImage.setIcon(new ImageIcon(
-									OpenDataForm.class
+									OpenDataWindow.class
 											.getResource("/ico_128/yes.png")));
 							lblLog.setText("Caricamento completato con successo!");
 
@@ -336,25 +336,25 @@ public class OpenDataForm extends JFrame {
 							
 						} catch (IOException e1) {
 							confirmImage.setIcon(new ImageIcon(
-									OpenDataForm.class
+									OpenDataWindow.class
 											.getResource("/ico_128/warning.png")));
 							lblLog.setText("Errore file!");
 							txtPass.setText("");
 						} catch (CryptographyException e2) {
 							confirmImage.setIcon(new ImageIcon(
-									OpenDataForm.class
+									OpenDataWindow.class
 											.getResource("/ico_128/attention.png")));
 							lblLog.setText("Errore criptografico!");
 							txtPass.setText("");
 						} catch (ParseException | JDOMException e3) {
 							confirmImage.setIcon(new ImageIcon(
-									OpenDataForm.class
+									OpenDataWindow.class
 											.getResource("/ico_128/attention.png")));
 							lblLog.setText("Errore lettura dati!");
 							txtPass.setText("");
 						} catch (InvalidPasswordException e4) {
 							confirmImage.setIcon(new ImageIcon(
-									OpenDataForm.class
+									OpenDataWindow.class
 											.getResource("/ico_128/divieto.png")));
 							lblLog.setText("Password errata!");
 							txtPass.setText("");

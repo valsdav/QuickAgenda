@@ -1,7 +1,7 @@
 package it.valsecchi.quickagenda;
 
 import java.awt.EventQueue;
-import it.valsecchi.quickagenda.windows.StartForm;
+import it.valsecchi.quickagenda.windows.StartWindow;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 
 public class Main {
@@ -10,7 +10,7 @@ public class Main {
 			public void run() {
 				try {
 					Log.info("apertura finestra di avvio");
-					StartForm form = new StartForm();
+					StartWindow form = new StartWindow();
 					form.setVisible(true);					
 				} catch (Exception e) {
 					e.printStackTrace();

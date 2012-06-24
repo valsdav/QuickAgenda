@@ -2,6 +2,8 @@ package it.valsecchi.quickagenda.data;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -261,9 +263,20 @@ public class DataManager implements AddCostumerInterface {
 	 * Metodo factory che restituisce un nuovo DataManager vuoto.
 	 * 
 	 * @return restituisce un DataManager vuoto.
+	 * @throws IOException
+	 *             eccezione lanciata se risulta impossibile creare il file
+	 *             vuoto.
 	 */
-	public static DataManager createVoidDataManager(String path, char[] password) {
+	public static DataManager createVoidDataManager(String path, char[] password)
+			throws IOException {
 		Log.info("creazione di un DataManager vuoto");
+		// si crea il file vuoto
+		try {
+			Files.createFile(Paths.get(path));
+		} catch (IOException e) {
+			Log.error("impossibile creare nuovo file");
+			throw e;
+		}
 		return new DataManager(path, password);
 	}
 

@@ -23,16 +23,16 @@ import java.awt.event.ActionEvent;
  * @version 1.0
  * 
  */
-public class StartForm extends JFrame {
+public class StartWindow extends JFrame {
 
 	private static final long serialVersionUID = 5855814906636103916L;
 	private JPanel contentPane;
 	private JLabel image;
 
-	public StartForm() {
+	public StartWindow() {
 		setTitle("Quick Agenda");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				StartForm.class.getResource("/ico_128/bookmarks.png")));
+				StartWindow.class.getResource("/ico_128/bookmarks.png")));
 		initComponent();
 	}
 
@@ -45,7 +45,7 @@ public class StartForm extends JFrame {
 
 		image = new JLabel("Benvenuto in Quick Agenda!");
 		image.setFont(new Font("Tahoma", Font.BOLD, 15));
-		image.setIcon(new ImageIcon(StartForm.class
+		image.setIcon(new ImageIcon(StartWindow.class
 				.getResource("/ico_128/agenda.png")));
 
 		JButton btnOpen = new JButton("Apri file dati");
@@ -53,18 +53,18 @@ public class StartForm extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// si apre la finestra
 				Log.info("apertura finestra OpenDataForm");
-				OpenDataForm form = new OpenDataForm();
+				OpenDataWindow form = new OpenDataWindow();
 				form.setVisible(true);
 				// si chiude questa
 				dispose();
 			}
 		});
-		btnOpen.setIcon(new ImageIcon(StartForm.class
+		btnOpen.setIcon(new ImageIcon(StartWindow.class
 				.getResource("/ico_128/apri.png")));
 		btnOpen.setFont(new Font("Tahoma", Font.BOLD, 15));
 
 		JButton btnNuovo = new JButton("Nuovo file dati");
-		btnNuovo.setIcon(new ImageIcon(StartForm.class
+		btnNuovo.setIcon(new ImageIcon(StartWindow.class
 				.getResource("/ico_128/new.png")));
 		btnNuovo.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnNuovo.addActionListener(new ActionListener(){
@@ -72,7 +72,7 @@ public class StartForm extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				//si apre la finestra
 				Log.info("apertura finestra CreateNewDataFileForm");
-				CreateNewDataFileForm form = new CreateNewDataFileForm();
+				CreateNewDataFileWindow form = new CreateNewDataFileWindow();
 				form.setVisible(true);
 				//si chiude questa
 				dispose();
