@@ -366,6 +366,17 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 				costsMan.addCostumer(txtNome.getText(), txtCognome.getText(),
 						txtAzienda.getText(), txtIndirizzo.getText(),
 						txtTelefono.getText(), txtEmail.getText());
+				// si sistema l'icona e l'avviso
+				lblAvviso.setText("Cliente aggiunto con successo!");
+				lblImmagine.setIcon(new ImageIcon(AddCostumerWindow.class
+						.getResource("/ico_small/check.png")));
+				// si svuotano i campi
+				txtNome.setText("");
+				txtCognome.setText("");
+				txtAzienda.setText("");
+				txtIndirizzo.setText("");
+				txtTelefono.setText("");
+				txtEmail.setText("");
 			} catch (CostumerAlreadyExistsException exc) {
 				// si avvisa
 				lblAvviso.setText("Cliente già presente nei dati!");
@@ -379,18 +390,7 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 				// si cambia l'avviso
 				lblAvviso
 						.setText("Inserire almeno Nome e Cognome del cliente!");
-			}
-			// si sistema l'icona e l'avviso
-			lblAvviso.setText("Cliente aggiunto con successo!");
-			lblImmagine.setIcon(new ImageIcon(AddCostumerWindow.class
-					.getResource("/ico_small/check.png")));
-			// si svuotano i campi
-			txtNome.setText("");
-			txtCognome.setText("");
-			txtAzienda.setText("");
-			txtIndirizzo.setText("");
-			txtTelefono.setText("");
-			txtEmail.setText("");
+			}	
 		}
 	}
 }

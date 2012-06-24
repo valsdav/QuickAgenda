@@ -19,12 +19,11 @@ public interface AddSessionInterface {
 
 	/**
 	 * Metodo definito dall'interfaccia necessario per aggiungere ai dati una
-	 * sessione. I dati necessari sono workid, costumerid e sessiondata.
+	 * sessione. I dati necessari sono workid e sessiondata.
 	 * Se non viene fornito almeno uno di questi parametri viene lanciata una
 	 * InsufficientDataException.
 	 * 
 	 * @param workid
-	 * @param costumerid
 	 * @param calendar
 	 * @param hours
 	 * @param spesa
@@ -33,7 +32,7 @@ public interface AddSessionInterface {
 	 * @throws InsufficientDataException
 	 * @throws IDNotFoundException 
 	 */
-	public void addSession(String workid, String costumerid,
+	public void addSession(String workid,
 			Calendar calendar, int hours, int spesa,
 			List<String> materiali) throws SessionAlreadyExistsException,InsufficientDataException, IDNotFoundException;
 

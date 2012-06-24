@@ -505,6 +505,17 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 	}
 
 	/**
+	 * Metodo che restiuisce il Costumer associato a una Session
+	 * @param session_id
+	 * @return
+	 * @throws IDNotFoundException
+	 */
+	public Costumer getCostumerFromSession(String session_id) throws IDNotFoundException{
+		Session s = sessionsMan.getSessionByID(session_id);
+		return costumersMan.getCostumerByID(s.getCostumerID());
+	}
+	
+	/**
 	 * Metodo di collegamento con il sessionsManager. Il metodo ricerca le
 	 * Sessions eseguita in una certa data passata come parametro.
 	 * 
@@ -516,32 +527,41 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		return sessionsMan.queryBySessionData(calendar2);
 	}
 
+	/**
+	 * Metodo di collegamento per l'aggiunta di una Session ai dati.
+	 */
 	@Override
-	public void addSession(String workid, String costumerid,
+	public void addSession(String workid,
 			Calendar sessiondata, int hours, int spesa,
 			List<String> materiali) throws SessionAlreadyExistsException,
 			InsufficientDataException, IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
 		// nulli
 		if ((workid == null || workid.equals(""))
-				|| (costumerid == null || costumerid.equals(""))
 				|| (sessiondata == null)) {
 			// si lancia una InsufficientDataException
 			throw new InsufficientDataException("DataManager.addSession", "",
 					"parametri insufficiente");
 		}else{
-			//si controlla l'esistenza di cliente e work
-			if(!costumersMan.exists(costumerid)){
-				//si lancia l'eccezione
-				throw new IDNotFoundException(ElementType.Costumer,costumerid);
-			}
+			//si controlla l'esistenza ddel work
 			if(!worksMan.exists(workid)){
 				//si lancia l'eccezione
 				throw new IDNotFoundException(ElementType.Work,workid);
 			}
+			//ora si ricava l'id del cliente
+			String costumerid = worksMan.getWorkByID(workid).getCostumerID();
 			//si chiama il metodo
 			sessionsMan.addSession(workid, costumerid, sessiondata, hours, spesa, materiali);
 		}
 	}
 
+	/**
+	 * Metodo che ricava una Session dall'ID
+	 * @param id id della session
+	 * @return
+	 * @throws IDNotFoundException
+	 */
+	public Session getSession(String id) throws IDNotFoundException{
+		return sessionsMan.getSessionByID(id);
+	}
 }

@@ -63,8 +63,6 @@ public class AddSessionWindow extends javax.swing.JFrame {
 
 		txtIDLavoro = new javax.swing.JTextField();
 		lblIDLavoro = new javax.swing.JLabel();
-		lblIDCliente = new javax.swing.JLabel();
-		txtIDCliente = new javax.swing.JTextField();
 		lblData = new javax.swing.JLabel();
 		lblOre = new javax.swing.JLabel();
 		txtOre = new javax.swing.JTextField();
@@ -99,9 +97,6 @@ public class AddSessionWindow extends javax.swing.JFrame {
 
 		lblIDLavoro.setText("ID Lavoro*:");
 		lblIDLavoro.setName("txtNome");
-
-		lblIDCliente.setText("ID Cliente*:");
-		lblIDCliente.setName("txtCognome");
 
 		lblData.setText("Data*:");
 		lblData.setName("txtAzienda");
@@ -138,8 +133,6 @@ public class AddSessionWindow extends javax.swing.JFrame {
 		txtMateriali.setToolTipText("");
 
 		btnIDLavoro = new JButton("...");
-
-		btnIDCliente = new JButton("...");
 		dateChooser = new JDateChooser();
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
@@ -159,38 +152,36 @@ public class AddSessionWindow extends javax.swing.JFrame {
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblIstruzioni, GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
 						.addGroup(layout.createSequentialGroup()
-							.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(txtMateriali)
-								.addComponent(txtSpesa, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)))
-						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-							.addGroup(layout.createSequentialGroup()
-								.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGroup(layout.createSequentialGroup()
-								.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(txtOre, 287, 287, 287)))
+							.addComponent(txtMateriali, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(66))
 						.addGroup(layout.createSequentialGroup()
-							.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(layout.createSequentialGroup()
-									.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtIDLavoro))
-								.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-									.addComponent(lblIDCliente, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtIDCliente, 287, 287, 287)))
+							.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(txtIDLavoro)
 							.addGap(18)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnIDCliente, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnIDLavoro))))
+							.addComponent(btnIDLavoro)))
 					.addGap(63))
 				.addComponent(jToolBar, GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(144))
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(txtOre, 287, 287, 287)
+					.addContainerGap(144, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(txtSpesa, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+					.addGap(144))
 		);
 		layout.setVerticalGroup(
 			layout.createParallelGroup(Alignment.LEADING)
@@ -204,15 +195,10 @@ public class AddSessionWindow extends javax.swing.JFrame {
 						.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnIDLavoro))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblIDCliente, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnIDCliente))
-					.addGap(13)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtOre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -220,7 +206,7 @@ public class AddSessionWindow extends javax.swing.JFrame {
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(12)
 					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtMateriali, GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE))
@@ -237,7 +223,6 @@ public class AddSessionWindow extends javax.swing.JFrame {
 	private javax.swing.JButton addButton;
 	private javax.swing.JButton exitButton;
 	private javax.swing.JLabel lblIDLavoro;
-	private javax.swing.JLabel lblIDCliente;
 	private javax.swing.JLabel lblData;
 	private javax.swing.JLabel lblOre;
 	private javax.swing.JLabel lblSpesa;
@@ -245,14 +230,12 @@ public class AddSessionWindow extends javax.swing.JFrame {
 	private javax.swing.JLabel lblIstruzioni;
 	private javax.swing.JLabel lblAvviso;
 	private javax.swing.JTextField txtIDLavoro;
-	private javax.swing.JTextField txtIDCliente;
 	private javax.swing.JTextField txtOre;
 	private javax.swing.JTextField txtSpesa;
 	private javax.swing.JToolBar jToolBar;
 	private javax.swing.JLabel lblImmagine;
 	private JTextPane txtMateriali;
 	private JButton btnIDLavoro;
-	private JButton btnIDCliente;
 	private JDateChooser dateChooser;
 
 	/** Classe interna che gestisce il click del pulsante add */
@@ -284,9 +267,15 @@ public class AddSessionWindow extends javax.swing.JFrame {
 					nore = Integer.parseInt(txtOre.getText());
 				}
 				sessionsMan.addSession(txtIDLavoro.getText().toUpperCase(),
-						txtIDLavoro.getText().toUpperCase(),
 						dateChooser.getCalendar(),
 						nore,spesa, materiali);
+				//si svuotano i campi
+				lblAvviso.setText("Sessione aggiunta con successo!");
+				txtIDLavoro.setText("");
+				dateChooser.cleanup();
+				txtOre.setText("");
+				txtSpesa.setText("");
+				txtMateriali.setText("Inserire i materiali separati da virgola");
 			} catch (SessionAlreadyExistsException exc) {
 				// si avvisa
 				lblAvviso.setText("Session già presente nei dati!");
@@ -299,7 +288,8 @@ public class AddSessionWindow extends javax.swing.JFrame {
 				lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class
 						.getResource("/ico_small/attention.png")));
 				// si cambia l'avviso
-				lblAvviso.setText("Inserire ID Lavoro, ID Cliente e Data!");
+				lblAvviso.setText("Inserire ID Lavoro e Data!");
+				return;
 			} catch (IDNotFoundException e2) {
 				//eccezione generata se non vengono trovati gli id di riferimento
 				if(e2.getType().equals(ElementType.Costumer)){
@@ -314,6 +304,7 @@ public class AddSessionWindow extends javax.swing.JFrame {
 					// si cambia l'avviso
 					lblAvviso.setText("Lavoro non trovato!");
 				}
+				return;
 			}
 		}
 	}
