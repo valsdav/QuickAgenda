@@ -142,8 +142,12 @@ public class Utility {
 	}
 
 	public static boolean equalsDate(Calendar d1, Calendar d2) {
-		if (d1.get(Calendar.DAY_OF_YEAR) == d2.get(Calendar.DAY_OF_YEAR)) {
-			return true;
+		if (d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR)) {
+			if (d1.get(Calendar.DAY_OF_YEAR) == d2.get(Calendar.DAY_OF_YEAR)) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

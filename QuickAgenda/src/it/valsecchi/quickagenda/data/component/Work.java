@@ -1,7 +1,8 @@
 package it.valsecchi.quickagenda.data.component;
 
 import it.valsecchi.quickagenda.data.Utility;
-import java.util.GregorianCalendar;
+
+import java.util.Calendar;
 
 /**
  * Classe che rappresenta un singolo lavoro (ad esempio un cantiere, un
@@ -20,13 +21,13 @@ public class Work {
 	private String costumerID;
 
 	private String indirizzo;
-	private GregorianCalendar inizioLavori;
-	private GregorianCalendar fineLavori;
+	private Calendar inizioLavori;
+	private Calendar fineLavori;
 	private boolean completed = false;
 
 	/** Costruttore di Word */
 	public Work(String id, String clienteid, String _indirizzo,
-			GregorianCalendar iniziolavori, GregorianCalendar finelavori,boolean _completed) {
+			Calendar iniziolavori, Calendar finelavori,boolean _completed) {
 		ID = id;
 		costumerID = clienteid;
 		indirizzo = _indirizzo;
@@ -40,7 +41,7 @@ public class Work {
 
 	/** Costruttore di Work con Hash */
 	public Work(String id, String _hash, String costumerid, String _indirizzo,
-			GregorianCalendar iniziolavori, GregorianCalendar finelavori,boolean _completed) {
+			Calendar iniziolavori, Calendar finelavori,boolean _completed) {
 		ID = id;
 		hash = _hash;
 		costumerID = costumerid;
@@ -55,7 +56,7 @@ public class Work {
 	 * parametro.
 	 */
 	public static String calculateWorkHash(String costumereid, String indirizzo,
-			GregorianCalendar inizio, GregorianCalendar fine) {
+			Calendar inizio, Calendar fine) {
 		return Utility.getHash(costumereid + indirizzo + inizio.toString()
 				+ fine.toString());
 	}
@@ -76,19 +77,19 @@ public class Work {
 		this.indirizzo = indirizzo;
 	}
 
-	public GregorianCalendar getInizioLavori() {
+	public Calendar getInizioLavori() {
 		return inizioLavori;
 	}
 
-	public void setInizioLavori(GregorianCalendar inizioLavori) {
+	public void setInizioLavori(Calendar inizioLavori) {
 		this.inizioLavori = inizioLavori;
 	}
 
-	public GregorianCalendar getFineLavori() {
+	public Calendar getFineLavori() {
 		return fineLavori;
 	}
 
-	public void setFineLavori(GregorianCalendar fineLavori) {
+	public void setFineLavori(Calendar fineLavori) {
 		this.fineLavori = fineLavori;
 	}
 

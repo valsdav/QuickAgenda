@@ -58,6 +58,7 @@ public class MainWindow extends JFrame {
 	private JSeparator separator;
 	private JButton btnCerca;
 	private JSeparator separator_1;
+	private Timer timer1;
 
 	public MainWindow(DataManager _data) {
 		addWindowListener(new ThisWindowListener());
@@ -302,9 +303,10 @@ public class MainWindow extends JFrame {
 							"/ico_small/check.png")));
 					progress.setMessage("Salvataggio completato!");
 					// timer
-					Timer timer1 = new Timer(2000, new ActionListener() {
+					timer1 = new Timer(2000, new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
+							timer1.stop();
 							// si chiude progress.
 							progress.dispose();
 							// si riapre la finestra di partenza
@@ -358,16 +360,13 @@ public class MainWindow extends JFrame {
 						"/ico_small/check.png")));
 				progress.setMessage("Salvataggio completato!");
 				// timer
-				Timer timer1 = new Timer(1500, new ActionListener() {
+				timer1 = new Timer(1500, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
+						//si ferma il timer
+						timer1.stop();
 						// si chiude progress.
 						progress.dispose();
-						// si riapre la finestra di partenza
-						StartWindow form = new StartWindow();
-						form.setVisible(true);
-						// Si chiude questa
-						dispose();
 					}
 				});
 				timer1.start();

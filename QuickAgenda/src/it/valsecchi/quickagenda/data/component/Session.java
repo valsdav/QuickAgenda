@@ -76,8 +76,8 @@ public class Session {
 		return sessionData;
 	}
 
-	public void setSessionData(GregorianCalendar _sessionData) {
-		sessionData = _sessionData;
+	public void setSessionData(Calendar calendar) {
+		sessionData = calendar;
 	}
 
 	public int getHours() {

@@ -4,8 +4,8 @@ import it.valsecchi.quickagenda.data.Utility;
 import it.valsecchi.quickagenda.data.component.exception.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,8 +105,8 @@ public class WorksManager {
 	 * @throws WorkAlreadyExistsException
 	 *             eccezione che viene lanciata se il work esiste già
 	 */
-	public void addWork(String indirizzo, GregorianCalendar iniziolavori,
-			GregorianCalendar finelavori, boolean completed, String costumerid)
+	public void addWork(String indirizzo, Calendar iniziolavori,
+			Calendar finelavori, boolean completed, String costumerid)
 			throws WorkAlreadyExistsException {
 		// Si ricava un id valido
 		String id = this.getValidID();
@@ -271,8 +271,8 @@ public class WorksManager {
 	 * @return ritorna la lista di Work che corrisponde a tutti i parametri
 	 */
 	public Collection<Work> queryByArguments(String costumerid,
-			String indirizzo, GregorianCalendar iniziolavori,
-			GregorianCalendar finelavori, boolean completed) {
+			String indirizzo, Calendar iniziolavori,
+			Calendar finelavori, boolean completed) {
 		// Si ricavano tutti i work tra cui cercare
 		Collection<Work> temp = worksMap.values();
 		// si ricerca
@@ -353,11 +353,11 @@ public class WorksManager {
 	 *            lista di work tra i quali cercare
 	 * @return ritorna i Work che corrispondono ai criteri di ricerca
 	 */
-	private List<Work> queryByInizioLavori(GregorianCalendar iniziolavori,
+	private List<Work> queryByInizioLavori(Calendar iniziolavori,
 			Collection<Work> set) {
 		List<Work> found = new ArrayList<>();
 		for (Work wk : set) {
-			if (wk.getInizioLavori().equals(iniziolavori)) {
+			if (Utility.equalsDate(wk.getInizioLavori(), iniziolavori)) {
 				found.add(wk);
 			}
 		}
@@ -365,7 +365,7 @@ public class WorksManager {
 	}
 
 	/** Metodo pubblico che filtra gli work con l'inizio lavori */
-	public List<Work> queryByInizioLavori(GregorianCalendar iniziolavori) {
+	public List<Work> queryByInizioLavori(Calendar iniziolavori) {
 		// Si ricavano tutti i work tra cui cercare
 		return this.queryByInizioLavori(iniziolavori, worksMap.values());
 	}
@@ -379,11 +379,11 @@ public class WorksManager {
 	 *            lista di work tra i quali cercare
 	 * @return ritorna i Work che corrispondono ai criteri di ricerca
 	 */
-	private List<Work> queryByFineLavori(GregorianCalendar finelavori,
+	private List<Work> queryByFineLavori(Calendar finelavori,
 			Collection<Work> set) {
 		List<Work> found = new ArrayList<>();
 		for (Work wk : set) {
-			if (wk.getFineLavori().equals(finelavori)) {
+			if (Utility.equalsDate(wk.getFineLavori(), finelavori)) {
 				found.add(wk);
 			}
 		}
@@ -391,7 +391,7 @@ public class WorksManager {
 	}
 
 	/** Metodo pubblico che filtra gli Work con il fine lavori */
-	public List<Work> queryByFineLavori(GregorianCalendar finelavori) {
+	public List<Work> queryByFineLavori(Calendar finelavori) {
 		// Si ricavano tutti i work tra cui cercare
 		return this.queryByFineLavori(finelavori, worksMap.values());
 	}
