@@ -137,6 +137,7 @@ public class MainWindow extends JFrame {
 		);
 		{
 			btnClienti = new JButton("Gestione Clienti");
+			btnClienti.addActionListener(new BtnClientiActionListener());
 			btnClienti.setBackground(UIManager
 					.getColor("ToolBar.dockingBackground"));
 			btnClienti.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -388,6 +389,13 @@ public class MainWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//si apre la finestra di aggiunta
 			AddSessionWindow form = new AddSessionWindow(data);
+			form.setVisible(true);
+		}
+	}
+	private class BtnClientiActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			//form gestione clienti
+			CostumersManagerWindow form = new CostumersManagerWindow(data);
 			form.setVisible(true);
 		}
 	}

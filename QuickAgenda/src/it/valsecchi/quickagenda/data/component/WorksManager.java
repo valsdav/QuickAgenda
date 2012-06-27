@@ -105,13 +105,13 @@ public class WorksManager {
 	 * @throws WorkAlreadyExistsException
 	 *             eccezione che viene lanciata se il work esiste già
 	 */
-	public void addWork(String indirizzo, Calendar iniziolavori,
+	public void addWork(String nome, String indirizzo, Calendar iniziolavori,
 			Calendar finelavori, boolean completed, String costumerid)
 			throws WorkAlreadyExistsException {
 		// Si ricava un id valido
 		String id = this.getValidID();
 		// si ricava un'hash valida
-		String hash = Work.calculateWorkHash(costumerid, indirizzo,
+		String hash = Work.calculateWorkHash(costumerid, nome, indirizzo,
 				iniziolavori, finelavori);
 		// si crea un work
 		Work newWork = new Work(id, hash, costumerid, indirizzo, iniziolavori,
@@ -270,16 +270,19 @@ public class WorksManager {
 	 *            stato di completamento
 	 * @return ritorna la lista di Work che corrisponde a tutti i parametri
 	 */
-	public Collection<Work> queryByArguments(String costumerid,
-			String indirizzo, Calendar iniziolavori,
-			Calendar finelavori, boolean completed) {
+	public Collection<Work> queryByArguments(String costumerid, String nome,
+			String indirizzo, Calendar iniziolavori, Calendar finelavori,
+			boolean completed) {
 		// Si ricavano tutti i work tra cui cercare
 		Collection<Work> temp = worksMap.values();
 		// si ricerca
-		if (costumerid != null && costumerid != "") {
+		if(nome!=null && !nome.equals("")){
+			temp = this.queryByNome(nome);
+		}
+		if (costumerid != null && !costumerid.equals("")) {
 			temp = this.queryByCostumerID(costumerid, temp);
 		}
-		if (indirizzo != null && indirizzo != "") {
+		if (indirizzo != null && !indirizzo .equals("")) {
 			temp = this.queryByIndirizzo(indirizzo, temp);
 		}
 		if (iniziolavori != null) {
@@ -342,6 +345,22 @@ public class WorksManager {
 	public List<Work> queryByIndirizzo(String indirizzo) {
 		// Si ricavano tutti i work tra cui cercare
 		return this.queryByIndirizzo(indirizzo, worksMap.values());
+	}
+
+	/** Metodo privato che filtra gli Work per il nome */
+	private List<Work> queryByNome(String nome, Collection<Work> set) {
+		List<Work> found = new ArrayList<>();
+		for (Work wk : set) {
+			if (wk.getNome().contains(nome)) {
+				found.add(wk);
+			}
+		}
+		return found;
+	}
+
+	/** Metodo pubblico che filtra gli Work per il nome */
+	public List<Work> queryByNome(String nome) {
+		return this.queryByNome(nome, worksMap.values());
 	}
 
 	/**

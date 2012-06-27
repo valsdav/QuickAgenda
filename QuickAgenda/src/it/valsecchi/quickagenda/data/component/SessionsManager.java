@@ -275,10 +275,10 @@ public class SessionsManager {
 		// si ricavano tutte le session da cercare
 		Collection<Session> set =sessionsMap.values();
 		// si ricerca
-		if (workID != null && workID != "") {
+		if (workID != null && !workID.equals("")) {
 			set = this.queryByWorkID(workID, set);
 		}
-		if (costumerID != null && costumerID != "") {
+		if (costumerID != null && !costumerID .equals("")) {
 			set = this.queryByCostumerID(costumerID, set);
 		}
 		if (sessionData != null) {

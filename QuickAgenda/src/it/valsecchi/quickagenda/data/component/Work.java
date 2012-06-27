@@ -15,21 +15,26 @@ public class Work {
 
 	/** Codice di 8 cifre */
 	private String ID;
-	/** L'hash identifica in modo univoco l'oggetto.Ricavata unendo (clienteid,indirizzo,iniziolavori, finelavori) */
+	/**
+	 * L'hash identifica in modo univoco l'oggetto.Ricavata unendo
+	 * (clienteid,indirizzo,iniziolavori, finelavori)
+	 */
 	private String hash;
 	/** ID del cliente a cui appartiene il lavoro */
 	private String costumerID;
-
+	/**Nome del lavoro,identificativo*/
+	private String nome;
 	private String indirizzo;
 	private Calendar inizioLavori;
 	private Calendar fineLavori;
 	private boolean completed = false;
 
 	/** Costruttore di Word */
-	public Work(String id, String clienteid, String _indirizzo,
-			Calendar iniziolavori, Calendar finelavori,boolean _completed) {
+	public Work(String id, String clienteid, String _nome,String _indirizzo,
+			Calendar iniziolavori, Calendar finelavori, boolean _completed) {
 		ID = id;
 		costumerID = clienteid;
+		nome = _nome;
 		indirizzo = _indirizzo;
 		inizioLavori = iniziolavori;
 		fineLavori = finelavori;
@@ -40,11 +45,12 @@ public class Work {
 	}
 
 	/** Costruttore di Work con Hash */
-	public Work(String id, String _hash, String costumerid, String _indirizzo,
-			Calendar iniziolavori, Calendar finelavori,boolean _completed) {
+	public Work(String id, String _hash, String costumerid, String _nome,String _indirizzo,
+			Calendar iniziolavori, Calendar finelavori, boolean _completed) {
 		ID = id;
 		hash = _hash;
 		costumerID = costumerid;
+		nome = _nome;
 		indirizzo = _indirizzo;
 		inizioLavori = iniziolavori;
 		fineLavori = finelavori;
@@ -55,9 +61,9 @@ public class Work {
 	 * Metodo statico che restituisce l'hash di un Work identificato dai dati
 	 * parametro.
 	 */
-	public static String calculateWorkHash(String costumereid, String indirizzo,
-			Calendar inizio, Calendar fine) {
-		return Utility.getHash(costumereid + indirizzo + inizio.toString()
+	public static String calculateWorkHash(String costumereid,String nome,
+			String indirizzo, Calendar inizio, Calendar fine) {
+		return Utility.getHash(costumereid + nome+ indirizzo + inizio.toString()
 				+ fine.toString());
 	}
 
@@ -67,6 +73,14 @@ public class Work {
 		long end = fineLavori.getTimeInMillis();
 		long dif = end - start;
 		return dif / (86400000);
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getIndirizzo() {

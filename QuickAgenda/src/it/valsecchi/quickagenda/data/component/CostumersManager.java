@@ -272,27 +272,27 @@ public class CostumersManager {
 		// a seconda dei parametri si ricerca.
 		// lista di tutti i costumers
 		Collection<Costumer> temp = costumersMap.values();
-		if (nome != null && nome != "") {
+		if (nome != null && !nome.equals("")) {
 			// allora si ricerca per nome
 			temp = this.queryByNome(nome, temp);
 		}
-		if (cognome != null && cognome != "") {
+		if (cognome != null && !cognome.equals("")) {
 			// allora si ricerca per cognome
 			temp = this.queryByCognome(cognome, temp);
 		}
-		if (azienda != null && azienda != "") {
+		if (azienda != null && !azienda.equals("")) {
 			// allora si ricerca per azienda
 			temp = this.queryByAzienda(azienda, temp);
 		}
-		if (indirizzo != null && indirizzo != "") {
+		if (indirizzo != null && !indirizzo.equals("")) {
 			// allora si ricerca per indirizzo
 			temp = this.queryByIndirizzo(indirizzo, temp);
 		}
-		if (tel != null && tel != "") {
+		if (tel != null && !tel.equals("")) {
 			// allora si ricerca per telefono
 			temp = this.queryByTel(tel, temp);
 		}
-		if (email != null && email != "") {
+		if (email != null && !email.equals("")) {
 			// allora si ricerca per email
 			temp = this.queryByEmail(email, temp);
 		}
