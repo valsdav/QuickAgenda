@@ -165,6 +165,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 					path, DataReaderWriter.READ_MODE);
 			Log.info("lettura del document");
 			doc = reader.readData(password);
+			//si elimina il reader
+			reader=null;
 		} catch (IllegalBlockSizeException e) {
 			Log.error("Errore di criptografia generico!");
 			throw new CryptographyException("Errore di criptografia generico!");
@@ -426,6 +428,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			Log.info("scrittura e criptazione dati");
 			writer.writeData(doc, this.password);
 			Log.info("scrittura dati completata");
+			//si elimina il writer
+			writer= null;
 		} catch (FileNotFoundException e) {
 			throw e;
 		} catch (IllegalBlockSizeException e) {
@@ -504,6 +508,12 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		costumersMan.addCostumer(costumer);
 	}
 
+	/**Metodo di collegamento che restituisce un Costumer per ID
+	 * @throws IDNotFoundException */
+	public Costumer getCostumerByID(String id) throws IDNotFoundException{
+		return costumersMan.getCostumerByID(id);
+	}
+	
 	/**
 	 * Metodo che restiuisce il Costumer associato a una Session
 	 * 
@@ -582,5 +592,41 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 	 */
 	public Session getSession(String id) throws IDNotFoundException {
 		return sessionsMan.getSessionByID(id);
+	}
+
+	public List<Costumer> queryCostumerByArg(String campo, String value) {
+		List<Costumer> found = new ArrayList<>();
+		switch (campo) {
+		case "ID":
+			try {
+				Costumer w = costumersMan.getCostumerByID(value);
+				found.add(w);
+			} catch (IDNotFoundException e) {
+				return null;
+			}
+			break;
+		case "Nome":
+			found.addAll(costumersMan.queryByNome(value));
+			break;
+		case "Cognome":
+			found.addAll(costumersMan.queryByCognome(value));
+			break;
+		case "Azienda":
+			found.addAll(costumersMan.queryByAzienda(value));
+			break;
+		case "Indirizzo":
+			found.addAll(costumersMan.queryByIndirizzo(value));
+			break;
+		case "Telefono":
+			found.addAll(costumersMan.queryByTel(value));
+			break;
+		case "Email":
+			found.addAll(costumersMan.queryByEmail(value));
+			break;
+		default:
+			//si ritornano tutti
+			return costumersMan.getAllCostumers();
+		}
+		return found;
 	}
 }

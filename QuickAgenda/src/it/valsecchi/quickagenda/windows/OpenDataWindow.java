@@ -215,7 +215,7 @@ public class OpenDataWindow extends JFrame {
 				confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
 						.getResource("/ico_128/refresh.png")));
 				lblLog.setText("Caricamento in corso...");
-				timer1 = new Timer(1500, new ActionListener() {
+				timer1 = new Timer(1000, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						timer1.stop();

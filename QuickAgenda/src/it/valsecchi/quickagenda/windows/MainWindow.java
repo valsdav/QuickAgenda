@@ -19,6 +19,7 @@ import javax.swing.Timer;
 
 import com.toedter.calendar.JCalendar;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -40,13 +41,15 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Rectangle;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
 
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -2881568803908491595L;
 	private JPanel contentPane;
 	private DataManager data;
-	private JTable table;
 	private JCalendar calendar;
 	private JToolBar toolBar;
 	private JButton btnClienti;
@@ -59,6 +62,9 @@ public class MainWindow extends JFrame {
 	private JButton btnCerca;
 	private JSeparator separator_1;
 	private Timer timer1;
+	private CostumersManagerWindow costsWindow;
+	private JPanel panel;
+	private JTable table;
 
 	public MainWindow(DataManager _data) {
 		addWindowListener(new ThisWindowListener());
@@ -74,7 +80,7 @@ public class MainWindow extends JFrame {
 
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 1279, 605);
+		setBounds(100, 100, 1409, 605);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("Panel.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -83,9 +89,6 @@ public class MainWindow extends JFrame {
 		// si ricavano i dati per la tabella
 		AbstractTableModel model = this.getTableModel(GregorianCalendar
 				.getInstance());
-		table = new JTable(model);
-		table.addMouseListener(new TableMouseListener());
-		table.setAutoCreateColumnsFromModel(true);
 		calendar = new JCalendar();
 		calendar.addPropertyChangeListener(new CalendarPropertyChangeListener());
 		calendar.getMonthChooser().getComboBox()
@@ -103,38 +106,98 @@ public class MainWindow extends JFrame {
 				.getResource("/ico_small/add1.png")));
 		separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
+
+		panel = new JPanel();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 3, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 385, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewSession))
-					.addGap(28)
-					.addComponent(table, GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(table, GroupLayout.PREFERRED_SIZE, 473, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 339, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnNewSession)))
-					.addContainerGap(64, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(toolBar, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
-						.addComponent(separator, GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE))
-					.addContainerGap())
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addComponent(toolBar,
+												GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addComponent(separator,
+												GroupLayout.PREFERRED_SIZE, 3,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																calendar,
+																GroupLayout.PREFERRED_SIZE,
+																385,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																btnNewSession))
+										.addPreferredGap(
+												ComponentPlacement.UNRELATED)
+										.addComponent(panel,
+												GroupLayout.DEFAULT_SIZE, 817,
+												Short.MAX_VALUE)
+										.addContainerGap()));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane
+						.createParallelGroup(Alignment.TRAILING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																toolBar,
+																GroupLayout.DEFAULT_SIZE,
+																832,
+																Short.MAX_VALUE)
+														.addComponent(
+																separator,
+																Alignment.TRAILING,
+																GroupLayout.DEFAULT_SIZE,
+																832,
+																Short.MAX_VALUE)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addContainerGap()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								panel,
+																								GroupLayout.PREFERRED_SIZE,
+																								502,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addComponent(
+																												calendar,
+																												GroupLayout.PREFERRED_SIZE,
+																												339,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addGap(18)
+																										.addComponent(
+																												btnNewSession)))
+																		.addGap(22)))
+										.addContainerGap()));
+		panel.setLayout(new BorderLayout(0, 0));
+
+		table = new JTable(this.getTableModel(Calendar.getInstance()));
+		table.addMouseListener(new TableMouseListener());
+		table.setAutoCreateRowSorter(true);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
+		panel.add(table, BorderLayout.CENTER);
+		panel.add(table.getTableHeader(), BorderLayout.PAGE_START);
 		{
 			btnClienti = new JButton("Gestione Clienti");
 			btnClienti.addActionListener(new BtnClientiActionListener());
@@ -196,75 +259,25 @@ public class MainWindow extends JFrame {
 		btnInfo.setIcon(new ImageIcon(MainWindow.class
 				.getResource("/ico_small/info_box_blue.png")));
 		toolBar.add(btnInfo);
+		// si inizializza la finestra
+		costsWindow = new CostumersManagerWindow(data,CostumersManagerWindow.MODE_NORMAL);
 		contentPane.setLayout(gl_contentPane);
 	}
 
+	/**
+	 * Metodo che costruisce il modello dati della tabella, selezionando le
+	 * session grazie alla data
+	 * 
+	 * @param calendar2
+	 *            data da cercare
+	 * @return restituisce il modello dati da assegrare alla tabella
+	 */
 	private AbstractTableModel getTableModel(Calendar calendar2) {
 		// si deve creare un table model con le Session della data passata come
 		// parametro
 		// si imposta la data nel modo giusto
 		calendar2.set(Calendar.HOUR_OF_DAY, 12);
-		final Calendar current = calendar2;
-
-		// si crea il data model
-		return new AbstractTableModel() {
-			private static final long serialVersionUID = -8582114483485505968L;
-			// dati
-			// si recuperano le session
-			List<Session> sessions = data.querySessionsByDate(current);
-			// colonne
-			String[] columns = { "ID", "ID del Lavoro", "ID del Cliente",
-					"N° di ore", "Spesa", "Materiali" };
-
-			@Override
-			public int getRowCount() {
-				return sessions.size();
-			}
-
-			@Override
-			public int getColumnCount() {
-				return columns.length;
-			}
-
-			@Override
-			public Object getValueAt(int row, int column) {
-				switch (column) {
-				case 0:
-					return sessions.get(row).getID();
-				case 1:
-					return sessions.get(row).getWorkID();
-				case 2:
-					return sessions.get(row).getCostumerID();
-				case 3:
-					return sessions.get(row).getHours();
-				case 4:
-					return sessions.get(row).getSpesa();
-				case 5:
-					StringBuilder build = new StringBuilder();
-					for (String s : sessions.get(row).getMateriali()) {
-						build.append(s + ", ");
-					}
-					return build.toString();
-				default:
-					return null;
-				}
-			}
-
-			/**
-			 * Sono editabili i campi n° di ore, spesa e
-			 */
-			@Override
-			public boolean isCellEditable(int a, int b) {
-				return false;
-			}
-		};
-	}
-
-	private class TableMouseListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// si ricava la riga selezionata
-		}
+		return new SessionTableModel(calendar2);
 	}
 
 	private class CalendarPropertyChangeListener implements
@@ -274,13 +287,19 @@ public class MainWindow extends JFrame {
 			Calendar c = calendar.getCalendar();
 			c.set(Calendar.HOUR_OF_DAY, 12);
 			// si aggiorna la tabella
-			table = new JTable(getTableModel(c));
+			SessionTableModel m = (SessionTableModel) table.getModel();
+			m.changeData(c);
+			table.updateUI();
 		}
 	}
 
 	private class ThisWindowListener extends WindowAdapter {
 		@Override
 		public void windowClosing(WindowEvent arg0) {
+			// si chiudono le altre finestra
+			if (costsWindow != null) {
+				costsWindow.dispose();
+			}
 			// controllo salvataggio
 			int r = JOptionPane.showConfirmDialog(contentPane,
 					"Salvare le modifiche prima di uscire?",
@@ -315,6 +334,7 @@ public class MainWindow extends JFrame {
 							form.setVisible(true);
 							// Si chiude questa
 							dispose();
+							Log.info("chiusura finestra principale");
 						}
 					});
 					timer1.start();
@@ -338,6 +358,7 @@ public class MainWindow extends JFrame {
 				form.setVisible(true);
 				// Si chiude questa
 				dispose();
+				Log.info("chiusura finestra principale");
 			}
 		}
 	}
@@ -364,7 +385,7 @@ public class MainWindow extends JFrame {
 				timer1 = new Timer(1500, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						//si ferma il timer
+						// si ferma il timer
 						timer1.stop();
 						// si chiude progress.
 						progress.dispose();
@@ -385,18 +406,87 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
+
 	private class BtnNewSessionActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//si apre la finestra di aggiunta
+			// si apre la finestra di aggiunta
 			AddSessionWindow form = new AddSessionWindow(data);
 			form.setVisible(true);
 		}
 	}
+
 	private class BtnClientiActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			//form gestione clienti
-			CostumersManagerWindow form = new CostumersManagerWindow(data);
-			form.setVisible(true);
+			// form gestione clienti
+			costsWindow.setVisible(true);
+			costsWindow.ShowAll();
+		}
+	}
+	private class TableMouseListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+		}
+	}
+
+	private class SessionTableModel extends AbstractTableModel {
+		private static final long serialVersionUID = -8582114483485505968L;
+		// dati
+		// si recuperano le session
+		List<Session> sessions = new ArrayList<>();
+		// colonne
+		String[] columns = { "ID", "ID del Lavoro", "ID del Cliente",
+				"N° di ore", "Spesa", "Materiali" };
+
+		public SessionTableModel(Calendar d) {
+			sessions = data.querySessionsByDate(d);
+		}
+
+		public void changeData(Calendar d) {
+			sessions = data.querySessionsByDate(d);
+		}
+
+		@Override
+		public int getRowCount() {
+			return sessions.size();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return columns.length;
+		}
+
+		@Override
+		public String getColumnName(int c) {
+			return columns[c];
+		}
+
+		@Override
+		public Object getValueAt(int row, int column) {
+			switch (column) {
+			case 0:
+				return sessions.get(row).getID();
+			case 1:
+				return sessions.get(row).getWorkID();
+			case 2:
+				return sessions.get(row).getCostumerID();
+			case 3:
+				return sessions.get(row).getHours();
+			case 4:
+				return sessions.get(row).getSpesa();
+			case 5:
+				StringBuilder build = new StringBuilder();
+				for (String s : sessions.get(row).getMateriali()) {
+					build.append(s + ", ");
+				}
+				return build.toString();
+			default:
+				return null;
+			}
+		}
+
+		@Override
+		public boolean isCellEditable(int a, int b) {
+			return false;
 		}
 	}
 }

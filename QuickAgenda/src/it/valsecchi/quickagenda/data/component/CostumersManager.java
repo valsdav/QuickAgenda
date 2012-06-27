@@ -4,7 +4,6 @@ import it.valsecchi.quickagenda.data.Utility;
 import it.valsecchi.quickagenda.data.component.exception.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -220,8 +219,12 @@ public class CostumersManager {
 	}
 
 	/** Metodo che restituisce tutti i Costumers contenuti nei dati */
-	public Collection<Costumer> getAllCostumers() {
-		return costumersMap.values();
+	public List<Costumer> getAllCostumers() {
+		List<Costumer> all = new ArrayList<>();
+		for(Costumer c: costumersMap.values()){
+			all.add(c);
+		}
+		return all;
 	}
 
 	/**
@@ -267,11 +270,11 @@ public class CostumersManager {
 	 * 
 	 * @return ritorna la lista di Costumer trovati
 	 */
-	public Collection<Costumer> querybyArguments(String nome, String cognome,
+	public List<Costumer> querybyArguments(String nome, String cognome,
 			String azienda, String indirizzo, String tel, String email) {
 		// a seconda dei parametri si ricerca.
 		// lista di tutti i costumers
-		Collection<Costumer> temp = costumersMap.values();
+		List<Costumer> temp = this.getAllCostumers();
 		if (nome != null && !nome.equals("")) {
 			// allora si ricerca per nome
 			temp = this.queryByNome(nome, temp);
@@ -309,7 +312,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByNome(String nome, Collection<Costumer> set) {
+	private List<Costumer> queryByNome(String nome,List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getNome().contains(nome)) {
@@ -321,7 +324,7 @@ public class CostumersManager {
 
 	/** Metodo che filtra i Costumer in base al nome */
 	public List<Costumer> queryByNome(String nome) {
-		return this.queryByNome(nome, costumersMap.values());
+		return this.queryByNome(nome, this.getAllCostumers());
 	}
 
 	/**
@@ -334,7 +337,7 @@ public class CostumersManager {
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
 	private List<Costumer> queryByCognome(String cognome,
-			Collection<Costumer> set) {
+			List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getCognome().contains(cognome)) {
@@ -346,7 +349,7 @@ public class CostumersManager {
 
 	/** Metodo che filtra i Costumer in base al cognome */
 	public List<Costumer> queryByCognome(String cognome) {
-		return this.queryByCognome(cognome, costumersMap.values());
+		return this.queryByCognome(cognome, this.getAllCostumers());
 	}
 
 	/**
@@ -359,7 +362,7 @@ public class CostumersManager {
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
 	private List<Costumer> queryByAzienda(String azienda,
-			Collection<Costumer> set) {
+			List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getAzienda().contains(azienda)) {
@@ -371,7 +374,7 @@ public class CostumersManager {
 
 	/** Metodo che filtra i Costumer in base all'azienda */
 	public List<Costumer> queryByAzienda(String azienda) {
-		return this.queryByAzienda(azienda, costumersMap.values());
+		return this.queryByAzienda(azienda,this.getAllCostumers());
 	}
 
 	/**
@@ -384,7 +387,7 @@ public class CostumersManager {
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
 	private List<Costumer> queryByIndirizzo(String indirizzo,
-			Collection<Costumer> set) {
+			List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getIndirizzo().contains(indirizzo)) {
@@ -395,8 +398,8 @@ public class CostumersManager {
 	}
 
 	/** Metodo che filtra i Costumer in base al'indirizzo */
-	public List<Costumer> queryByindirizzo(String indirizzo) {
-		return this.queryByIndirizzo(indirizzo, costumersMap.values());
+	public List<Costumer> queryByIndirizzo(String indirizzo) {
+		return this.queryByIndirizzo(indirizzo, this.getAllCostumers());
 	}
 
 	/**
@@ -408,7 +411,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByTel(String tel, Collection<Costumer> set) {
+	private List<Costumer> queryByTel(String tel, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getTel().equals(tel)) {
@@ -420,7 +423,7 @@ public class CostumersManager {
 
 	/** Metodo che filtra i Costumer in base al telefono */
 	public List<Costumer> queryByTel(String tel) {
-		return this.queryByTel(tel, costumersMap.values());
+		return this.queryByTel(tel, this.getAllCostumers());
 	}
 
 	/**
@@ -432,7 +435,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByEmail(String email, Collection<Costumer> set) {
+	private List<Costumer> queryByEmail(String email, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getEmail().equals(email)) {
@@ -444,6 +447,6 @@ public class CostumersManager {
 
 	/** Metodo che filtra i Costumer in base all'email */
 	public List<Costumer> queryByEmail(String email) {
-		return this.queryByEmail(email, costumersMap.values());
+		return this.queryByEmail(email, this.getAllCostumers());
 	}
 }
