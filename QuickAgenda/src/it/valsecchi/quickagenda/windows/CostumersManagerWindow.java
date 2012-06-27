@@ -186,6 +186,7 @@ public class CostumersManagerWindow extends JFrame {
 			form.setVisible(true);
 		}
 	}
+	
 	private class BtnConfermaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			//Si invia il costumer selezionato
