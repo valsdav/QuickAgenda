@@ -41,8 +41,6 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Rectangle;
-import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 
 public class MainWindow extends JFrame {
@@ -63,6 +61,7 @@ public class MainWindow extends JFrame {
 	private JSeparator separator_1;
 	private Timer timer1;
 	private CostumersManagerWindow costsWindow;
+	private WorksManagerWindow worksWindow;
 	private JPanel panel;
 	private JTable table;
 
@@ -213,6 +212,7 @@ public class MainWindow extends JFrame {
 		{
 			toolBar.addSeparator();
 			btnLavori = new JButton("Gestione Lavori");
+			btnLavori.addActionListener(new BtnLavoriActionListener());
 			btnLavori.setBackground(UIManager
 					.getColor("ToolBar.dockingBackground"));
 			btnLavori.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -262,6 +262,7 @@ public class MainWindow extends JFrame {
 		// si inizializza la finestra
 		costsWindow = new CostumersManagerWindow(data,CostumersManagerWindow.MODE_NORMAL);
 		contentPane.setLayout(gl_contentPane);
+		worksWindow = new WorksManagerWindow(data,WorksManagerWindow.MODE_NORMAL);
 	}
 
 	/**
@@ -419,12 +420,17 @@ public class MainWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			// form gestione clienti
 			costsWindow.setVisible(true);
-			costsWindow.ShowAll();
+			costsWindow.showAll();
 		}
 	}
 	private class TableMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
+		}
+	}
+	private class BtnLavoriActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			worksWindow.setVisible(true);
 		}
 	}
 

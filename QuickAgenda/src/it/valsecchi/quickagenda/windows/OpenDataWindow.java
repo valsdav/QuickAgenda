@@ -34,8 +34,6 @@ import org.jdom2.JDOMException;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import javax.swing.JProgressBar;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 

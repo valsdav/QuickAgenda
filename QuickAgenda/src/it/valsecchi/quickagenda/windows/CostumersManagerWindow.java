@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -38,7 +39,6 @@ public class CostumersManagerWindow extends JFrame {
 	private JTextField txtCerca;
 	private JButton btnCerca;
 	private JComboBox cbCerca;
-	private JButton btnNewButton;
 	private JButton btnAggiungiCliente;
 	private JPanel panel;
 	private JTable table;
@@ -46,7 +46,8 @@ public class CostumersManagerWindow extends JFrame {
 	public static final int MODE_SELECTION = 1;
 	private int mode;
 	private JButton btnConferma;
-	/** lista di listener per la selezione dei costumer*/
+	private JButton btnTutti;
+	/** lista di listener per la selezione dei costumer */
 	private List<CostumerSelectionListener> listeners = new ArrayList<>();
 
 	public CostumersManagerWindow(DataManager d, int _mode) {
@@ -74,9 +75,9 @@ public class CostumersManagerWindow extends JFrame {
 		cbCerca = new JComboBox();
 		cbCerca.setModel(new DefaultComboBoxModel(new String[] { "ID", "Nome",
 				"Cognome", "Azienda", "Indirizzo", "Telefono", "Email" }));
-		btnNewButton = new JButton("Visualizza tutti");
-		btnNewButton.addActionListener(new BtnNewButtonActionListener());
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnTutti = new JButton("Visualizza tutti");
+		btnTutti.addActionListener(new BtnTuttiActionListener());
+		btnTutti.setFont(new Font("Tahoma", Font.BOLD, 15));
 
 		btnAggiungiCliente = new JButton("Aggiungi Cliente");
 		btnAggiungiCliente.setIcon(new ImageIcon(CostumersManagerWindow.class
@@ -84,54 +85,131 @@ public class CostumersManagerWindow extends JFrame {
 		btnAggiungiCliente
 				.addActionListener(new BtnAggiungiClienteActionListener());
 		panel = new JPanel();
-		
+
 		btnConferma = new JButton("Conferma");
 		btnConferma.addActionListener(new BtnConfermaActionListener());
-		btnConferma.setIcon(new ImageIcon(CostumersManagerWindow.class.getResource("/ico_small/check.png")));
+		btnConferma.setIcon(new ImageIcon(CostumersManagerWindow.class
+				.getResource("/ico_small/check.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnNewButton))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnCerca)
-							.addGap(28)
-							.addComponent(btnAggiungiCliente)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnConferma)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(22)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnConferma, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(Alignment.LEADING, gl_contentPane.createParallelGroup(Alignment.BASELINE)
-									.addComponent(btnCerca)
-									.addComponent(btnAggiungiCliente, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																panel,
+																GroupLayout.DEFAULT_SIZE,
+																920,
+																Short.MAX_VALUE)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addComponent(
+																												txtCerca,
+																												GroupLayout.PREFERRED_SIZE,
+																												261,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addPreferredGap(
+																												ComponentPlacement.UNRELATED)
+																										.addComponent(
+																												cbCerca,
+																												GroupLayout.PREFERRED_SIZE,
+																												127,
+																												GroupLayout.PREFERRED_SIZE))
+																						.addComponent(
+																								btnTutti))
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				btnCerca)
+																		.addGap(28)
+																		.addComponent(
+																				btnAggiungiCliente)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				btnConferma)))
+										.addContainerGap()));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(22)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.BASELINE)
+																						.addComponent(
+																								txtCerca,
+																								GroupLayout.PREFERRED_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								cbCerca,
+																								GroupLayout.PREFERRED_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				btnTutti,
+																				GroupLayout.PREFERRED_SIZE,
+																				36,
+																				GroupLayout.PREFERRED_SIZE))
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addContainerGap()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.TRAILING,
+																								false)
+																						.addComponent(
+																								btnConferma,
+																								Alignment.LEADING,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)
+																						.addGroup(
+																								Alignment.LEADING,
+																								gl_contentPane
+																										.createParallelGroup(
+																												Alignment.BASELINE)
+																										.addComponent(
+																												btnCerca)
+																										.addComponent(
+																												btnAggiungiCliente,
+																												GroupLayout.DEFAULT_SIZE,
+																												GroupLayout.DEFAULT_SIZE,
+																												Short.MAX_VALUE)))))
+										.addGap(18)
+										.addComponent(panel,
+												GroupLayout.DEFAULT_SIZE, 580,
+												Short.MAX_VALUE)
+										.addContainerGap()));
 		panel.setLayout(new BorderLayout(0, 0));
 		{
 			table = new JTable(this.getTableModel("", ""));
@@ -141,24 +219,36 @@ public class CostumersManagerWindow extends JFrame {
 			panel.add(table, BorderLayout.CENTER);
 			panel.add(table.getTableHeader(), BorderLayout.PAGE_START);
 		}
-		//si imposta in base alla modalità
-		if(mode ==MODE_NORMAL){
+		// si imposta in base alla modalità
+		if (mode == MODE_NORMAL) {
 			btnConferma.setVisible(false);
-		}else if(mode ==MODE_SELECTION){
+		} else if (mode == MODE_SELECTION) {
 			btnConferma.setVisible(true);
 		}
 		contentPane.setLayout(gl_contentPane);
 	}
 
-	public void addCostumerSelectionListener(CostumerSelectionListener listener){
+	/** Metodo che aggiunge un listener per l'evento di selezione di un costumer */
+	public void addCostumerSelectionListener(CostumerSelectionListener listener) {
 		this.listeners.add(listener);
 	}
-	
-	private AbstractTableModel getTableModel(String campo, String value) {
+
+	/** Metodo che rimuove un listener per l'evento di selezione di un costumer */
+	public void removeCostumerSelectionListener(
+			CostumerSelectionListener listener) {
+		this.listeners.remove(listener);
+	}
+
+	/**
+	 * Metodo che restituisce il modello dati per la tabella, costruito
+	 * dinamicamente grazie alla ricerca con campo e value
+	 */
+	private TableModel getTableModel(String campo, String value) {
 		return new CostumerTableModel(campo, value);
 	}
 
-	public void ShowAll() {
+	/** Metodo che mostra tutti i costumer */
+	public void showAll() {
 		// Si visualizzano tutti i costumer
 		CostumerTableModel m = (CostumerTableModel) table.getModel();
 		m.changeData("", "");
@@ -174,9 +264,10 @@ public class CostumersManagerWindow extends JFrame {
 		}
 	}
 
-	private class BtnNewButtonActionListener implements ActionListener {
+	private class BtnTuttiActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			ShowAll();
+			showAll();
+			txtCerca.setText("");
 		}
 	}
 
@@ -186,24 +277,27 @@ public class CostumersManagerWindow extends JFrame {
 			form.setVisible(true);
 		}
 	}
-	
+
 	private class BtnConfermaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//Si invia il costumer selezionato
-			int column = table.getSelectedColumn();
+			// Si invia il costumer selezionato
 			int row = table.getSelectedRow();
-			String id =(String) table.getValueAt(row, column);
 			Costumer cos = null;
-			//si ricava il costumer
-			try {
-				cos =data.getCostumerByID(id);
-			} catch (IDNotFoundException e1) {
-				cos =null;
+			if (row != -1) {
+				String id = (String) table.getValueAt(row, 0);
+				// si ricava il costumer
+				try {
+					cos = data.getCostumerByID(id);
+				} catch (IDNotFoundException e1) {
+					cos = null;
+				}
 			}
-			//si invia a ogni listener
-			for(CostumerSelectionListener l :listeners){
+			// si invia a ogni listener
+			for (CostumerSelectionListener l : listeners) {
 				l.registerSelectedCostumer(cos);
 			}
+			//si chiude la finestra
+			dispose();
 		}
 	}
 
@@ -213,11 +307,11 @@ public class CostumersManagerWindow extends JFrame {
 				"Telefono", "Email" };
 		List<Costumer> costumers = new ArrayList<>();
 
-		public void changeData(String campo, String value) {
+		public CostumerTableModel(String campo, String value) {
 			costumers = data.queryCostumerByArg(campo, value);
 		}
 
-		public CostumerTableModel(String campo, String value) {
+		public void changeData(String campo, String value) {
 			costumers = data.queryCostumerByArg(campo, value);
 		}
 
@@ -229,6 +323,11 @@ public class CostumersManagerWindow extends JFrame {
 		@Override
 		public int getRowCount() {
 			return costumers.size();
+		}
+
+		@Override
+		public String getColumnName(int column) {
+			return columns[column];
 		}
 
 		@Override
@@ -251,11 +350,6 @@ public class CostumersManagerWindow extends JFrame {
 			default:
 				return null;
 			}
-		}
-
-		@Override
-		public String getColumnName(int column) {
-			return columns[column];
 		}
 
 		@Override

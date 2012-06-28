@@ -8,7 +8,6 @@ import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsExc
 import it.valsecchi.quickagenda.data.component.exception.SessionNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;

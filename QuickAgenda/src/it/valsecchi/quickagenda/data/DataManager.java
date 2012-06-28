@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -165,8 +166,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 					path, DataReaderWriter.READ_MODE);
 			Log.info("lettura del document");
 			doc = reader.readData(password);
-			//si elimina il reader
-			reader=null;
+			// si elimina il reader
+			reader = null;
 		} catch (IllegalBlockSizeException e) {
 			Log.error("Errore di criptografia generico!");
 			throw new CryptographyException("Errore di criptografia generico!");
@@ -428,8 +429,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			Log.info("scrittura e criptazione dati");
 			writer.writeData(doc, this.password);
 			Log.info("scrittura dati completata");
-			//si elimina il writer
-			writer= null;
+			// si elimina il writer
+			writer = null;
 		} catch (FileNotFoundException e) {
 			throw e;
 		} catch (IllegalBlockSizeException e) {
@@ -508,12 +509,15 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		costumersMan.addCostumer(costumer);
 	}
 
-	/**Metodo di collegamento che restituisce un Costumer per ID
-	 * @throws IDNotFoundException */
-	public Costumer getCostumerByID(String id) throws IDNotFoundException{
+	/**
+	 * Metodo di collegamento che restituisce un Costumer per ID
+	 * 
+	 * @throws IDNotFoundException
+	 */
+	public Costumer getCostumerByID(String id) throws IDNotFoundException {
 		return costumersMan.getCostumerByID(id);
 	}
-	
+
 	/**
 	 * Metodo che restiuisce il Costumer associato a una Session
 	 * 
@@ -540,6 +544,15 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			throws IDNotFoundException {
 		Session s = sessionsMan.getSessionByID(session_id);
 		return worksMan.getWorkByID(s.getWorkID());
+	}
+
+	/**
+	 * Metodo di collegamento che restituisce un Work per id
+	 * 
+	 * @throws IDNotFoundException
+	 */
+	public Work getWorkByID(String id) throws IDNotFoundException {
+		return worksMan.getWorkByID(id);
 	}
 
 	/**
@@ -594,6 +607,15 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		return sessionsMan.getSessionByID(id);
 	}
 
+	/**
+	 * Ricerca i Costumer in base a un campo e al valore.
+	 * 
+	 * @param campo
+	 *            campo da ricercare (ad esempio: Nome)
+	 * @param value
+	 *            valore da ricercare
+	 * @return ritorna una lista di Costumer che soddisfano il requisito
+	 */
 	public List<Costumer> queryCostumerByArg(String campo, String value) {
 		List<Costumer> found = new ArrayList<>();
 		switch (campo) {
@@ -624,9 +646,72 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			found.addAll(costumersMan.queryByEmail(value));
 			break;
 		default:
-			//si ritornano tutti
+			// si ritornano tutti
 			return costumersMan.getAllCostumers();
 		}
 		return found;
 	}
+
+	public List<Work> queryWorkByArg(String campo, String value)
+			throws ParseException {
+		List<Work> found = new ArrayList<>();
+		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
+		switch (campo) {
+		case "ID":
+			try {
+				Work w = worksMan.getWorkByID(value);
+				found.add(w);
+			} catch (IDNotFoundException e) {
+				return null;
+			}
+			break;
+		case "Nome Lavoro":
+			found.addAll(worksMan.queryByNome(value));
+			break;
+		case "Cognome Cliente":
+			// si cerca il cliente
+			List<Costumer> cos = costumersMan.queryByCognome(value);
+			List<String> ids = new ArrayList<>();
+			for (Costumer c : cos) {
+				ids.add(c.getID());
+			}
+			for (String id : ids) {
+				found.addAll(worksMan.queryByCostumerID(id));
+			}
+			break;
+		case "Azienda Cliente":
+			// si cerca il cliente
+			List<Costumer> cos2 = costumersMan.queryByAzienda(value);
+			List<String> ids2 = new ArrayList<>();
+			for (Costumer c : cos2) {
+				ids2.add(c.getID());
+			}
+			for (String id2 : ids2) {
+				found.addAll(worksMan.queryByCostumerID(id2));
+			}
+			break;
+		case "Indirizzo":
+			found.addAll(worksMan.queryByIndirizzo(value));
+			break;
+		case "Inizio Lavori":
+			// si formatta la data
+			Date d = f.parse(value);
+			Calendar c = Calendar.getInstance();
+			c.setTime(d);
+			found.addAll(worksMan.queryByInizioLavori(c));
+			break;
+		case "Fine Lavori":
+			// si formatta la data
+			Date d2 = f.parse(value);
+			Calendar c2 = Calendar.getInstance();
+			c2.setTime(d2);
+			found.addAll(worksMan.queryByFineLavori(c2));
+			break;
+		case "Completato":
+			found.addAll(worksMan.queryByCompleted(Boolean.parseBoolean(value)));
+			break;
+		}
+		return found;
+	}
+
 }

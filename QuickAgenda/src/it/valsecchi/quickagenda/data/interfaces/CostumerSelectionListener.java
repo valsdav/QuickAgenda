@@ -18,6 +18,6 @@ public interface CostumerSelectionListener {
 	 * 
 	 * @param selected Costumer selezionato
 	 */
-	public void registerSelectedCostumer(Costumer selected);
+	public void registerSelectedCostumer(Costumer selected_costumer);
 
 }

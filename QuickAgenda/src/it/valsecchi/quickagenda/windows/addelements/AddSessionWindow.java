@@ -8,11 +8,14 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.interfaces.*;
+import it.valsecchi.quickagenda.windows.WorksManagerWindow;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.Font;
 import javax.swing.JFrame;
@@ -34,7 +37,8 @@ import com.toedter.calendar.JDateChooser;
  * @author Davide Valsecchi
  * @version 1.0
  */
-public class AddSessionWindow extends javax.swing.JFrame {
+public class AddSessionWindow extends javax.swing.JFrame implements
+		WorkSelectionListener {
 
 	private static final long serialVersionUID = 2240305864691419492L;
 	/** Variabile di tipo AddCostumerInterface che gestisce l'aggiunta dei dati */
@@ -60,7 +64,7 @@ public class AddSessionWindow extends javax.swing.JFrame {
 	 * Metodo che inizializza i componenti dell'interfaccia grafica.
 	 */
 	private void initComponents() {
-
+		currentWindow = this;
 		txtIDLavoro = new javax.swing.JTextField();
 		lblIDLavoro = new javax.swing.JLabel();
 		lblData = new javax.swing.JLabel();
@@ -133,89 +137,181 @@ public class AddSessionWindow extends javax.swing.JFrame {
 		txtMateriali.setToolTipText("");
 
 		btnIDLavoro = new JButton("...");
+		btnIDLavoro.addActionListener(new BtnIDLavoroActionListener());
 		dateChooser = new JDateChooser();
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
-		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addGap(200)
-					.addComponent(lblImmagine, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(239, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblAvviso)
-					.addContainerGap(123, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblIstruzioni, GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
-						.addGroup(layout.createSequentialGroup()
-							.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtMateriali, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(66))
-						.addGroup(layout.createSequentialGroup()
-							.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtIDLavoro)
-							.addGap(18)
-							.addComponent(btnIDLavoro)))
-					.addGap(63))
-				.addComponent(jToolBar, GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(144))
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtOre, 287, 287, 287)
-					.addContainerGap(144, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtSpesa, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-					.addGap(144))
-		);
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblIstruzioni, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnIDLavoro))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtOre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(12)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtMateriali, GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblAvviso)
-					.addGap(18)
-					.addComponent(lblImmagine)
-					.addContainerGap())
-		);
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addGap(200)
+								.addComponent(lblImmagine,
+										GroupLayout.PREFERRED_SIZE, 79,
+										GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(239, Short.MAX_VALUE))
+				.addGroup(
+						layout.createSequentialGroup().addContainerGap()
+								.addComponent(lblAvviso)
+								.addContainerGap(123, Short.MAX_VALUE))
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										layout.createParallelGroup(
+												Alignment.LEADING)
+												.addComponent(
+														lblIstruzioni,
+														GroupLayout.DEFAULT_SIZE,
+														443, Short.MAX_VALUE)
+												.addGroup(
+														layout.createSequentialGroup()
+																.addComponent(
+																		lblMateriali,
+																		GroupLayout.PREFERRED_SIZE,
+																		70,
+																		GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(
+																		ComponentPlacement.RELATED)
+																.addComponent(
+																		txtMateriali,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(66))
+												.addGroup(
+														layout.createSequentialGroup()
+																.addComponent(
+																		lblIDLavoro,
+																		GroupLayout.PREFERRED_SIZE,
+																		70,
+																		GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(
+																		ComponentPlacement.RELATED)
+																.addComponent(
+																		txtIDLavoro)
+																.addGap(18)
+																.addComponent(
+																		btnIDLavoro)))
+								.addGap(63))
+				.addComponent(jToolBar, GroupLayout.DEFAULT_SIZE, 518,
+						Short.MAX_VALUE)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(lblData,
+										GroupLayout.PREFERRED_SIZE, 70,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(dateChooser,
+										GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE).addGap(144))
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(lblOre,
+										GroupLayout.PREFERRED_SIZE, 70,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(txtOre, 287, 287, 287)
+								.addContainerGap(144, Short.MAX_VALUE))
+				.addGroup(
+						layout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(lblSpesa,
+										GroupLayout.PREFERRED_SIZE, 70,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(txtSpesa,
+										GroupLayout.DEFAULT_SIZE, 287,
+										Short.MAX_VALUE).addGap(144)));
+		layout.setVerticalGroup(layout
+				.createParallelGroup(Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup()
+								.addComponent(jToolBar,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblIstruzioni,
+										GroupLayout.PREFERRED_SIZE, 38,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												Alignment.BASELINE)
+												.addComponent(
+														lblIDLavoro,
+														GroupLayout.PREFERRED_SIZE,
+														31,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(
+														txtIDLavoro,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(btnIDLavoro))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												Alignment.TRAILING)
+												.addComponent(
+														lblData,
+														GroupLayout.PREFERRED_SIZE,
+														31,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(
+														dateChooser,
+														GroupLayout.PREFERRED_SIZE,
+														25,
+														GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												Alignment.BASELINE)
+												.addComponent(
+														lblOre,
+														GroupLayout.PREFERRED_SIZE,
+														31,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(
+														txtOre,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(
+										layout.createParallelGroup(
+												Alignment.BASELINE)
+												.addComponent(
+														lblSpesa,
+														GroupLayout.PREFERRED_SIZE,
+														31,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(
+														txtSpesa,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+								.addGap(12)
+								.addGroup(
+										layout.createParallelGroup(
+												Alignment.LEADING)
+												.addComponent(
+														lblMateriali,
+														GroupLayout.PREFERRED_SIZE,
+														31,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(
+														txtMateriali,
+														GroupLayout.DEFAULT_SIZE,
+														59, Short.MAX_VALUE))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblAvviso).addGap(18)
+								.addComponent(lblImmagine).addContainerGap()));
 		getContentPane().setLayout(layout);
 		pack();
 	}
@@ -237,6 +333,7 @@ public class AddSessionWindow extends javax.swing.JFrame {
 	private JTextPane txtMateriali;
 	private JButton btnIDLavoro;
 	private JDateChooser dateChooser;
+	private AddSessionWindow currentWindow;
 
 	/** Classe interna che gestisce il click del pulsante add */
 	private class AddButtonActionListener implements ActionListener {
@@ -253,29 +350,27 @@ public class AddSessionWindow extends javax.swing.JFrame {
 						materiali.add(tok.nextToken());
 					}
 				}
-				int nore,spesa;
-				if(txtSpesa.getText().equals("")){
+				int nore, spesa;
+				if (txtSpesa.getText().equals("")) {
 					spesa = 0;
-				}else
-				{
+				} else {
 					spesa = Integer.parseInt(txtSpesa.getText());
 				}
-				if(txtOre.getText().equals("")){
+				if (txtOre.getText().equals("")) {
 					nore = 0;
-				}else
-				{
+				} else {
 					nore = Integer.parseInt(txtOre.getText());
 				}
 				sessionsMan.addSession(txtIDLavoro.getText().toUpperCase(),
-						dateChooser.getCalendar(),
-						nore,spesa, materiali);
-				//si svuotano i campi
+						dateChooser.getCalendar(), nore, spesa, materiali);
+				// si svuotano i campi
 				lblAvviso.setText("Sessione aggiunta con successo!");
 				txtIDLavoro.setText("");
 				dateChooser.cleanup();
 				txtOre.setText("");
 				txtSpesa.setText("");
-				txtMateriali.setText("Inserire i materiali separati da virgola");
+				txtMateriali
+						.setText("Inserire i materiali separati da virgola");
 			} catch (SessionAlreadyExistsException exc) {
 				// si avvisa
 				lblAvviso.setText("Session già presente nei dati!");
@@ -291,14 +386,15 @@ public class AddSessionWindow extends javax.swing.JFrame {
 				lblAvviso.setText("Inserire ID Lavoro e Data!");
 				return;
 			} catch (IDNotFoundException e2) {
-				//eccezione generata se non vengono trovati gli id di riferimento
-				if(e2.getType().equals(ElementType.Costumer)){
+				// eccezione generata se non vengono trovati gli id di
+				// riferimento
+				if (e2.getType().equals(ElementType.Costumer)) {
 					lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class
 							.getResource("/ico_small/attention.png")));
 					// si cambia l'avviso
 					lblAvviso.setText("Cliente non trovato!");
 				}
-				if(e2.getType().equals(ElementType.Work)){
+				if (e2.getType().equals(ElementType.Work)) {
 					lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class
 							.getResource("/ico_small/attention.png")));
 					// si cambia l'avviso
@@ -308,4 +404,24 @@ public class AddSessionWindow extends javax.swing.JFrame {
 			}
 		}
 	}
+
+	/**
+	 * Metodo che salva il costumer selezionato
+	 */
+	@Override
+	public void registerSelectedWork(Work selected_work) {
+
+	}
+
+	private class BtnIDLavoroActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// Si apre la finestra di selezione
+			WorksManagerWindow w = new WorksManagerWindow(
+					(DataManager) sessionsMan,
+					WorksManagerWindow.MODE_SELECTION);
+			w.addWorkSelectionListener(currentWindow);
+			w.setVisible(true);
+		}
+	}
+
 }
