@@ -2,6 +2,7 @@ package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.component.Session;
+import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
 import it.valsecchi.quickagenda.settings.SettingsManager;
 import it.valsecchi.quickagenda.windows.addelements.AddSessionWindow;
@@ -19,6 +20,7 @@ import javax.swing.Timer;
 
 import com.toedter.calendar.JCalendar;
 import java.awt.Font;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -62,6 +64,7 @@ public class MainWindow extends JFrame {
 	private Timer timer1;
 	private CostumersManagerWindow costsWindow;
 	private WorksManagerWindow worksWindow;
+	private AddSessionWindow addSessionWindow;
 	private JPanel panel;
 	private JTable table;
 
@@ -301,6 +304,12 @@ public class MainWindow extends JFrame {
 			if (costsWindow != null) {
 				costsWindow.dispose();
 			}
+			if(worksWindow != null){
+				worksWindow.dispose();
+			}
+			if(addSessionWindow != null){
+				addSessionWindow.dispose();
+			}
 			// controllo salvataggio
 			int r = JOptionPane.showConfirmDialog(contentPane,
 					"Salvare le modifiche prima di uscire?",
@@ -317,8 +326,6 @@ public class MainWindow extends JFrame {
 				try {
 					// SALVATAGGIO DATI
 					data.saveData();
-					// si salvano le preferenze
-					SettingsManager.writeSettings();
 					// si chiude la finestra
 					progress.setIcon(new ImageIcon(getClass().getResource(
 							"/ico_small/check.png")));
@@ -352,8 +359,6 @@ public class MainWindow extends JFrame {
 					progress.setMessage("Errore file! Impossibile scrivere dati! Riprovare.");
 				}
 			} else {
-				// si salvano solo le preferenze
-				SettingsManager.writeSettings();
 				// si riapre la finestra di partenza
 				StartWindow form = new StartWindow();
 				form.setVisible(true);
@@ -411,8 +416,8 @@ public class MainWindow extends JFrame {
 	private class BtnNewSessionActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si apre la finestra di aggiunta
-			AddSessionWindow form = new AddSessionWindow(data);
-			form.setVisible(true);
+			addSessionWindow = new AddSessionWindow(data,calendar.getCalendar());
+		    addSessionWindow.setVisible(true);
 		}
 	}
 
@@ -440,7 +445,7 @@ public class MainWindow extends JFrame {
 		// si recuperano le session
 		List<Session> sessions = new ArrayList<>();
 		// colonne
-		String[] columns = { "ID", "ID del Lavoro", "ID del Cliente",
+		String[] columns = { "ID", "Nome Lavoro", "Cognome Cliente",
 				"N° di ore", "Spesa", "Materiali" };
 
 		public SessionTableModel(Calendar d) {
@@ -472,9 +477,19 @@ public class MainWindow extends JFrame {
 			case 0:
 				return sessions.get(row).getID();
 			case 1:
-				return sessions.get(row).getWorkID();
+				try {
+					return data.getWorkFromSession(sessions.get(row).getID()).getNome();
+				} catch (IDNotFoundException e) {
+					//impossibile che si generi questa eccezione
+					return null;
+				}
 			case 2:
-				return sessions.get(row).getCostumerID();
+				try {
+					return data.getCostumerFromSession(sessions.get(row).getID()).getCognome();
+				} catch (IDNotFoundException e) {
+					//impossibile che si generi questa eccezione
+					return null;
+				}
 			case 3:
 				return sessions.get(row).getHours();
 			case 4:

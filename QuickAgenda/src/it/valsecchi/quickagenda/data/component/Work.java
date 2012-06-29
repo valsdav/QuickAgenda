@@ -30,23 +30,22 @@ public class Work {
 	private boolean completed = false;
 
 	/** Costruttore di Word */
-	public Work(String id, String clienteid, String _nome,String _indirizzo,
+	public Work(String id, String costumerid, String _nome,String _indirizzo,
 			Calendar iniziolavori, Calendar finelavori, boolean _completed) {
 		ID = id;
-		costumerID = clienteid;
+		costumerID = costumerid;
 		nome = _nome;
 		indirizzo = _indirizzo;
 		inizioLavori = iniziolavori;
 		fineLavori = finelavori;
 		completed = _completed;
 		// si crea l'hash unendo (id,clienteid,indirizzo,iniziolavori)
-		hash = Utility.getHash(clienteid + indirizzo + iniziolavori.toString()
-				+ finelavori.toString());
+		hash = Utility.getHash(costumerid + indirizzo + iniziolavori.toString());
 	}
 
 	/** Costruttore di Work con Hash */
-	public Work(String id, String _hash, String costumerid, String _nome,String _indirizzo,
-			Calendar iniziolavori, Calendar finelavori, boolean _completed) {
+	public Work(String id, String costumerid, String _nome,String _indirizzo,
+			Calendar iniziolavori, Calendar finelavori, boolean _completed,String _hash) {
 		ID = id;
 		hash = _hash;
 		costumerID = costumerid;
@@ -62,9 +61,8 @@ public class Work {
 	 * parametro.
 	 */
 	public static String calculateWorkHash(String costumereid,String nome,
-			String indirizzo, Calendar inizio, Calendar fine) {
-		return Utility.getHash(costumereid + nome+ indirizzo + inizio.toString()
-				+ fine.toString());
+			String indirizzo, Calendar inizio) {
+		return Utility.getHash(costumereid + nome+ indirizzo + inizio.toString());
 	}
 
 	/** Metodo che calcola l'arco di tempo in cui il lavoro è stato attivo */

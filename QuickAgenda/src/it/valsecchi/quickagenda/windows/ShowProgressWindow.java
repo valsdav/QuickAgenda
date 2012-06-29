@@ -37,7 +37,7 @@ public class ShowProgressWindow extends JFrame {
 	private void initComponent(String mess,String title){
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ShowProgressWindow.class.getResource("/ico_small/view_refresh.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 650, 186);
+		setBounds(100, 100, 650, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -70,9 +70,9 @@ public class ShowProgressWindow extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(immagine)
 						.addComponent(lblMess))
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(18)
 					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-					.addGap(43))
+					.addGap(32))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

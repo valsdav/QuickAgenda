@@ -39,8 +39,7 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 	 *            oggetto che gestisce l'aggiunta dei costumers.
 	 */
 	public AddCostumerWindow(AddCostumerInterface _costsMan) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				AddCostumerWindow.class.getResource("/ico_small/agenda.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(AddCostumerWindow.class.getResource("/ico_small/add1.png")));
 		setTitle("Aggiungi Cliente");
 		initComponents();
 		costsMan = _costsMan;
@@ -66,11 +65,14 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 		txtEmail = new javax.swing.JTextField();
 		lblImmagine = new JLabel("");
 		jToolBar = new javax.swing.JToolBar();
+		jToolBar.setFloatable(false);
 		addButton = new javax.swing.JButton();
+		addButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		addButton.addActionListener(new AddButtonClickHandler());
 		addButton.setIcon(new ImageIcon(AddCostumerWindow.class
 				.getResource("/ico_small/add2.png")));
 		exitButton = new javax.swing.JButton();
+		exitButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// si chiude

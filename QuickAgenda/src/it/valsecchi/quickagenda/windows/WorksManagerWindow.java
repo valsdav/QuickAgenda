@@ -4,6 +4,7 @@ import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.interfaces.WorkSelectionListener;
+import it.valsecchi.quickagenda.windows.addelements.AddWorkWindow;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.table.TableModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Toolkit;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class WorksManagerWindow extends JFrame {
 
@@ -49,7 +52,8 @@ public class WorksManagerWindow extends JFrame {
 	private JLabel lblIstr;
 
 	public WorksManagerWindow(DataManager _data, int _mode) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(WorksManagerWindow.class.getResource("/ico_small/agenda.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				WorksManagerWindow.class.getResource("/ico_small/agenda.png")));
 		setTitle("Gestione Lavori");
 		data = _data;
 		mode = _mode;
@@ -57,7 +61,7 @@ public class WorksManagerWindow extends JFrame {
 	}
 
 	private void initComponent() {
-		setBounds(100, 100, 964, 684);
+		setBounds(100, 100, 990, 684);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -67,13 +71,16 @@ public class WorksManagerWindow extends JFrame {
 		txtCerca = new JTextField();
 		txtCerca.setColumns(10);
 		cbCerca = new JComboBox();
-		cbCerca.setModel(new DefaultComboBoxModel(new String[] {"ID", "Nome Lavoro", "Cognome Cliente", "Azienda Cliente", "Indirizzo", "Inizio Lavori", "Fine Lavori", "Completato"}));
+		cbCerca.setModel(new DefaultComboBoxModel(new String[] { "ID",
+				"Nome Lavoro", "Cognome Cliente", "Azienda Cliente",
+				"Indirizzo", "Inizio Lavori", "Fine Lavori", "Completato" }));
 		btnCerca = new JButton("Cerca...");
 		btnCerca.addActionListener(new BtnCercaActionListener());
 		btnCerca.setIcon(new ImageIcon(WorksManagerWindow.class
 				.getResource("/ico_small/search3.png")));
 		btnCerca.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnAggiungi = new JButton("Aggiungi Cliente");
+		btnAggiungi = new JButton("Aggiungi Lavoro");
+		btnAggiungi.addActionListener(new BtnAggiungiActionListener());
 		btnAggiungi.setIcon(new ImageIcon(WorksManagerWindow.class
 				.getResource("/ico_small/add1.png")));
 		btnConferma = new JButton("Conferma");
@@ -83,135 +90,53 @@ public class WorksManagerWindow extends JFrame {
 		panel = new JPanel();
 		lblIstr = new JLabel("");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																panel,
-																GroupLayout.DEFAULT_SIZE,
-																912,
-																Short.MAX_VALUE)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								txtCerca,
-																								GroupLayout.PREFERRED_SIZE,
-																								261,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addComponent(
-																												btnTutti,
-																												GroupLayout.PREFERRED_SIZE,
-																												145,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addGap(18)
-																										.addComponent(
-																												lblIstr)))
-																		.addGap(12)
-																		.addComponent(
-																				cbCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				127,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(7)
-																		.addComponent(
-																				btnCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				135,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(28)
-																		.addComponent(
-																				btnAggiungi,
-																				GroupLayout.PREFERRED_SIZE,
-																				193,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(7)
-																		.addComponent(
-																				btnConferma,
-																				GroupLayout.PREFERRED_SIZE,
-																				141,
-																				GroupLayout.PREFERRED_SIZE)))
-										.addContainerGap()));
-		gl_contentPane
-				.setVerticalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(9)
-																		.addComponent(
-																				txtCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(13)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.BASELINE)
-																						.addComponent(
-																								btnTutti,
-																								GroupLayout.PREFERRED_SIZE,
-																								36,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								lblIstr)))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(9)
-																		.addComponent(
-																				cbCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(7)
-																		.addComponent(
-																				btnCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				57,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																btnAggiungi,
-																GroupLayout.PREFERRED_SIZE,
-																73,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																btnConferma,
-																GroupLayout.PREFERRED_SIZE,
-																73,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addComponent(panel,
-												GroupLayout.DEFAULT_SIZE, 505,
-												Short.MAX_VALUE)
-										.addContainerGap()));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 912, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblIstr)))
+							.addGap(12)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+							.addGap(7)
+							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+							.addGap(28)
+							.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(9)
+							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(13)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblIstr)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(9)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(7)
+							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 		panel.setLayout(new BorderLayout(0, 0));
 		table = new JTable(this.getTableModel("", ""));
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -240,51 +165,60 @@ public class WorksManagerWindow extends JFrame {
 	 * Metodo che restituisce il modello dati per la tabella, costruito
 	 * dinamicamente grazie alla ricerca con campo e value
 	 */
-	private TableModel getTableModel(String campo,String value){
-		return new WorkTableModel(campo,value);
+	private TableModel getTableModel(String campo, String value) {
+		return new WorkTableModel(campo, value);
 	}
-	
-	/** Metodo che mostra tutti i work*/
-	private void showAll(){
+
+	/** Metodo che mostra tutti i work */
+	private void showAll() {
 		WorkTableModel m = (WorkTableModel) table.getModel();
 		m.changeData("", "");
 		table.updateUI();
 	}
-	
+
 	private class BtnConfermaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//si invia il costumer selezionato
+			// si invia il costumer selezionato
 			int row = table.getSelectedRow();
-			String id ="";
+			String id = "";
 			Work w = null;
-			if(row!=-1){
-				id = (String) table.getValueAt(row,0);
+			if (row != -1) {
+				id = (String) table.getValueAt(row, 0);
 				try {
 					w = data.getWorkByID(id);
 				} catch (IDNotFoundException e1) {
-					w= null;
+					w = null;
 				}
 			}
-			//si invia ai listener
-			for(WorkSelectionListener l:listeners){
+			// si invia ai listener
+			for (WorkSelectionListener l : listeners) {
 				l.registerSelectedWork(w);
 			}
-			//si chiude la finestra
+			// si chiude la finestra
 			dispose();
 		}
 	}
-	
+
 	private class BtnTuttiActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			showAll();
 			txtCerca.setText("");
 		}
 	}
+
 	private class BtnCercaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			WorkTableModel m = (WorkTableModel) table.getModel();
-			m.changeData((String)cbCerca.getSelectedItem(), txtCerca.getText());
+			m.changeData((String) cbCerca.getSelectedItem(), txtCerca.getText());
 			table.updateUI();
+		}
+	}
+
+	private class BtnAggiungiActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// si apre la finestra
+			AddWorkWindow w = new AddWorkWindow(data);
+			w.setVisible(true);
 		}
 	}
 
@@ -328,6 +262,7 @@ public class WorksManagerWindow extends JFrame {
 
 		@Override
 		public Object getValueAt(int row, int column) {
+			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
 			switch (column) {
 			case 0:
 				return lavori.get(row).getID();
@@ -354,9 +289,13 @@ public class WorksManagerWindow extends JFrame {
 			case 4:
 				return lavori.get(row).getIndirizzo();
 			case 5:
-				return lavori.get(row).getInizioLavori();
+				return f.format(lavori.get(row).getInizioLavori().getTime());
 			case 6:
-				return lavori.get(row).getFineLavori();
+				if (lavori.get(row).getFineLavori() != null) {
+					return f.format(lavori.get(row).getFineLavori().getTime());
+				} else {
+					return "";
+				}
 			case 7:
 				return lavori.get(row).isCompleted();
 			default:
@@ -371,7 +310,11 @@ public class WorksManagerWindow extends JFrame {
 
 		@Override
 		public Class<?> getColumnClass(int c) {
-			return getValueAt(0, c).getClass();
+			Object o = getValueAt(0, c);
+			if (o == null) {
+				o = new Object();
+			}
+			return o.getClass();
 		}
 	}
 }

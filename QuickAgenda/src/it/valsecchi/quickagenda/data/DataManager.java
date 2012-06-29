@@ -49,7 +49,8 @@ import it.valsecchi.quickagenda.data.interfaces.*;
  * @version 1.0
  * 
  */
-public class DataManager implements AddCostumerInterface, AddSessionInterface {
+public class DataManager implements AddCostumerInterface, AddSessionInterface,
+		AddWorkInterface {
 
 	private CostumersManager costumersMan;
 	private WorksManager worksMan;
@@ -215,17 +216,22 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		List<Element> workElem = root.getChildren("work");
 		List<Work> works = new ArrayList<>();
 		for (Element w : workElem) {
-			String id, hash, costumerid, indirizzo;
+			String id, hash, costumerid, indirizzo,nome;
 			GregorianCalendar inizio, fine;
 			boolean completed;
 			id = w.getChildText("id");
 			hash = w.getChildText("hash");
 			costumerid = w.getChildText("costumerid");
+			nome = w.getChildText("nome");
 			indirizzo = w.getChildText("indirizzo");
 			inizio = (GregorianCalendar) GregorianCalendar.getInstance();
 			inizio.setTime(formatdata.parse(w.getChildText("iniziolavori")));
-			fine = (GregorianCalendar) GregorianCalendar.getInstance();
-			fine.setTime(formatdata.parse(w.getChildText("finelavori")));
+			if (w.getChildText("finelavori").equals("null")) {
+				fine = null;
+			} else {
+				fine = (GregorianCalendar) GregorianCalendar.getInstance();
+				fine.setTime(formatdata.parse(w.getChildText("finelavori")));
+			}
 			completed = Boolean.parseBoolean(w.getChildText("completed"));
 			// creazione della work
 			Work newWork = new Work(id, hash, costumerid, indirizzo, inizio,
@@ -236,9 +242,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		List<Element> sessionElem = root.getChildren("session");
 		List<Session> sessions = new ArrayList<>();
 		for (Element s : sessionElem) {
-			String id, hash, workid, costumerid;
-			GregorianCalendar sessiondata;
-			int hours, spesa;
+			String id, hash, workid, costumerid = "";
+			GregorianCalendar sessiondata = null;
+			int hours = 0;
+			int spesa = 0;
 			List<String> materiali = new ArrayList<>();
 			id = s.getChildText("id");
 			hash = s.getChildText("hash");
@@ -247,9 +254,9 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			sessiondata = (GregorianCalendar) GregorianCalendar.getInstance();
 			sessiondata
 					.setTime(formatdata.parse(s.getChildText("sessiondata")));
-			hours = Integer.getInteger(s.getChildText("hours"));
-			spesa = Integer.getInteger(s.getChildText("spesa"));
-			// StringTokenizer per i materiali
+			hours = Integer.parseInt("+" + s.getChildText("hours"));
+			spesa = Integer.parseInt("+" + s.getChildText("spesa"));
+			 //StringTokenizer per i materiali
 			String mat = s.getChildText("materiali");
 			StringTokenizer tok = new StringTokenizer(mat, "#");
 			while (tok.hasMoreTokens()) {
@@ -358,17 +365,27 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			Element costumerid = new Element("costumerid");
 			costumerid.setText(w.getCostumerID());
 			newW.addContent(costumerid);
+			//nome 
+			Element nome = new Element("Nome");
+			nome.setText(w.getNome());
+			newW.addContent(nome);
 			// indirizzo
 			Element indirizzo = new Element("indirizzo");
 			indirizzo.setText(w.getIndirizzo());
 			newW.addContent(indirizzo);
 			// iniziolavori
 			Element iniziolavori = new Element("iniziolavori");
-			iniziolavori.setText(formatdata.format(w.getInizioLavori()));
+			iniziolavori.setText(formatdata.format(w.getInizioLavori()
+					.getTime()));
 			newW.addContent(iniziolavori);
 			// finelavori
 			Element finelavori = new Element("finelavori");
-			finelavori.setText(formatdata.format(w.getFineLavori()));
+			if (w.getFineLavori() != null) {
+				finelavori.setText(formatdata.format(w.getFineLavori()
+						.getTime()));
+			} else {
+				finelavori.setText("null");
+			}
 			newW.addContent(finelavori);
 			// completed
 			Element completed = new Element("completed");
@@ -399,7 +416,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			newS.addContent(costumerid);
 			// sessiondata
 			Element sessiondata = new Element("sessiondata");
-			sessiondata.setText(formatdata.format(s.getSessionData()));
+			sessiondata
+					.setText(formatdata.format(s.getSessionData().getTime()));
 			newS.addContent(sessiondata);
 			// hours
 			Element hours = new Element("hours");
@@ -408,12 +426,14 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 			// spesa
 			Element spesa = new Element("spesa");
 			spesa.setText(Integer.toString(s.getSpesa()));
+			newS.addContent(spesa);
 			// materiali
 			StringBuilder build = new StringBuilder();
 			for (String m : s.getMateriali()) {
 				build.append(m + "#");
 			}
-			build.deleteCharAt(build.length() - 1);
+			if(build.length()>0){
+			build.deleteCharAt(build.length() - 1);}
 			Element materiali = new Element("materiali");
 			materiali.setText(build.toString());
 			newS.addContent(materiali);
@@ -608,7 +628,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 	}
 
 	/**
-	 * Ricerca i Costumer in base a un campo e al valore.
+	 * Ricerca i Costumer in base a un campo e a un valore.
 	 * 
 	 * @param campo
 	 *            campo da ricercare (ad esempio: Nome)
@@ -652,6 +672,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		return found;
 	}
 
+	/** Ricerca i Work in base a un campo e a un valore */
 	public List<Work> queryWorkByArg(String campo, String value)
 			throws ParseException {
 		List<Work> found = new ArrayList<>();
@@ -710,8 +731,46 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface {
 		case "Completato":
 			found.addAll(worksMan.queryByCompleted(Boolean.parseBoolean(value)));
 			break;
+		default:
+			return worksMan.getAllWorks();
 		}
 		return found;
 	}
 
+	/**
+	 * Metodo di collegamento che aggiunge un Work ai dati. I parametri
+	 * necessari sono nome, costumerid e iniziolavori. Se almeno uno di questi è
+	 * nullo viene lanciata una InsufficientDataExceptio.
+	 * 
+	 * @param nome
+	 * @param costumerid
+	 * @param indirizzo
+	 * @param iniziolavori
+	 * @param finelavori
+	 * @param completed
+	 * @throws InsufficientDataException
+	 * @throws WorkAlreadyExistsException
+	 * @throws IDNotFoundException
+	 */
+	@Override
+	public void addWork(String nome, String costumerid, String indirizzo,
+			Calendar iniziolavori, Calendar finelavori, boolean completed)
+			throws InsufficientDataException, WorkAlreadyExistsException,
+			IDNotFoundException {
+		if (nome == null || nome.equals("") && costumerid == null
+				|| costumerid.equals("") || iniziolavori == null) {
+			// si lancia una eccezione per parametri insufficienti
+			throw new InsufficientDataException("DataManager.addWork",
+					"nome/costumerid/iniziolavori", "parametri insufficienti");
+		} else {
+			// si controlla l'esistenza del cliente
+			if (!costumersMan.exists(costumerid)) {
+				// si lancia l'eccezione
+				throw new IDNotFoundException(ElementType.Costumer, costumerid);
+			}
+			// si aggiunge
+			worksMan.addWork(nome, indirizzo, costumerid, iniziolavori,
+					finelavori, completed);
+		}
+	}
 }

@@ -1,5 +1,7 @@
 package it.valsecchi.quickagenda.windows;
 
+import it.valsecchi.quickagenda.settings.SettingsManager;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Prima finestra aperta dall'aplicazione. Essa permette all'utente di scegliere
@@ -30,6 +34,7 @@ public class StartWindow extends JFrame {
 	private JLabel image;
 
 	public StartWindow() {
+		addWindowListener(new ThisWindowListener());
 		setTitle("Quick Agenda");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				StartWindow.class.getResource("/ico_128/bookmarks.png")));
@@ -67,18 +72,18 @@ public class StartWindow extends JFrame {
 		btnNuovo.setIcon(new ImageIcon(StartWindow.class
 				.getResource("/ico_128/new.png")));
 		btnNuovo.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnNuovo.addActionListener(new ActionListener(){
+		btnNuovo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//si apre la finestra
+				// si apre la finestra
 				Log.info("apertura finestra CreateNewDataFileForm");
 				CreateNewDataFileWindow form = new CreateNewDataFileWindow();
 				form.setVisible(true);
-				//si chiude questa
+				// si chiude questa
 				dispose();
 			}
 		});
-		
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane
 				.createParallelGroup(Alignment.LEADING)
@@ -116,5 +121,14 @@ public class StartWindow extends JFrame {
 												.addComponent(btnNuovo))
 								.addGap(55)));
 		contentPane.setLayout(gl_contentPane);
+	}
+
+	private class ThisWindowListener extends WindowAdapter {
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+			// si salvano le preferenze
+			Log.info("salvataggio preferenze");
+			SettingsManager.writeSettings();
+		}
 	}
 }

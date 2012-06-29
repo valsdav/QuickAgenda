@@ -21,6 +21,7 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -50,12 +51,23 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 	 * 
 	 * @param _costsMan
 	 *            oggetto che gestisce l'aggiunta dei costumers.
+	 * @wbp.parser.constructor
 	 */
 	public AddSessionWindow(AddSessionInterface _sessionsMan) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				AddSessionWindow.class.getResource("/ico_small/agenda.png")));
+				AddSessionWindow.class.getResource("/ico_small/add1.png")));
 		setTitle("Aggiungi Sessione");
 		initComponents();
+		sessionsMan = _sessionsMan;
+		Log.info("finestra inizializzata");
+	}
+
+	public AddSessionWindow(AddSessionInterface _sessionsMan, Calendar cal) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				AddSessionWindow.class.getResource("/ico_small/add1.png")));
+		setTitle("Aggiungi Sessione");
+		initComponents();
+		dateChooser.setCalendar(cal);
 		sessionsMan = _sessionsMan;
 		Log.info("finestra inizializzata");
 	}
@@ -77,10 +89,12 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		jToolBar = new javax.swing.JToolBar();
 		jToolBar.setFloatable(false);
 		addButton = new javax.swing.JButton();
+		addButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		addButton.addActionListener(new AddButtonActionListener());
 		addButton.setIcon(new ImageIcon(AddSessionWindow.class
 				.getResource("/ico_small/add2.png")));
 		exitButton = new javax.swing.JButton();
+		exitButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// si chiude
@@ -105,7 +119,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		lblData.setText("Data*:");
 		lblData.setName("txtAzienda");
 
-		lblOre.setText("N\u00B0 Ore*:");
+		lblOre.setText("N\u00B0 Ore:");
 		lblOre.setName("txtIndirizzo");
 
 		lblSpesa.setText("Spesa:");
@@ -161,72 +175,110 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 								.addGroup(
 										layout.createParallelGroup(
 												Alignment.LEADING)
-												.addComponent(
-														lblIstruzioni,
-														GroupLayout.DEFAULT_SIZE,
-														443, Short.MAX_VALUE)
+												.addGroup(
+														Alignment.TRAILING,
+														layout.createSequentialGroup()
+																.addGroup(
+																		layout.createParallelGroup(
+																				Alignment.TRAILING)
+																				.addComponent(
+																						lblIstruzioni,
+																						Alignment.LEADING,
+																						GroupLayout.DEFAULT_SIZE,
+																						362,
+																						Short.MAX_VALUE)
+																				.addGroup(
+																						layout.createSequentialGroup()
+																								.addComponent(
+																										lblData,
+																										GroupLayout.PREFERRED_SIZE,
+																										70,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(
+																										ComponentPlacement.RELATED)
+																								.addComponent(
+																										dateChooser,
+																										GroupLayout.DEFAULT_SIZE,
+																										287,
+																										Short.MAX_VALUE)))
+																.addGap(144))
 												.addGroup(
 														layout.createSequentialGroup()
-																.addComponent(
-																		lblMateriali,
-																		GroupLayout.PREFERRED_SIZE,
-																		70,
-																		GroupLayout.PREFERRED_SIZE)
-																.addPreferredGap(
-																		ComponentPlacement.RELATED)
-																.addComponent(
-																		txtMateriali,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.DEFAULT_SIZE,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGap(66))
-												.addGroup(
-														layout.createSequentialGroup()
-																.addComponent(
-																		lblIDLavoro,
-																		GroupLayout.PREFERRED_SIZE,
-																		70,
-																		GroupLayout.PREFERRED_SIZE)
-																.addPreferredGap(
-																		ComponentPlacement.RELATED)
-																.addComponent(
-																		txtIDLavoro)
-																.addGap(18)
-																.addComponent(
-																		btnIDLavoro)))
-								.addGap(63))
-				.addComponent(jToolBar, GroupLayout.DEFAULT_SIZE, 518,
-						Short.MAX_VALUE)
+																.addGroup(
+																		layout.createParallelGroup(
+																				Alignment.TRAILING)
+																				.addGroup(
+																						Alignment.LEADING,
+																						layout.createSequentialGroup()
+																								.addComponent(
+																										lblIDLavoro,
+																										GroupLayout.PREFERRED_SIZE,
+																										70,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(
+																										ComponentPlacement.RELATED)
+																								.addComponent(
+																										txtIDLavoro,
+																										GroupLayout.PREFERRED_SIZE,
+																										219,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(
+																										ComponentPlacement.RELATED)
+																								.addComponent(
+																										btnIDLavoro))
+																				.addGroup(
+																						Alignment.LEADING,
+																						layout.createParallelGroup(
+																								Alignment.TRAILING,
+																								false)
+																								.addGroup(
+																										Alignment.LEADING,
+																										layout.createSequentialGroup()
+																												.addComponent(
+																														lblMateriali,
+																														GroupLayout.PREFERRED_SIZE,
+																														70,
+																														GroupLayout.PREFERRED_SIZE)
+																												.addPreferredGap(
+																														ComponentPlacement.RELATED)
+																												.addComponent(
+																														txtMateriali))
+																								.addGroup(
+																										layout.createSequentialGroup()
+																												.addComponent(
+																														lblSpesa,
+																														GroupLayout.PREFERRED_SIZE,
+																														70,
+																														GroupLayout.PREFERRED_SIZE)
+																												.addPreferredGap(
+																														ComponentPlacement.RELATED)
+																												.addComponent(
+																														txtSpesa))
+																								.addGroup(
+																										Alignment.LEADING,
+																										layout.createSequentialGroup()
+																												.addComponent(
+																														lblOre,
+																														GroupLayout.PREFERRED_SIZE,
+																														70,
+																														GroupLayout.PREFERRED_SIZE)
+																												.addPreferredGap(
+																														ComponentPlacement.RELATED)
+																												.addComponent(
+																														txtOre,
+																														287,
+																														287,
+																														287))))
+																.addContainerGap(
+																		144,
+																		Short.MAX_VALUE))))
 				.addGroup(
 						layout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(lblData,
-										GroupLayout.PREFERRED_SIZE, 70,
+								.addComponent(jToolBar,
+										GroupLayout.PREFERRED_SIZE, 334,
 										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(dateChooser,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE).addGap(144))
-				.addGroup(
-						layout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(lblOre,
-										GroupLayout.PREFERRED_SIZE, 70,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(txtOre, 287, 287, 287)
-								.addContainerGap(144, Short.MAX_VALUE))
-				.addGroup(
-						layout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(lblSpesa,
-										GroupLayout.PREFERRED_SIZE, 70,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(txtSpesa,
-										GroupLayout.DEFAULT_SIZE, 287,
-										Short.MAX_VALUE).addGap(144)));
+								.addContainerGap(GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout
 				.createParallelGroup(Alignment.LEADING)
 				.addGroup(
@@ -365,6 +417,8 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 						dateChooser.getCalendar(), nore, spesa, materiali);
 				// si svuotano i campi
 				lblAvviso.setText("Sessione aggiunta con successo!");
+				lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class
+						.getResource("/ico_small/check.png")));
 				txtIDLavoro.setText("");
 				dateChooser.cleanup();
 				txtOre.setText("");
@@ -410,7 +464,11 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 	 */
 	@Override
 	public void registerSelectedWork(Work selected_work) {
-
+		// se è null non si fa niente
+		if (selected_work != null) {
+			// si imposta il suo id nel campo
+			txtIDLavoro.setText(selected_work.getID());
+		}
 	}
 
 	private class BtnIDLavoroActionListener implements ActionListener {

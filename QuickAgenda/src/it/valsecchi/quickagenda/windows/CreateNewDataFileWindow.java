@@ -53,7 +53,7 @@ public class CreateNewDataFileWindow extends JFrame {
 
 	public void initComponent() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 615, 395);
+		setBounds(100, 100, 615, 378);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -76,7 +76,7 @@ public class CreateNewDataFileWindow extends JFrame {
 			@Override
 			public void caretUpdate(CaretEvent arg0) {
 				// si rende disponibile il pulsante next
-				if (txtPass.getPassword().length != 0) {
+				if (txtPass.getPassword().length != 0 && txtPass.getPassword().length <=7 ) {
 					btnNext.setEnabled(true);
 				} else {
 					btnNext.setEnabled(false);
@@ -87,7 +87,7 @@ public class CreateNewDataFileWindow extends JFrame {
 		JLabel lblPassword = new JLabel("Password:");
 
 		JLabel lblInserireUnPassoword = new JLabel(
-				"Inserire un passoword per il nuovo file dati:");
+				"Inserire una password di max 7 caratteri per il nuovo file dati:");
 
 		btnNext = new JButton("");
 		btnNext.addActionListener(new NextClickHandler());
@@ -118,25 +118,29 @@ public class CreateNewDataFileWindow extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(immagine1)
-							.addGap(29)
-							.addComponent(lblPath))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(22)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblInserireUnPassoword)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-									.addComponent(immagine2)
-									.addGroup(gl_contentPane.createSequentialGroup()
-										.addComponent(lblPassword)
-										.addGap(46)
-										.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED))))))
-					.addPreferredGap(ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnSfoglia)
-						.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(immagine1)
+											.addGap(29)
+											.addComponent(lblPath))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(lblPassword)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)
+											.addGap(44))))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(lblInserireUnPassoword)))
+							.addPreferredGap(ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnSfoglia)
+								.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(229)
+							.addComponent(immagine2)))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -151,18 +155,18 @@ public class CreateNewDataFileWindow extends JFrame {
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(btnSfoglia)
 								.addComponent(immagine1))))
-					.addGap(44)
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblInserireUnPassoword)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblPassword)
-								.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(27)
-							.addComponent(immagine2))
+								.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(immagine2)
+					.addContainerGap(45, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
