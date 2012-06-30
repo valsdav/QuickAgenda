@@ -30,6 +30,7 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.ListSelectionModel;
 
 public class CostumersManagerWindow extends JFrame {
 
@@ -213,6 +214,7 @@ public class CostumersManagerWindow extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 		{
 			table = new JTable(this.getTableModel("", ""));
+			table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
 			table.setAutoCreateRowSorter(true);

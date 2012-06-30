@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.Toolkit;
 
 public class SessionDetailWindow extends JFrame {
 
@@ -56,7 +57,7 @@ public class SessionDetailWindow extends JFrame {
 	private JLabel label;
 	private JLabel label_1;
 	private JTextField txtSessioneID;
-	private JTextField txtLavoroSessione;
+	private JTextField txtIDLavoroSessione;
 	private JTextField txtClienteSessione;
 	private JTextField txtDataSessione;
 	private JTextField txtOre;
@@ -98,6 +99,8 @@ public class SessionDetailWindow extends JFrame {
 	private JButton btnSalvaCliente;
 
 	public SessionDetailWindow(String sessionId, DataManager _manager) {
+		setTitle("Dettagli Sessione");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(SessionDetailWindow.class.getResource("/ico_small/agenda.png")));
 		manager = _manager;
 		sessionID = sessionId;
 		initComponent();
@@ -105,7 +108,7 @@ public class SessionDetailWindow extends JFrame {
 	}
 
 	private void initComponent() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 646, 775);
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.BLUE);
@@ -162,9 +165,9 @@ public class SessionDetailWindow extends JFrame {
 		txtSessioneID = new JTextField();
 		txtSessioneID.setEditable(false);
 		txtSessioneID.setColumns(10);
-		txtLavoroSessione = new JTextField();
-		txtLavoroSessione.setEditable(false);
-		txtLavoroSessione.setColumns(10);
+		txtIDLavoroSessione = new JTextField();
+		txtIDLavoroSessione.setEditable(false);
+		txtIDLavoroSessione.setColumns(10);
 		txtClienteSessione = new JTextField();
 		txtClienteSessione.setEditable(false);
 		txtClienteSessione.setColumns(10);
@@ -181,7 +184,7 @@ public class SessionDetailWindow extends JFrame {
 		txtMateriali.setEditable(false);
 		txtMateriali.setColumns(10);
 		btnSalvaSessione = new JButton("Salva");
-		btnSalvaSessione.addActionListener(new BtnSalvaActionListener());
+		btnSalvaSessione.addActionListener(new BtnSalvaSessioneActionListener());
 		btnSalvaSessione.setEnabled(false);
 		btnSalvaSessione.setFont(new Font("Tahoma", Font.BOLD, 14));
 
@@ -324,40 +327,6 @@ public class SessionDetailWindow extends JFrame {
 							.addComponent(lblIstrSessione))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(label, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(txtLavoroID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(12)
-									.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtClienteID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 262, Short.MAX_VALUE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtMateriali))
-								.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 618, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-												.addGroup(gl_contentPane.createSequentialGroup()
-													.addComponent(lblIndirizzo, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-													.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
-												.addGroup(gl_contentPane.createSequentialGroup()
-													.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.RELATED)
-													.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE)))
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
-										.addComponent(lblDettagliLavoro, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-									.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
 							.addComponent(lblCompletato, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(cbCompleted))
@@ -417,6 +386,43 @@ public class SessionDetailWindow extends JFrame {
 							.addComponent(btnSalvaCliente, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
+							.addComponent(immagine1))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(label, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(txtLavoroID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(12)
+									.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtClienteID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 262, Short.MAX_VALUE))
+								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+									.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtMateriali, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+								.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 618, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+												.addGroup(gl_contentPane.createSequentialGroup()
+													.addComponent(lblIndirizzo, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+													.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+													.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
+												.addGroup(gl_contentPane.createSequentialGroup()
+													.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE)))
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblDettagliLavoro, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+									.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(lblID)
@@ -433,7 +439,7 @@ public class SessionDetailWindow extends JFrame {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(txtLavoroSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtIDLavoroSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
 									.addComponent(lblNewLabel_4))
 								.addGroup(gl_contentPane.createSequentialGroup()
@@ -443,10 +449,7 @@ public class SessionDetailWindow extends JFrame {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(txtSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtClienteSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(immagine1)))
+								.addComponent(txtClienteSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -458,7 +461,7 @@ public class SessionDetailWindow extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblID)
 						.addComponent(lblNewLabel_2)
-						.addComponent(txtLavoroSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtIDLavoroSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewLabel_4)
 						.addComponent(txtClienteSessione, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtSessioneID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -549,7 +552,7 @@ public class SessionDetailWindow extends JFrame {
 								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 								.addComponent(txtTelefonoCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(txtEmailCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(1288, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -587,6 +590,7 @@ public class SessionDetailWindow extends JFrame {
 			// non si puo verificare questo errore
 			Log.error("id " + e.getID() + ", non trovato");
 		}
+		txtIDLavoroSessione.setText(work.getID());
 		txtLavoroID.setText(work.getID());
 		txtClienteID.setText(work.getCostumerID());
 		txtIndirizzoLavoro.setText(work.getIndirizzo());
@@ -615,7 +619,7 @@ public class SessionDetailWindow extends JFrame {
 		}
 	}
 
-	private class BtnSalvaActionListener implements ActionListener {
+	private class BtnSalvaSessioneActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si salvano i nuovi dati
 			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
@@ -642,6 +646,10 @@ public class SessionDetailWindow extends JFrame {
 			lblIstrSessione.setText("");
 			btnModificaSessione.setEnabled(true);
 			btnSalvaSessione.setEnabled(false);
+			txtDataSessione.setEditable(false);
+			txtOre.setEditable(false);
+			txtSpesa.setEditable(false);
+			txtMateriali.setEditable(false);
 		}
 	}
 
@@ -686,6 +694,9 @@ public class SessionDetailWindow extends JFrame {
 			work.setIndirizzo(txtIndirizzoLavoro.getText());
 			btnSalvaLavoro.setEnabled(false);
 			btnModificaLavoro.setEnabled(true);
+			txtIndirizzoLavoro.setEditable(false);
+			txtInizioLavori.setEditable(false);
+			txtFineLavori.setEditable(false);
 		}
 	}
 
@@ -712,6 +723,12 @@ public class SessionDetailWindow extends JFrame {
 			costumer.setTel(txtTelefonoCliente.getText());
 			btnModificaCliente.setEnabled(true);
 			btnSalvaCliente.setEnabled(false);
+			txtNome.setEditable(false);
+			txtCognome.setEditable(false);
+			txtIndirizzoCliente.setEditable(false);
+			txtAzienda.setEditable(false);
+			txtEmailCliente.setEditable(false);
+			txtTelefonoCliente.setEditable(false);
 		}
 	}
 

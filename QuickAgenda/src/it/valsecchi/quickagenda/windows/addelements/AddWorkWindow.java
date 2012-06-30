@@ -422,8 +422,8 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 				txtNome.setText("");
 				txtIDCliente.setText("");
 				txtIndirizzo.setText("");
-				dcInizioLavori.cleanup();
-				dcFineLavori.cleanup();
+				dcInizioLavori.setCalendar(null);
+				dcFineLavori.setCalendar(null);
 				checkCompletato.setSelected(false);
 			} catch (WorkAlreadyExistsException e1) {
 				// si avvisa

@@ -6,6 +6,7 @@ import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
 import it.valsecchi.quickagenda.settings.SettingsManager;
 import it.valsecchi.quickagenda.windows.addelements.AddSessionWindow;
+import it.valsecchi.quickagenda.windows.detail.SessionDetailWindow;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -44,6 +45,7 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
+import javax.swing.ListSelectionModel;
 
 public class MainWindow extends JFrame {
 
@@ -92,6 +94,8 @@ public class MainWindow extends JFrame {
 		AbstractTableModel model = this.getTableModel(GregorianCalendar
 				.getInstance());
 		calendar = new JCalendar();
+		calendar.setTodayButtonVisible(true);
+		calendar.setTodayButtonText("Oggi");
 		calendar.addPropertyChangeListener(new CalendarPropertyChangeListener());
 		calendar.getMonthChooser().getComboBox()
 				.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -194,6 +198,7 @@ public class MainWindow extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 
 		table = new JTable(this.getTableModel(Calendar.getInstance()));
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		table.addMouseListener(new TableMouseListener());
 		table.setAutoCreateRowSorter(true);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -428,9 +433,18 @@ public class MainWindow extends JFrame {
 			costsWindow.showAll();
 		}
 	}
+	
 	private class TableMouseListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseClicked(MouseEvent arg) {
+			//si controlla che si sia cliccato due volte
+			if(arg.getClickCount() == 2){
+				//si apre la finestra dettagli sessione
+				//si ricava l'id selezionato
+				String id = (String) table.getValueAt(table.getSelectedRow(),0);
+				SessionDetailWindow detail = new SessionDetailWindow(id,data);
+				detail.setVisible(true);
+			}
 		}
 	}
 	private class BtnLavoriActionListener implements ActionListener {

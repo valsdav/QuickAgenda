@@ -234,8 +234,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			}
 			completed = Boolean.parseBoolean(w.getChildText("completed"));
 			// creazione della work
-			Work newWork = new Work(id, hash, costumerid, indirizzo, inizio,
-					fine, completed);
+			Work newWork = new Work(id, costumerid,nome, indirizzo, inizio,
+					fine, completed,hash);
 			works.add(newWork);
 		}
 		// si ricava lista di Sessions
@@ -366,7 +366,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			costumerid.setText(w.getCostumerID());
 			newW.addContent(costumerid);
 			//nome 
-			Element nome = new Element("Nome");
+			Element nome = new Element("nome");
 			nome.setText(w.getNome());
 			newW.addContent(nome);
 			// indirizzo
