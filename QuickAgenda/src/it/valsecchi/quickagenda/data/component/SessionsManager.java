@@ -1,7 +1,6 @@
 package it.valsecchi.quickagenda.data.component;
 
 import it.valsecchi.quickagenda.data.Utility;
-import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;

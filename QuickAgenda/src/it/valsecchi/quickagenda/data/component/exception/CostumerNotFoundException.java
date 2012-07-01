@@ -1,6 +1,7 @@
 package it.valsecchi.quickagenda.data.component.exception;
 
 import it.valsecchi.quickagenda.data.component.Costumer;
+import it.valsecchi.quickagenda.data.component.ElementType;
 
 /**
  * Classe che rappresenta l'eccezione che viene lanciata quando non viene

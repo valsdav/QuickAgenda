@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Work;
-import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;

@@ -20,12 +20,12 @@ import org.jdom2.JDOMException;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import it.valsecchi.quickagenda.data.component.Costumer;
 import it.valsecchi.quickagenda.data.component.CostumersManager;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Session;
 import it.valsecchi.quickagenda.data.component.SessionsManager;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.WorksManager;
 import it.valsecchi.quickagenda.data.component.exception.CostumerAlreadyExistsException;
-import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
@@ -40,10 +40,13 @@ import it.valsecchi.quickagenda.data.interfaces.*;
  * dati, la loro scrittura attraverso DataReaderWriter. Gestisce tutti i
  * componenti grazia a un CostumersManager, un WorksManager e un
  * SessionsManager. Fornisce tutte le funzioni di ricerca, aggiunta ed rimozione
- * dei dati al codice client.
+ * dei dati al codice client. Inoltre fornisce un meccanismo di notifica
+ * dell'aggiornamento dei dati tramite listeners;
  * 
  * La classe implementa varie interfaccie che stabiliscono tutte le azioni che
  * può compiere: -AddCostumerInterface: funzionalità di aggiunta di un Costumer
+ * -AddSessionInterface: funzionalità di aggiunta di un Costumer
+ * -AddWorkInterface: funzionalità di aggiunta di un Work
  * 
  * @author Davide Valsecchi
  * @version 1.0
@@ -52,11 +55,22 @@ import it.valsecchi.quickagenda.data.interfaces.*;
 public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		AddWorkInterface {
 
+	/** Gestore dei Costumer */
 	private CostumersManager costumersMan;
+	/** Gestore dei Work */
 	private WorksManager worksMan;
+	/** Gestore delle Session */
 	private SessionsManager sessionsMan;
+	// si memorizza password e path
 	private char[] password;
 	private String path;
+
+	/** Listener per l'evento di aggiornamento dei dati dei Costumers */
+	private List<DataUpdateListener> costumersListeners = new ArrayList<>();
+	/** Listener per l'evento di aggiornamento dei dati dei Works */
+	private List<DataUpdateListener> worksListeners = new ArrayList<>();
+	/** Listener per l'evento di aggiornamento dei dati delle Sessions */
+	private List<DataUpdateListener> sessionsListeners = new ArrayList<>();
 
 	/**
 	 * Costruttore privato della classe che accetta 3 liste con i dati: i
@@ -216,7 +230,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		List<Element> workElem = root.getChildren("work");
 		List<Work> works = new ArrayList<>();
 		for (Element w : workElem) {
-			String id, hash, costumerid, indirizzo,nome;
+			String id, hash, costumerid, indirizzo, nome;
 			GregorianCalendar inizio, fine;
 			boolean completed;
 			id = w.getChildText("id");
@@ -234,8 +248,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			}
 			completed = Boolean.parseBoolean(w.getChildText("completed"));
 			// creazione della work
-			Work newWork = new Work(id, costumerid,nome, indirizzo, inizio,
-					fine, completed,hash);
+			Work newWork = new Work(id, costumerid, nome, indirizzo, inizio,
+					fine, completed, hash);
 			works.add(newWork);
 		}
 		// si ricava lista di Sessions
@@ -256,7 +270,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 					.setTime(formatdata.parse(s.getChildText("sessiondata")));
 			hours = Integer.parseInt("+" + s.getChildText("hours"));
 			spesa = Integer.parseInt("+" + s.getChildText("spesa"));
-			 //StringTokenizer per i materiali
+			// StringTokenizer per i materiali
 			String mat = s.getChildText("materiali");
 			StringTokenizer tok = new StringTokenizer(mat, "#");
 			while (tok.hasMoreTokens()) {
@@ -365,7 +379,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Element costumerid = new Element("costumerid");
 			costumerid.setText(w.getCostumerID());
 			newW.addContent(costumerid);
-			//nome 
+			// nome
 			Element nome = new Element("nome");
 			nome.setText(w.getNome());
 			newW.addContent(nome);
@@ -432,8 +446,9 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			for (String m : s.getMateriali()) {
 				build.append(m + "#");
 			}
-			if(build.length()>0){
-			build.deleteCharAt(build.length() - 1);}
+			if (build.length() > 0) {
+				build.deleteCharAt(build.length() - 1);
+			}
 			Element materiali = new Element("materiali");
 			materiali.setText(build.toString());
 			newS.addContent(materiali);
@@ -485,6 +500,56 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	public void setPath(String _path) {
 		this.path = _path;
+	}
+
+	/**
+	 * Metodo che registra i listeners per gli eventi di aggiornamento dei dati
+	 * in base al tipo di dato: Costumer,Work o Session.
+	 * 
+	 * @param listener
+	 *            oggetto listener
+	 * @param type
+	 *            tipo di listener da registrare
+	 */
+	public void addDataUpdateListener(DataUpdateListener listener,
+			ElementType type) {
+		switch (type) {
+		case Costumer:
+			this.costumersListeners.add(listener);
+			break;
+		case Work:
+			this.worksListeners.add(listener);
+			break;
+		case Session:
+			this.sessionsListeners.add(listener);
+			break;
+		}
+	}
+
+	/**
+	 * Metodo che lancia la notifica dell'evento di aggiornamento dei dati ai
+	 * listener a seconda del tipo passato come parametro.
+	 * 
+	 * @param type tipo di dati per il quale lanciare l'aggiornamento
+	 */
+	public void fireDataUpdatePerformed(ElementType type) {
+		switch (type) {
+		case Costumer:
+			for(DataUpdateListener l:this.costumersListeners){
+				l.DataUpdatePerformed(type);
+			}
+			break;
+		case Work:
+			for(DataUpdateListener l:this.worksListeners){
+				l.DataUpdatePerformed(type);
+			}
+			break;
+		case Session:
+			for(DataUpdateListener l:this.sessionsListeners){
+				l.DataUpdatePerformed(type);
+			}
+			break;
+		}
 	}
 
 	/**
