@@ -23,7 +23,6 @@ import javax.swing.Timer;
 
 import com.toedter.calendar.JCalendar;
 import java.awt.Font;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -71,6 +70,7 @@ public class MainWindow extends JFrame {
 	private AddSessionWindow addSessionWindow;
 	private JPanel panel;
 	private JTable table;
+	private JButton btnRimuovi;
 
 	public MainWindow(DataManager _data) {
 		addWindowListener(new ThisWindowListener());
@@ -80,8 +80,9 @@ public class MainWindow extends JFrame {
 				MainWindow.class.getResource("/ico_small/agenda.png")));
 		// si memorizza la fonte dati
 		data = _data;
-		//si memorizza il listener per l'aggiornamento dati
-		data.addDataUpdateListener(new SessionUpdateListener(),ElementType.Session);
+		// si memorizza il listener per l'aggiornamento dati
+		data.addDataUpdateListener(new SessionUpdateListener(),
+				ElementType.Session);
 		// si inizializzano i componenti
 		initComponent();
 	}
@@ -118,87 +119,47 @@ public class MainWindow extends JFrame {
 		separator.setOrientation(SwingConstants.VERTICAL);
 
 		panel = new JPanel();
+		btnRimuovi = new JButton("Rimuovi Sessioni selezionate");
+		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
+		btnRimuovi.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnRimuovi.setIcon(new ImageIcon(MainWindow.class
+				.getResource("/ico_small/edit_remove.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addComponent(toolBar,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(separator,
-												GroupLayout.PREFERRED_SIZE, 3,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																calendar,
-																GroupLayout.PREFERRED_SIZE,
-																385,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																btnNewSession))
-										.addPreferredGap(
-												ComponentPlacement.UNRELATED)
-										.addComponent(panel,
-												GroupLayout.DEFAULT_SIZE, 817,
-												Short.MAX_VALUE)
-										.addContainerGap()));
-		gl_contentPane
-				.setVerticalGroup(gl_contentPane
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																toolBar,
-																GroupLayout.DEFAULT_SIZE,
-																832,
-																Short.MAX_VALUE)
-														.addComponent(
-																separator,
-																Alignment.TRAILING,
-																GroupLayout.DEFAULT_SIZE,
-																832,
-																Short.MAX_VALUE)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								panel,
-																								GroupLayout.PREFERRED_SIZE,
-																								502,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addComponent(
-																												calendar,
-																												GroupLayout.PREFERRED_SIZE,
-																												339,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addGap(18)
-																										.addComponent(
-																												btnNewSession)))
-																		.addGap(22)))
-										.addContainerGap()));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 3, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 385, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(btnRimuovi, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(btnNewSession, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(toolBar, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+						.addComponent(separator, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 502, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 339, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnNewSession)
+									.addGap(18)
+									.addComponent(btnRimuovi)))
+							.addGap(22)))
+					.addContainerGap())
+		);
 		panel.setLayout(new BorderLayout(0, 0));
 
 		table = new JTable(this.getTableModel(Calendar.getInstance()));
@@ -272,9 +233,11 @@ public class MainWindow extends JFrame {
 				.getResource("/ico_small/info_box_blue.png")));
 		toolBar.add(btnInfo);
 		// si inizializza la finestra
-		costsWindow = new CostumersManagerWindow(data,CostumersManagerWindow.MODE_NORMAL);
+		costsWindow = new CostumersManagerWindow(data,
+				CostumersManagerWindow.MODE_NORMAL);
 		contentPane.setLayout(gl_contentPane);
-		worksWindow = new WorksManagerWindow(data,WorksManagerWindow.MODE_NORMAL);
+		worksWindow = new WorksManagerWindow(data,
+				WorksManagerWindow.MODE_NORMAL);
 	}
 
 	/**
@@ -313,10 +276,10 @@ public class MainWindow extends JFrame {
 			if (costsWindow != null) {
 				costsWindow.dispose();
 			}
-			if(worksWindow != null){
+			if (worksWindow != null) {
 				worksWindow.dispose();
 			}
-			if(addSessionWindow != null){
+			if (addSessionWindow != null) {
 				addSessionWindow.dispose();
 			}
 			// controllo salvataggio
@@ -425,8 +388,9 @@ public class MainWindow extends JFrame {
 	private class BtnNewSessionActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si apre la finestra di aggiunta
-			addSessionWindow = new AddSessionWindow(data,calendar.getCalendar());
-		    addSessionWindow.setVisible(true);
+			addSessionWindow = new AddSessionWindow(data,
+					calendar.getCalendar());
+			addSessionWindow.setVisible(true);
 		}
 	}
 
@@ -437,23 +401,45 @@ public class MainWindow extends JFrame {
 			costsWindow.showAll();
 		}
 	}
-	
+
 	private class TableMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg) {
-			//si controlla che si sia cliccato due volte
-			if(arg.getClickCount() == 2){
-				//si apre la finestra dettagli sessione
-				//si ricava l'id selezionato
-				String id = (String) table.getValueAt(table.getSelectedRow(),0);
-				SessionDetailWindow detail = new SessionDetailWindow(id,data);
+			// si controlla che si sia cliccato due volte
+			if (arg.getClickCount() == 2) {
+				// si apre la finestra dettagli sessione
+				// si ricava l'id selezionato
+				String id = (String) table
+						.getValueAt(table.getSelectedRow(), 0);
+				SessionDetailWindow detail = new SessionDetailWindow(id, data);
 				detail.setVisible(true);
 			}
 		}
 	}
+
 	private class BtnLavoriActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			worksWindow.setVisible(true);
+		}
+	}
+
+	private class BtnRimuoviActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg) {
+			//Si ricavano le sessioni selezionate
+			int[] selected = table.getSelectedRows();
+			List<String> ids = new ArrayList<>();
+			for(int i :selected){
+				ids.add((String) table.getValueAt(i, 0));
+			}
+			//ora si rimuovono
+			for(String id :ids){
+				try {
+					data.removeSession(id);
+				} catch (IDNotFoundException e) {
+					//questa eccezione non dovrebbe accadere
+					Log.error("Sessione non trovata");
+				}
+			}
 		}
 	}
 
@@ -496,16 +482,18 @@ public class MainWindow extends JFrame {
 				return sessions.get(row).getID();
 			case 1:
 				try {
-					return data.getWorkFromSession(sessions.get(row).getID()).getNome();
+					return data.getWorkFromSession(sessions.get(row).getID())
+							.getNome();
 				} catch (IDNotFoundException e) {
-					//impossibile che si generi questa eccezione
+					// impossibile che si generi questa eccezione
 					return null;
 				}
 			case 2:
 				try {
-					return data.getCostumerFromSession(sessions.get(row).getID()).getCognome();
+					return data.getCostumerFromSession(
+							sessions.get(row).getID()).getCognome();
 				} catch (IDNotFoundException e) {
-					//impossibile che si generi questa eccezione
+					// impossibile che si generi questa eccezione
 					return null;
 				}
 			case 3:
@@ -528,20 +516,22 @@ public class MainWindow extends JFrame {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Classe privata che fa da listener per gli eventi di aggiornamento delle sessioni.
+	 * Classe privata che fa da listener per gli eventi di aggiornamento delle
+	 * sessioni.
+	 * 
 	 * @author Davide Valsecchi
 	 * @version 1.0
-	 *
+	 * 
 	 */
-	private class SessionUpdateListener implements DataUpdateListener{
+	private class SessionUpdateListener implements DataUpdateListener {
 		@Override
 		public void DataUpdatePerformed(ElementType type) {
-			if(type!= ElementType.Session){
+			if (type != ElementType.Session) {
 				return;
 			}
-			//si aggiorna la tabella
+			// si aggiorna la tabella
 			// si ricava la data selezionata
 			Calendar c = calendar.getCalendar();
 			c.set(Calendar.HOUR_OF_DAY, 12);
@@ -551,4 +541,4 @@ public class MainWindow extends JFrame {
 			table.updateUI();
 		}
 	}
-	}
+}

@@ -9,9 +9,6 @@ import it.valsecchi.quickagenda.data.interfaces.AddWorkInterface;
 import it.valsecchi.quickagenda.data.interfaces.CostumerSelectionListener;
 import it.valsecchi.quickagenda.windows.CostumersManagerWindow;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;

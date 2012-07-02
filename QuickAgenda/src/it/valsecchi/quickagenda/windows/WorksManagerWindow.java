@@ -7,7 +7,7 @@ import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import it.valsecchi.quickagenda.data.interfaces.WorkSelectionListener;
 import it.valsecchi.quickagenda.windows.addelements.AddWorkWindow;
-
+import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -53,6 +53,7 @@ public class WorksManagerWindow extends JFrame {
 	private int mode;
 	private List<WorkSelectionListener> listeners = new ArrayList<>();
 	private JLabel lblIstr;
+	private JButton btnRimuovi;
 
 	public WorksManagerWindow(DataManager _data, int _mode) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -66,7 +67,7 @@ public class WorksManagerWindow extends JFrame {
 	}
 
 	private void initComponent() {
-		setBounds(100, 100, 990, 684);
+		setBounds(100, 100, 990, 885);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -85,6 +86,7 @@ public class WorksManagerWindow extends JFrame {
 				.getResource("/ico_small/search3.png")));
 		btnCerca.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnAggiungi = new JButton("Aggiungi Lavoro");
+		btnAggiungi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnAggiungi.addActionListener(new BtnAggiungiActionListener());
 		btnAggiungi.setIcon(new ImageIcon(WorksManagerWindow.class
 				.getResource("/ico_small/add1.png")));
@@ -94,6 +96,11 @@ public class WorksManagerWindow extends JFrame {
 				.getResource("/ico_small/check.png")));
 		panel = new JPanel();
 		lblIstr = new JLabel("");
+		
+		btnRimuovi = new JButton("Rimuovi Lavori selezionati");
+		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
+		btnRimuovi.setIcon(new ImageIcon(WorksManagerWindow.class.getResource("/ico_small/edit_remove.png")));
+		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -110,39 +117,42 @@ public class WorksManagerWindow extends JFrame {
 									.addComponent(lblIstr)))
 							.addGap(12)
 							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(9)
-									.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(13)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblIstr)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(9)
-									.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
+							.addGap(9)
+							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(13)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblIstr)))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(20)
-							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)))
+							.addGap(9)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+								.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
-					.addContainerGap())
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 637, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel.setLayout(new BorderLayout(0, 0));
 		table = new JTable(this.getTableModel("", ""));
@@ -228,6 +238,24 @@ public class WorksManagerWindow extends JFrame {
 			// si apre la finestra
 			AddWorkWindow w = new AddWorkWindow(data);
 			w.setVisible(true);
+		}
+	}
+	private class BtnRimuoviActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			//Si ricavano le sessioni selezionate
+			int[] selected = table.getSelectedRows();
+			List<String> ids = new ArrayList<>();
+			for(int i :selected){
+				ids.add((String) table.getValueAt(i, 0));
+			}
+			for(String id :ids){
+				try {
+					data.removeWork(id);
+				} catch (IDNotFoundException e2) {
+					//questa eccezione non dovrebbe accadere
+					Log.error("Cliente non trovato");
+				}
+			}
 		}
 	}
 
@@ -340,7 +368,7 @@ public class WorksManagerWindow extends JFrame {
 			}
 			//si aggiornano i dati mantenendo i parametri di ricerca correnti
 			WorkTableModel m = (WorkTableModel) table.getModel();
-			m.changeData((String) cbCerca.getSelectedItem(), txtCerca.getText());
+			m.changeData("","");
 			table.updateUI();
 		}
 	}

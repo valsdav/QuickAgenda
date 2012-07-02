@@ -113,8 +113,8 @@ public class WorksManager {
 		String hash = Work.calculateWorkHash(costumerid, nome, indirizzo,
 				iniziolavori);
 		// si crea un work
-		Work newWork = new Work(id ,costumerid,nome, indirizzo, iniziolavori,
-				finelavori, completed,hash);
+		Work newWork = new Work(id, costumerid, nome, indirizzo, iniziolavori,
+				finelavori, completed, hash);
 		// ora si controlla se esiste già con l'hash
 		if (hashMap.containsKey(hash)) {
 			// si lancia l'eccezione
@@ -172,6 +172,24 @@ public class WorksManager {
 	}
 
 	/**
+	 * Metodo che rimuove i Work identificati dall'ID del Costumer
+	 * 
+	 * @param costumerID
+	 *            ID del Costumer
+	 */
+	public void removeWorksByCostumerID(String costumerID) {
+		List<Work> ws = this.queryByCostumerID(costumerID);
+		for (Work w : ws) {
+			try {
+				this.removeWorkByID(w.getID());
+			} catch (IDNotFoundException e) {
+				// Il Work verrà trovato di sicuro perchè è appena stato
+				// cercato
+			}
+		}
+	}
+
+	/**
 	 * Metodo che restituisce un Work avente come ID il parametro passato al
 	 * metodo. Se il Work non viene trovato viene lanciata l'eccezione
 	 * IDNotFoundException
@@ -215,7 +233,7 @@ public class WorksManager {
 	/** Metodo che restituisce tutti gli Work contenuti nei dati */
 	public List<Work> getAllWorks() {
 		List<Work> all = new ArrayList<>();
-		for(Work w:worksMap.values()){
+		for (Work w : worksMap.values()) {
 			all.add(w);
 		}
 		return all;
@@ -308,7 +326,7 @@ public class WorksManager {
 	 *            lista di work tra i quali cercare
 	 * @return ritorna i Work che corrispondono ai criteri di ricerca
 	 */
-	private List<Work> queryByCostumerID(String costumerID,List<Work> set) {
+	private List<Work> queryByCostumerID(String costumerID, List<Work> set) {
 		List<Work> found = new ArrayList<>();
 		for (Work wk : set) {
 			if (wk.getCostumerID().equals(costumerID)) {
@@ -321,7 +339,7 @@ public class WorksManager {
 	/** Metodo pubblico che filtra gli work con l'ID del Costumer */
 	public List<Work> queryByCostumerID(String costumerID) {
 		// Si ricavano tutti i work tra cui cercare
-		return this.queryByCostumerID(costumerID,this.getAllWorks());
+		return this.queryByCostumerID(costumerID, this.getAllWorks());
 	}
 
 	/**
@@ -374,8 +392,7 @@ public class WorksManager {
 	 *            lista di work tra i quali cercare
 	 * @return ritorna i Work che corrispondono ai criteri di ricerca
 	 */
-	private List<Work> queryByInizioLavori(Calendar iniziolavori,
-			List<Work> set) {
+	private List<Work> queryByInizioLavori(Calendar iniziolavori, List<Work> set) {
 		List<Work> found = new ArrayList<>();
 		for (Work wk : set) {
 			if (Utility.equalsDate(wk.getInizioLavori(), iniziolavori)) {
@@ -400,8 +417,7 @@ public class WorksManager {
 	 *            lista di work tra i quali cercare
 	 * @return ritorna i Work che corrispondono ai criteri di ricerca
 	 */
-	private List<Work> queryByFineLavori(Calendar finelavori,
-			List<Work> set) {
+	private List<Work> queryByFineLavori(Calendar finelavori, List<Work> set) {
 		List<Work> found = new ArrayList<>();
 		for (Work wk : set) {
 			if (Utility.equalsDate(wk.getFineLavori(), finelavori)) {
@@ -439,6 +455,6 @@ public class WorksManager {
 	/** Metodo pubblico che filtra gli Work con lo stato */
 	public List<Work> queryByCompleted(boolean completed) {
 		// Si ricavano tutti i work tra cui cercare
-		return this.queryByCompleted(completed,this.getAllWorks());
+		return this.queryByCompleted(completed, this.getAllWorks());
 	}
 }

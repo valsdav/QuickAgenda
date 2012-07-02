@@ -682,7 +682,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si chiama il metodo
 			sessionsMan.addSession(workid, costumerid, sessiondata, hours,
 					spesa, materiali);
-			//si lancia l'aggiornamento
+			// si lancia l'aggiornamento
 			this.fireDataUpdatePerformed(ElementType.Session);
 		}
 	}
@@ -843,8 +843,61 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si aggiunge
 			worksMan.addWork(nome, indirizzo, costumerid, iniziolavori,
 					finelavori, completed);
-			//si lancia l'aggiornamento
+			// si lancia l'aggiornamento
 			this.fireDataUpdatePerformed(ElementType.Work);
 		}
+	}
+
+	/**
+	 * Metodo di collegamento che rimuove una sessione.Il metodo provoca anche
+	 * l'evento DataUpdate.
+	 * 
+	 * @param ID
+	 *            id della sessione da rimuovere
+	 * @throws IDNotFoundException
+	 */
+	public void removeSession(String ID) throws IDNotFoundException {
+		// si cancella a sessione
+		sessionsMan.removeSessionByID(ID);
+		// si lancia l'evento
+		this.fireDataUpdatePerformed(ElementType.Session);
+	}
+
+	/**
+	 * Metodo che rimuove un Costumer eliminando di conseguenza anche tutti i
+	 * relativi Work e Session. Il metodo provoca anche l'evento DataUpdate.
+	 * 
+	 * @param ID
+	 *            ID del Costumer da rimuovere
+	 * @throws IDNotFoundException
+	 */
+	public void removeCostumer(String ID) throws IDNotFoundException {
+		// si cancellano le sessioni del costumer
+		sessionsMan.removeSessionsByCostumerID(ID);
+		// si cancellano i Work del Costumer
+		worksMan.removeWorksByCostumerID(ID);
+		// si cancella il cliente
+		costumersMan.removeCostumerByID(ID);
+		// si lanciano gli eventi
+		this.fireDataUpdatePerformed(ElementType.Session);
+		this.fireDataUpdatePerformed(ElementType.Work);
+		this.fireDataUpdatePerformed(ElementType.Costumer);
+	}
+
+	/**
+	 * Metodo che rimuove un Work eliminando di conseguenza anche tutte le
+	 * relative Session. Il metodo provoca anche l'evento DataUpdate.
+	 * 
+	 * @param ID
+	 * @throws IDNotFoundException
+	 */
+	public void removeWork(String ID) throws IDNotFoundException {
+		// si cancellano le relative sessioni
+		sessionsMan.removeSessionsByWorkID(ID);
+		// si cancella il cliente
+		worksMan.removeWorkByID(ID);
+		// si lanciano gli eventi
+		this.fireDataUpdatePerformed(ElementType.Session);
+		this.fireDataUpdatePerformed(ElementType.Work);
 	}
 }
