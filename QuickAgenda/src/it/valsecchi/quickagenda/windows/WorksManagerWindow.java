@@ -1,8 +1,10 @@
 package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
+import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import it.valsecchi.quickagenda.data.interfaces.WorkSelectionListener;
 import it.valsecchi.quickagenda.windows.addelements.AddWorkWindow;
 
@@ -57,6 +59,8 @@ public class WorksManagerWindow extends JFrame {
 				WorksManagerWindow.class.getResource("/ico_small/agenda.png")));
 		setTitle("Gestione Lavori");
 		data = _data;
+		//si registra il listener
+		data.addDataUpdateListener(new WorkUpdateListener(),ElementType.Work);
 		mode = _mode;
 		initComponent();
 	}
@@ -237,6 +241,7 @@ public class WorksManagerWindow extends JFrame {
 		public WorkTableModel(String campo, String value) {
 			try {
 				lavori = data.queryWorkByArg(campo, value);
+				lblIstr.setText("");
 			} catch (ParseException e) {
 				lblIstr.setText("inserire la data nel formato giorno/mese/anno");
 			}
@@ -245,6 +250,10 @@ public class WorksManagerWindow extends JFrame {
 		public void changeData(String campo, String value) {
 			try {
 				lavori = data.queryWorkByArg(campo, value);
+				if(lavori ==null){
+					lavori = new ArrayList<>();
+				}
+				lblIstr.setText("");
 			} catch (ParseException e) {
 				lblIstr.setText("inserire la data nel formato giorno/mese/anno");
 			}
@@ -320,6 +329,19 @@ public class WorksManagerWindow extends JFrame {
 				o = new Object();
 			}
 			return o.getClass();
+		}
+	}
+	
+	private class WorkUpdateListener implements DataUpdateListener{
+		@Override
+		public void DataUpdatePerformed(ElementType type) {
+			if(type!=ElementType.Work){
+				return;
+			}
+			//si aggiornano i dati mantenendo i parametri di ricerca correnti
+			WorkTableModel m = (WorkTableModel) table.getModel();
+			m.changeData((String) cbCerca.getSelectedItem(), txtCerca.getText());
+			table.updateUI();
 		}
 	}
 }

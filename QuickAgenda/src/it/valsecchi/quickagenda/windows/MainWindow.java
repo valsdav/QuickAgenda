@@ -1,9 +1,11 @@
 package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Session;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
+import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import it.valsecchi.quickagenda.settings.SettingsManager;
 import it.valsecchi.quickagenda.windows.addelements.AddSessionWindow;
 import it.valsecchi.quickagenda.windows.detail.SessionDetailWindow;
@@ -78,6 +80,8 @@ public class MainWindow extends JFrame {
 				MainWindow.class.getResource("/ico_small/agenda.png")));
 		// si memorizza la fonte dati
 		data = _data;
+		//si memorizza il listener per l'aggiornamento dati
+		data.addDataUpdateListener(new SessionUpdateListener(),ElementType.Session);
 		// si inizializzano i componenti
 		initComponent();
 	}
@@ -524,4 +528,27 @@ public class MainWindow extends JFrame {
 			return false;
 		}
 	}
-}
+	
+	/**
+	 * Classe privata che fa da listener per gli eventi di aggiornamento delle sessioni.
+	 * @author Davide Valsecchi
+	 * @version 1.0
+	 *
+	 */
+	private class SessionUpdateListener implements DataUpdateListener{
+		@Override
+		public void DataUpdatePerformed(ElementType type) {
+			if(type!= ElementType.Session){
+				return;
+			}
+			//si aggiorna la tabella
+			// si ricava la data selezionata
+			Calendar c = calendar.getCalendar();
+			c.set(Calendar.HOUR_OF_DAY, 12);
+			// si aggiorna la tabella
+			SessionTableModel m = (SessionTableModel) table.getModel();
+			m.changeData(c);
+			table.updateUI();
+		}
+	}
+	}

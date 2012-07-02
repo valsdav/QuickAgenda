@@ -530,22 +530,23 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 * Metodo che lancia la notifica dell'evento di aggiornamento dei dati ai
 	 * listener a seconda del tipo passato come parametro.
 	 * 
-	 * @param type tipo di dati per il quale lanciare l'aggiornamento
+	 * @param type
+	 *            tipo di dati per il quale lanciare l'aggiornamento
 	 */
 	public void fireDataUpdatePerformed(ElementType type) {
 		switch (type) {
 		case Costumer:
-			for(DataUpdateListener l:this.costumersListeners){
+			for (DataUpdateListener l : this.costumersListeners) {
 				l.DataUpdatePerformed(type);
 			}
 			break;
 		case Work:
-			for(DataUpdateListener l:this.worksListeners){
+			for (DataUpdateListener l : this.worksListeners) {
 				l.DataUpdatePerformed(type);
 			}
 			break;
 		case Session:
-			for(DataUpdateListener l:this.sessionsListeners){
+			for (DataUpdateListener l : this.sessionsListeners) {
 				l.DataUpdatePerformed(type);
 			}
 			break;
@@ -583,6 +584,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		}
 		// si chiama il metodo
 		costumersMan.addCostumer(nome, cognome, azienda, indirizzo, tel, email);
+		// si lancia l'aggiornamento
+		this.fireDataUpdatePerformed(ElementType.Costumer);
 	}
 
 	/**
@@ -592,6 +595,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	public void addCostumer(Costumer costumer)
 			throws CostumerAlreadyExistsException, IDAlreadyExistsException {
 		costumersMan.addCostumer(costumer);
+		// si lancia l'aggiornamento
+		this.fireDataUpdatePerformed(ElementType.Costumer);
 	}
 
 	/**
@@ -677,6 +682,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si chiama il metodo
 			sessionsMan.addSession(workid, costumerid, sessiondata, hours,
 					spesa, materiali);
+			//si lancia l'aggiornamento
+			this.fireDataUpdatePerformed(ElementType.Session);
 		}
 	}
 
@@ -836,6 +843,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si aggiunge
 			worksMan.addWork(nome, indirizzo, costumerid, iniziolavori,
 					finelavori, completed);
+			//si lancia l'aggiornamento
+			this.fireDataUpdatePerformed(ElementType.Work);
 		}
 	}
 }

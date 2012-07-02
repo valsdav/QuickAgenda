@@ -2,6 +2,7 @@ package it.valsecchi.quickagenda.windows.detail;
 
 import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.component.Costumer;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Session;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
@@ -50,7 +51,7 @@ public class SessionDetailWindow extends JFrame {
 	private JLabel lblMateriali;
 	private JSeparator separator;
 	private JButton btnModificaSessione;
-	private DataManager manager;
+	private DataManager data;
 	private String sessionID;
 	private JLabel lblDettagliCliente;
 	private JLabel lblDettagliLavoro;
@@ -101,7 +102,7 @@ public class SessionDetailWindow extends JFrame {
 	public SessionDetailWindow(String sessionId, DataManager _manager) {
 		setTitle("Dettagli Sessione");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(SessionDetailWindow.class.getResource("/ico_small/agenda.png")));
-		manager = _manager;
+		data = _manager;
 		sessionID = sessionId;
 		initComponent();
 		initData();
@@ -560,7 +561,7 @@ public class SessionDetailWindow extends JFrame {
 	private void initData() {
 		// si ricava la sessione
 		try {
-			session = manager.getSession(sessionID);
+			session = data.getSession(sessionID);
 		} catch (IDNotFoundException e) {
 			// non si puo verificare questo errore
 			Log.error("id " + e.getID() + ", non trovato");
@@ -575,7 +576,7 @@ public class SessionDetailWindow extends JFrame {
 		txtMateriali.setText(b.toString());
 		// si ricava il costumer
 		try {
-			costumer = manager.getCostumerFromSession(sessionID);
+			costumer = data.getCostumerFromSession(sessionID);
 		} catch (IDNotFoundException e) {
 			// non si puo verificare questo errore
 			Log.error("id " + e.getID() + ", non trovato");
@@ -585,7 +586,7 @@ public class SessionDetailWindow extends JFrame {
 		txtSpesa.setText(Integer.toString(session.getSpesa()));
 		// Si ricava il work
 		try {
-			work = manager.getWorkFromSession(sessionID);
+			work = data.getWorkFromSession(sessionID);
 		} catch (IDNotFoundException e) {
 			// non si puo verificare questo errore
 			Log.error("id " + e.getID() + ", non trovato");
@@ -650,6 +651,8 @@ public class SessionDetailWindow extends JFrame {
 			txtOre.setEditable(false);
 			txtSpesa.setEditable(false);
 			txtMateriali.setEditable(false);
+			//si lancia l'aggiornamento
+			data.fireDataUpdatePerformed(ElementType.Session);
 		}
 	}
 
@@ -697,6 +700,8 @@ public class SessionDetailWindow extends JFrame {
 			txtIndirizzoLavoro.setEditable(false);
 			txtInizioLavori.setEditable(false);
 			txtFineLavori.setEditable(false);
+			//si lancia l'aggiornamento
+			data.fireDataUpdatePerformed(ElementType.Work);
 		}
 	}
 
@@ -729,6 +734,8 @@ public class SessionDetailWindow extends JFrame {
 			txtAzienda.setEditable(false);
 			txtEmailCliente.setEditable(false);
 			txtTelefonoCliente.setEditable(false);
+			//si lancia l'aggiornamento
+			data.fireDataUpdatePerformed(ElementType.Costumer);
 		}
 	}
 

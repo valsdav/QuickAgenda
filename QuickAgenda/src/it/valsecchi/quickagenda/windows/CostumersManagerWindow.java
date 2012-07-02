@@ -2,8 +2,10 @@ package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.component.Costumer;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.interfaces.CostumerSelectionListener;
+import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import it.valsecchi.quickagenda.windows.addelements.AddCostumerWindow;
 
 import java.awt.BorderLayout;
@@ -32,6 +34,12 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.ListSelectionModel;
 
+/**
+ * Finestra che visualizza e gestisce i Costumer.
+ * @author Davide Valsecchi
+ * @version 1.0
+ *
+ */
 public class CostumersManagerWindow extends JFrame {
 
 	private static final long serialVersionUID = 5532739737947952966L;
@@ -53,6 +61,8 @@ public class CostumersManagerWindow extends JFrame {
 
 	public CostumersManagerWindow(DataManager d, int _mode) {
 		data = d;
+		//si aggiunge il listener per l'aggiornamento dati
+		data.addDataUpdateListener(new CostumerUpdateListener(), ElementType.Costumer);
 		mode = _mode;
 		setTitle("Gestione Clienti");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -298,7 +308,7 @@ public class CostumersManagerWindow extends JFrame {
 			for (CostumerSelectionListener l : listeners) {
 				l.registerSelectedCostumer(cos);
 			}
-			//si chiude la finestra
+			// si chiude la finestra
 			dispose();
 		}
 	}
@@ -315,6 +325,9 @@ public class CostumersManagerWindow extends JFrame {
 
 		public void changeData(String campo, String value) {
 			costumers = data.queryCostumerByArg(campo, value);
+			if(costumers==null){
+				costumers=new ArrayList<>();
+			}
 		}
 
 		@Override
@@ -362,6 +375,19 @@ public class CostumersManagerWindow extends JFrame {
 		@Override
 		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
+		}
+	}
+
+	private class CostumerUpdateListener implements DataUpdateListener {
+		@Override
+		public void DataUpdatePerformed(ElementType type) {
+			if (type != ElementType.Costumer) {
+				return;
+			}
+			//si aggiornano i dati mantenendo i parametri di ricerca correnti
+			CostumerTableModel m = (CostumerTableModel) table.getModel();
+			m.changeData((String) cbCerca.getSelectedItem(), txtCerca.getText());
+			table.updateUI();
 		}
 	}
 }
