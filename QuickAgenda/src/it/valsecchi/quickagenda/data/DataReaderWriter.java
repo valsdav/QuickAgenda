@@ -133,7 +133,6 @@ class DataReaderWriter {
 		Log.info("inizio processo di lettura");
 		//si ricava la password come stringa
 		String password = this.getPasswordString(_password);
-		Log.debug("controlla password: " + password);
 		// prima di tutto si controlla la validità della password
 		if (this.checkPassword(password)) {
 			Log.info("password corretta");

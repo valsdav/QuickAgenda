@@ -149,11 +149,11 @@ public class CostumersManagerWindow extends JFrame {
 								.addComponent(btnCerca)
 								.addComponent(btnConferma, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
 					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAggiungiCliente, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnRimuovi, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+						.addComponent(btnAggiungiCliente, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		panel.setLayout(new BorderLayout(0, 0));
@@ -312,7 +312,7 @@ public class CostumersManagerWindow extends JFrame {
 			case 4:
 				return costumers.get(row).getIndirizzo();
 			case 5:
-				return costumers.get(row).getTel();
+				return costumers.get(row).getTelefono();
 			case 6:
 				return costumers.get(row).getEmail();
 			default:

@@ -351,7 +351,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			newC.addContent(indirizzo);
 			// tel
 			Element tel = new Element("tel");
-			tel.setText(c.getTel());
+			tel.setText(c.getTelefono());
 			newC.addContent(tel);
 			// email
 			Element email = new Element("email");

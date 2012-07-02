@@ -414,7 +414,7 @@ public class CostumersManager {
 	private List<Costumer> queryByTel(String tel, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
-			if (cs.getTel().equals(tel)) {
+			if (cs.getTelefono().equals(tel)) {
 				found.add(cs);
 			}
 		}

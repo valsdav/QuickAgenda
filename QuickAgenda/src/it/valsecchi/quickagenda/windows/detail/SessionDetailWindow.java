@@ -604,7 +604,13 @@ public class SessionDetailWindow extends JFrame {
 		} else {
 			cbCompleted.setSelected(false);
 		}
-
+		txtIDCliente.setText(costumer.getID());
+		txtNome.setText(costumer.getNome());
+		txtCognome.setText(costumer.getCognome());
+		txtAzienda.setText(costumer.getAzienda());
+		txtIndirizzoCliente.setText(costumer.getIndirizzo());
+		txtTelefonoCliente.setText(costumer.getTelefono());
+		txtEmailCliente.setText(costumer.getEmail());
 	}
 
 	private class BtnModificaActionListener implements ActionListener {
@@ -713,8 +719,8 @@ public class SessionDetailWindow extends JFrame {
 			txtAzienda.setEditable(true);
 			txtEmailCliente.setEditable(true);
 			txtTelefonoCliente.setEditable(true);
-			btnModificaLavoro.setEnabled(false);
-			btnSalvaLavoro.setEnabled(true);
+			btnModificaCliente.setEnabled(false);
+			btnSalvaCliente.setEnabled(true);
 		}
 	}
 
@@ -725,7 +731,7 @@ public class SessionDetailWindow extends JFrame {
 			costumer.setIndirizzo(txtIndirizzoCliente.getText());
 			costumer.setAzienda(txtAzienda.getText());
 			costumer.setEmail(txtEmailCliente.getText());
-			costumer.setTel(txtTelefonoCliente.getText());
+			costumer.setTelefono(txtTelefonoCliente.getText());
 			btnModificaCliente.setEnabled(true);
 			btnSalvaCliente.setEnabled(false);
 			txtNome.setEditable(false);

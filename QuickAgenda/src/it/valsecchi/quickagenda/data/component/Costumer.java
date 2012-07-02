@@ -96,11 +96,11 @@ public class Costumer {
 		this.indirizzo = indirizzo;
 	}
 
-	public String getTel() {
+	public String getTelefono() {
 		return tel;
 	}
 
-	public void setTel(String tel) {
+	public void setTelefono(String tel) {
 		this.tel = tel;
 	}
 

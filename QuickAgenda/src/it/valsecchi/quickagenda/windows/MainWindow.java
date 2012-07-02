@@ -227,6 +227,7 @@ public class MainWindow extends JFrame {
 		toolBar.addSeparator();
 
 		btnInfo = new JButton("Info");
+		btnInfo.addActionListener(new BtnInfoActionListener());
 		btnInfo.setBackground(UIManager.getColor("ToolBar.dockingBackground"));
 		btnInfo.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnInfo.setIcon(new ImageIcon(MainWindow.class
@@ -440,6 +441,12 @@ public class MainWindow extends JFrame {
 					Log.error("Sessione non trovata");
 				}
 			}
+		}
+	}
+	private class BtnInfoActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			//si apre la finestra info
+			new InfoWindow().setVisible(true);
 		}
 	}
 
