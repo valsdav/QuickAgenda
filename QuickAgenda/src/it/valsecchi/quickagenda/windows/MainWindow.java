@@ -443,6 +443,7 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
+	
 	private class BtnInfoActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			//si apre la finestra info
