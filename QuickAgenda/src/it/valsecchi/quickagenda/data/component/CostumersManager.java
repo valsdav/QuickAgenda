@@ -114,8 +114,7 @@ public class CostumersManager {
 		// ora, ricavato un id valido,
 		String id = this.getValidID();
 		// si ricava un'hash valida
-		String hash = Costumer.calculateCostumerHash(nome, cognome, indirizzo,
-				azienda);
+		String hash = Costumer.calculateCostumerHash(indirizzo);
 		// si crea il Costumer
 		Costumer newCost = new Costumer(id, hash, nome, cognome, azienda,
 				indirizzo, tel, email);
@@ -221,7 +220,7 @@ public class CostumersManager {
 	/** Metodo che restituisce tutti i Costumers contenuti nei dati */
 	public List<Costumer> getAllCostumers() {
 		List<Costumer> all = new ArrayList<>();
-		for(Costumer c: costumersMap.values()){
+		for (Costumer c : costumersMap.values()) {
 			all.add(c);
 		}
 		return all;
@@ -312,7 +311,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByNome(String nome,List<Costumer> set) {
+	private List<Costumer> queryByNome(String nome, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getNome().contains(nome)) {
@@ -336,8 +335,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByCognome(String cognome,
-			List<Costumer> set) {
+	private List<Costumer> queryByCognome(String cognome, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getCognome().contains(cognome)) {
@@ -361,8 +359,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByAzienda(String azienda,
-			List<Costumer> set) {
+	private List<Costumer> queryByAzienda(String azienda, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getAzienda().contains(azienda)) {
@@ -374,7 +371,7 @@ public class CostumersManager {
 
 	/** Metodo che filtra i Costumer in base all'azienda */
 	public List<Costumer> queryByAzienda(String azienda) {
-		return this.queryByAzienda(azienda,this.getAllCostumers());
+		return this.queryByAzienda(azienda, this.getAllCostumers());
 	}
 
 	/**
@@ -386,8 +383,7 @@ public class CostumersManager {
 	 *            lista di costumer tra i quali cercare
 	 * @return ritorna i Costumer che corrispondono ai criteri di ricerca
 	 */
-	private List<Costumer> queryByIndirizzo(String indirizzo,
-			List<Costumer> set) {
+	private List<Costumer> queryByIndirizzo(String indirizzo, List<Costumer> set) {
 		List<Costumer> found = new ArrayList<>();
 		for (Costumer cs : set) {
 			if (cs.getIndirizzo().contains(indirizzo)) {

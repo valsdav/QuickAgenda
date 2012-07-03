@@ -457,7 +457,7 @@ public class MainWindow extends JFrame {
 		// si recuperano le session
 		List<Session> sessions = new ArrayList<>();
 		// colonne
-		String[] columns = { "ID", "Nome Lavoro", "Cognome Cliente",
+		String[] columns = { "ID", "Nome Lavoro", "Azienda Cliente","Indirizzo Cliente",
 				"N° di ore", "Spesa", "Materiali" };
 
 		public SessionTableModel(Calendar d) {
@@ -499,16 +499,24 @@ public class MainWindow extends JFrame {
 			case 2:
 				try {
 					return data.getCostumerFromSession(
-							sessions.get(row).getID()).getCognome();
+							sessions.get(row).getID()).getAzienda();
 				} catch (IDNotFoundException e) {
 					// impossibile che si generi questa eccezione
 					return null;
 				}
 			case 3:
-				return sessions.get(row).getHours();
+				try {
+					return data.getCostumerFromSession(
+							sessions.get(row).getID()).getIndirizzo();
+				} catch (IDNotFoundException e) {
+					// impossibile che si generi questa eccezione
+					return null;
+				}
 			case 4:
-				return sessions.get(row).getSpesa();
+				return sessions.get(row).getHours();
 			case 5:
+				return sessions.get(row).getSpesa();
+			case 6:
 				StringBuilder build = new StringBuilder();
 				for (String s : sessions.get(row).getMateriali()) {
 					build.append(s + ", ");

@@ -90,7 +90,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 		btnIDCliente = new JButton("...");
 		btnIDCliente.addActionListener(new BtnIDClienteActionListener());
 		lblIndirizzo = new JLabel();
-		lblIndirizzo.setText("Indirizzo:");
+		lblIndirizzo.setText("Indirizzo*:");
 		lblIndirizzo.setName("txtNome");
 		txtIndirizzo = new JTextField();
 		dcInizioLavori = new JDateChooser();
@@ -434,7 +434,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 				lblImmagine.setIcon(new ImageIcon(AddWorkWindow.class
 						.getResource("/ico_small/attention.png")));
 				// si cambia l'avviso
-				lblAvviso.setText("Inserire Nome, ID Cliente e Inizio Lavori!");
+				lblAvviso.setText("Inserire Nome, ID Cliente, Indirizzo e Inizio Lavori!");
 				return;
 			} catch (IDNotFoundException e2) {
 				lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class

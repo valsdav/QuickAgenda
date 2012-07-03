@@ -75,9 +75,8 @@ public class Costumer {
 	 * Metodo statico che restituisce l'hash di un cliente identificato dai dati
 	 * parametro.
 	 */
-	public static String calculateCostumerHash(String nome, String cognome,
-			String indirizzo, String azienda) {
-		return Utility.getHash(nome + cognome + indirizzo + azienda);
+	public static String calculateCostumerHash(String indirizzo) {
+		return Utility.getHash(indirizzo);
 	}
 
 	public String getAzienda() {
@@ -127,11 +126,11 @@ public class Costumer {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public String getCognome() {
 		return cognome;
 	}
-	
+
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
