@@ -91,16 +91,16 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		lblNome.setText("Nome*:");
+		lblNome.setText("Nome:");
 		lblNome.setName("txtNome");
 
-		lblCognome.setText("Cognome*:");
+		lblCognome.setText("Cognome:");
 		lblCognome.setName("txtCognome");
 
 		lblAzienda.setText("Azienda:");
 		lblAzienda.setName("txtAzienda");
 
-		lblIndirizzo.setText("Indirizzo:");
+		lblIndirizzo.setText("Indirizzo*:");
 		lblIndirizzo.setName("txtIndirizzo");
 
 		lblTelefono.setText("Telefono:");
@@ -391,7 +391,7 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 						.getResource("/ico_small/attention.png")));
 				// si cambia l'avviso
 				lblAvviso
-						.setText("Inserire almeno Nome e Cognome del cliente!");
+						.setText("Inserire almeno l'indirizzo del cliente!");
 			}	
 		}
 	}

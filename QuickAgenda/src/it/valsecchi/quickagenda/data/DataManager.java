@@ -575,12 +575,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			String indirizzo, String tel, String email)
 			throws CostumerAlreadyExistsException, InsufficientDataException {
 		// si controlla che almeno nome cognome non siamo nulli
-		if ((nome == null || nome.equals(""))
-				|| (cognome == null || cognome.equals(""))) {
+		if (indirizzo == null || indirizzo.equals("")) {
 			// si lancia l'eccezione
 			throw new InsufficientDataException("DataManager.addCostumer",
-					"nome/cognome", "parametri insufficiente");
-
+					"Indirizzo", "parametri insufficiente");
 		}
 		// si chiama il metodo
 		costumersMan.addCostumer(nome, cognome, azienda, indirizzo, tel, email);
@@ -667,7 +665,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
 		// nulli
-		if ((workid == null || workid.equals("")) || (sessiondata == null)) {
+		if (workid == null || workid.equals("") || (sessiondata == null)) {
 			// si lancia una InsufficientDataException
 			throw new InsufficientDataException("DataManager.addSession", "",
 					"parametri insufficiente");
@@ -830,10 +828,12 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			throws InsufficientDataException, WorkAlreadyExistsException,
 			IDNotFoundException {
 		if (nome == null || nome.equals("") && costumerid == null
-				|| costumerid.equals("") || iniziolavori == null) {
+				|| costumerid.equals("") || indirizzo == null
+				|| indirizzo.equals("") || iniziolavori == null) {
 			// si lancia una eccezione per parametri insufficienti
 			throw new InsufficientDataException("DataManager.addWork",
-					"nome/costumerid/iniziolavori", "parametri insufficienti");
+					"nome/costumerid/indirizzo/iniziolavori",
+					"parametri insufficienti");
 		} else {
 			// si controlla l'esistenza del cliente
 			if (!costumersMan.exists(costumerid)) {
