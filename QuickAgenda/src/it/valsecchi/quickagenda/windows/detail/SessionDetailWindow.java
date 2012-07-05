@@ -661,11 +661,8 @@ public class SessionDetailWindow extends JFrame {
 	private class BtnSalvaSessioneActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si salvano i nuovi dati
-			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
 			try {
-				Calendar c = Calendar.getInstance();
-				c.setTime(f.parse(txtDataSessione.getText()));
-				session.setSessionData(c);
+				session.setSessionData(txtDataSessione.getText());
 			} catch (ParseException e1) {
 				// si notifica l'errore
 				lblIstrSessione
@@ -718,14 +715,9 @@ public class SessionDetailWindow extends JFrame {
 	private class BtnSalvaLavoroActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si salvano i nuovi dati
-			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
 			try {
-				Calendar c = Calendar.getInstance();
-				c.setTime(f.parse(txtInizioLavori.getText()));
-				work.setInizioLavori(c);
-				Calendar d = Calendar.getInstance();
-				d.setTime(f.parse(txtFineLavori.getText()));
-				work.setFineLavori(d);
+				work.setInizioLavori(txtInizioLavori.getText());
+				work.setFineLavori(txtFineLavori.getText());
 			} catch (ParseException e1) {
 				// si notifica l'errore
 				lblIstrLavoro

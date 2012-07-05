@@ -72,6 +72,8 @@ public class WorkDetailWindow extends JFrame {
 	private JTable table;
 	private JButton btnAggiungiSessione;
 	private JButton btnRimuoviSessioniSelezionate;
+	private JLabel lblIstrLavoro;
+	private JButton btnCambiaCliente;
 
 	public WorkDetailWindow(String workId,DataManager _data) {
 		setTitle("Dettagli Lavoro");
@@ -129,7 +131,9 @@ public class WorkDetailWindow extends JFrame {
 		lblCompletato = new JLabel("Completato:");
 		checkCompletato = new JCheckBox("");
 		btnModifica = new JButton("Modifica");
+		btnModifica.addActionListener(new BtnModificaActionListener());
 		btnSalva = new JButton("Salva");
+		btnSalva.addActionListener(new BtnSalvaActionListener());
 		btnSalva.setEnabled(false);
 		separator = new JSeparator();
 
@@ -153,6 +157,11 @@ public class WorkDetailWindow extends JFrame {
 		btnRimuoviSessioniSelezionate.addActionListener(new BtnRimuoviSessioniSelezionateActionListener());
 		btnRimuoviSessioniSelezionate.setIcon(new ImageIcon(WorkDetailWindow.class.getResource("/ico_small/deletered.png")));
 		btnRimuoviSessioniSelezionate.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		lblIstrLavoro = new JLabel("");
+		
+		btnCambiaCliente = new JButton("Cambia Cliente...");
+		btnCambiaCliente.setEnabled(false);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -170,38 +179,43 @@ public class WorkDetailWindow extends JFrame {
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(checkCompletato))
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblIdCliente, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(btnDettagliCliente))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblNomeLavoro)
-									.addGap(18)
-									.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(lblIndirizzoLavoro)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtIndirizzoLavoro, 254, 254, 254))
-								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
 									.addGap(5)
 									.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
 									.addGap(5)
-									.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))))
+									.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+									.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+										.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(lblIdCliente, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(btnCambiaCliente)
+										.addGap(18)
+										.addComponent(btnDettagliCliente))
+									.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+										.addComponent(lblNomeLavoro)
+										.addGap(18)
+										.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(lblIndirizzoLavoro)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtIndirizzoLavoro, 254, 254, 254)))))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(separator, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnModifica)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnSalva))
+							.addComponent(btnSalva)
+							.addGap(18)
+							.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(separator_1, GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE))
@@ -232,6 +246,7 @@ public class WorkDetailWindow extends JFrame {
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 											.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(btnCambiaCliente)
 											.addComponent(btnDettagliCliente))
 										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 											.addComponent(lblIDLavoro)
@@ -256,14 +271,16 @@ public class WorkDetailWindow extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblCompletato)
 						.addComponent(checkCompletato))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnModifica)
-								.addComponent(btnSalva))))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(18)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(btnModifica)
+									.addComponent(btnSalva))))
+						.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -273,7 +290,7 @@ public class WorkDetailWindow extends JFrame {
 							.addGap(27)
 							.addComponent(lblSessioniDelLavoro)))
 					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnAggiungiSessione)
@@ -430,6 +447,29 @@ public class WorkDetailWindow extends JFrame {
 					Log.error("Sessione non trovata");
 				}
 			}
+		}
+	}
+	private class BtnModificaActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			//si rendono editabili i campi
+			txtIDLavoro.setEditable(true);
+			btnCambiaCliente.setEnabled(true);
+			txtNomeLavoro.setEditable(true);
+			txtInizioLavori.setEditable(true);
+			txtFineLavori.setEditable(true);
+			btnModifica.setEnabled(false);
+			btnSalva.setEnabled(true);
+		}
+	}
+	private class BtnSalvaActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			//si salvano i dati
+			if(txtIDCliente.getText().equals("")){
+				lblIstrLavoro.setText("Scegliere un Cliente per il lavoro!");
+				return;
+			}
+			work.set
+			
 		}
 	}
 }
