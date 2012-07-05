@@ -139,4 +139,8 @@ public class Session {
 	public String getCostumerID() {
 		return costumerID;
 	}
+
+	public void setCostumerID(String costumerID) {
+		this.costumerID = costumerID;
+	}
 }

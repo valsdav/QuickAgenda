@@ -226,7 +226,7 @@ public class SessionDetailWindow extends JFrame {
 		lblCompletato.setForeground(Color.BLUE);
 		lblCompletato.setFont(new Font("Tahoma", Font.BOLD, 14));
 		cbCompleted = new JCheckBox("");
-		cbCompleted.addItemListener(new CbCompletedItemListener());
+		cbCompleted.setEnabled(false);
 		separator_1 = new JSeparator();
 		btnSalvaLavoro = new JButton("Salva");
 		btnSalvaLavoro.addActionListener(new BtnSalvaLavoroActionListener());
@@ -691,22 +691,13 @@ public class SessionDetailWindow extends JFrame {
 		}
 	}
 
-	private class CbCompletedItemListener implements ItemListener {
-		public void itemStateChanged(ItemEvent arg) {
-			if (arg.getStateChange() == ItemEvent.SELECTED) {
-				work.setCompleted(true);
-			} else {
-				work.setCompleted(false);
-			}
-		}
-	}
-
 	private class BtnModificaLavoroActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si rendono editabili
 			txtIndirizzoLavoro.setEditable(true);
 			txtInizioLavori.setEditable(true);
 			txtFineLavori.setEditable(true);
+			cbCompleted.setEnabled(true);
 			btnSalvaLavoro.setEnabled(true);
 			btnModificaLavoro.setEnabled(false);
 		}
@@ -725,13 +716,15 @@ public class SessionDetailWindow extends JFrame {
 				return;
 			}
 			work.setIndirizzo(txtIndirizzoLavoro.getText());
+			work.setCompleted(cbCompleted.isSelected());
+			//si lancia l'aggiornamento
+			data.fireDataUpdatePerformed(ElementType.Work);
 			btnSalvaLavoro.setEnabled(false);
 			btnModificaLavoro.setEnabled(true);
 			txtIndirizzoLavoro.setEditable(false);
 			txtInizioLavori.setEditable(false);
 			txtFineLavori.setEditable(false);
-			//si lancia l'aggiornamento
-			data.fireDataUpdatePerformed(ElementType.Work);
+			cbCompleted.setEnabled(false);
 		}
 	}
 

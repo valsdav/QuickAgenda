@@ -425,8 +425,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			newS.addContent(costumerid);
 			// sessiondata
 			Element sessiondata = new Element("sessiondata");
-			sessiondata
-					.setText(s.getSessionDataString());
+			sessiondata.setText(s.getSessionDataString());
 			newS.addContent(sessiondata);
 			// hours
 			Element hours = new Element("hours");
@@ -693,14 +692,18 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
-	 * Metodo di collegamento che restituisce tutte le sessioni di un determinato Work
-	 * @param workID ID del Work di cui restituire le sessioni
-	 * @return ritorna una lista di sessioni che appartengono a un certo work identificato con l'id
+	 * Metodo di collegamento che restituisce tutte le sessioni di un
+	 * determinato Work
+	 * 
+	 * @param workID
+	 *            ID del Work di cui restituire le sessioni
+	 * @return ritorna una lista di sessioni che appartengono a un certo work
+	 *         identificato con l'id
 	 */
-	public List<Session> getSessionsFromWorkID(String workID){
+	public List<Session> getSessionsFromWorkID(String workID) {
 		return sessionsMan.queryByWorkID(workID);
 	}
-	
+
 	/**
 	 * Ricerca i Costumer in base a un campo e a un valore.
 	 * 
@@ -903,5 +906,33 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		// si lanciano gli eventi
 		this.fireDataUpdatePerformed(ElementType.Session);
 		this.fireDataUpdatePerformed(ElementType.Work);
+	}
+
+	/**
+	 * Metodo che cambia il Costumer a cui è riferito un Work. Per far questo
+	 * bisogna anche cambiare il CostumerID anche di tutte le session del Work.
+	 * 
+	 * @param workid
+	 *            id del work a cui cambiare il costumerID
+	 * @param newCostumerid
+	 *            ID del nuovo costumer del Work
+	 * @throws IDNotFoundException
+	 *             lanciato nel caso non si trovi il Work o il Costumer
+	 */
+	public void changeWorkCostumerID(String workID, String newCostumerID)
+			throws IDNotFoundException {
+		if (!costumersMan.exists(newCostumerID)) {
+			throw new IDNotFoundException(ElementType.Costumer, newCostumerID);
+		}
+		// si cambia l'id al work
+		worksMan.getWorkByID(workID).setCostumerID(newCostumerID);
+		// si ricavano le sessioni
+		List<Session> sessions = sessionsMan.queryByWorkID(workID);
+		for (Session s : sessions) {
+			s.setCostumerID(newCostumerID);
+		}
+		// si lancia un aggiornamento delle session. l'aggiornamento dei Work
+		// verrà lanciato dal codice chiamante
+		this.fireDataUpdatePerformed(ElementType.Session);
 	}
 }

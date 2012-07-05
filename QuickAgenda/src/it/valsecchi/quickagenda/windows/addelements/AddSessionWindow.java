@@ -387,6 +387,10 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 	private JDateChooser dateChooser;
 	private AddSessionWindow currentWindow;
 
+	public void setWorkID(String workID){
+		txtIDLavoro.setText(workID);
+	}
+	
 	/** Classe interna che gestisce il click del pulsante add */
 	private class AddButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
