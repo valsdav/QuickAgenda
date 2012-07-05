@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import it.valsecchi.quickagenda.data.Utility;
 
 /**
@@ -33,30 +32,28 @@ public class Session {
 	private int hours;
 	/** Spese della sessione */
 	private int spesa;
-	/** Lista dei materiali della sessione */
-	private List<String> materiali;
-	/** Formattatore per le date*/
+	/** Note della sessione */
+	private String note;
+	/** Formattatore per le date */
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 
 	/** Costruttore di Session */
 	public Session(String id, String workid, String costumerid,
-			GregorianCalendar sessiondata, int _hours, int _spesa,
-			List<String> _materiali) {
+			GregorianCalendar sessiondata, int _hours, int _spesa, String _note) {
 		ID = id;
 		workID = workid;
 		costumerID = costumerid;
 		sessionData = sessiondata;
 		hours = _hours;
 		spesa = _spesa;
-		materiali = _materiali;
+		note = _note;
 		// si ricava l'hash unendo (id,workid,costumerid)
 		hash = Utility.getHash(workid + costumerid + sessiondata.toString());
 	}
 
 	/** Costruttore di Session con Hash fornita */
 	public Session(String id, String _hash, String workid, String costumerid,
-			Calendar sessiondata, int _hours, int _spesa,
-			List<String> _materiali) {
+			Calendar sessiondata, int _hours, int _spesa, String _note) {
 		ID = id;
 		hash = _hash;
 		workID = workid;
@@ -64,7 +61,7 @@ public class Session {
 		sessionData = sessiondata;
 		hours = _hours;
 		spesa = _spesa;
-		materiali = _materiali;
+		note = _note;
 	}
 
 	/**
@@ -79,25 +76,28 @@ public class Session {
 	public Calendar getSessionData() {
 		return sessionData;
 	}
-	
-	/** Metodo che restituisce la SessionData come stringa già formattata*/
-	public String getSessionDataString(){
+
+	/** Metodo che restituisce la SessionData come stringa già formattata */
+	public String getSessionDataString() {
 		return formatter.format(this.sessionData.getTime());
 	}
 
 	public void setSessionData(Calendar calendar) {
 		sessionData = calendar;
 	}
-	
-	/** 
-	 * Metodo che imposta la SessionData accettando come parametro una stringa nel formato "dd/MM/yy".
-	 * @param data stringa che rappresenta la data
+
+	/**
+	 * Metodo che imposta la SessionData accettando come parametro una stringa
+	 * nel formato "dd/MM/yy".
+	 * 
+	 * @param data
+	 *            stringa che rappresenta la data
 	 * @throws ParseException
 	 */
-	public void setSessionData(String data) throws ParseException{
+	public void setSessionData(String data) throws ParseException {
 		Calendar c = Calendar.getInstance();
 		c.setTime(formatter.parse(data));
-		this.sessionData= c;
+		this.sessionData = c;
 	}
 
 	public int getHours() {
@@ -114,14 +114,6 @@ public class Session {
 
 	public void setSpesa(int _spesa) {
 		spesa = _spesa;
-	}
-
-	public List<String> getMateriali() {
-		return materiali;
-	}
-
-	public void setMateriali(List<String> _materiali) {
-		materiali = _materiali;
 	}
 
 	public String getID() {
@@ -142,5 +134,13 @@ public class Session {
 
 	public void setCostumerID(String costumerID) {
 		this.costumerID = costumerID;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 }

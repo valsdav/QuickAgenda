@@ -14,7 +14,7 @@ public class InfoWindow extends JFrame {
 	private static final long serialVersionUID = 5668698471978405208L;
 	private JPanel contentPane;
 	private JLabel lblImmagine;
-	private JTextArea txtrQuickAgendaVersione;
+	private JTextArea txtQuickAgendaVersione;
 
 	public InfoWindow() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(InfoWindow.class.getResource("/ico_small/agenda.png")));
@@ -32,9 +32,10 @@ public class InfoWindow extends JFrame {
 			contentPane.add(lblImmagine, BorderLayout.WEST);
 		}
 		{
-			txtrQuickAgendaVersione = new JTextArea();
-			txtrQuickAgendaVersione.setText("Quick Agenda\r\n\r\nVersione:  1.0.2_beta\r\nAutore:  Davide Valsecchi\r\n\r\n");
-			contentPane.add(txtrQuickAgendaVersione, BorderLayout.CENTER);
+			txtQuickAgendaVersione = new JTextArea();
+			txtQuickAgendaVersione.setEditable(false);
+			txtQuickAgendaVersione.setText("Quick Agenda\r\n\r\nVersione:  1.0.2_beta\r\nAutore:  Davide Valsecchi\r\n\r\n");
+			contentPane.add(txtQuickAgendaVersione, BorderLayout.CENTER);
 		}
 	}
 

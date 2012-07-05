@@ -256,11 +256,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		List<Element> sessionElem = root.getChildren("session");
 		List<Session> sessions = new ArrayList<>();
 		for (Element s : sessionElem) {
-			String id, hash, workid, costumerid = "";
+			String id, hash, workid, costumerid ,note;
 			GregorianCalendar sessiondata = null;
 			int hours = 0;
 			int spesa = 0;
-			List<String> materiali = new ArrayList<>();
 			id = s.getChildText("id");
 			hash = s.getChildText("hash");
 			workid = s.getChildText("workid");
@@ -270,15 +269,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 					.setTime(formatdata.parse(s.getChildText("sessiondata")));
 			hours = Integer.parseInt("+" + s.getChildText("hours"));
 			spesa = Integer.parseInt("+" + s.getChildText("spesa"));
-			// StringTokenizer per i materiali
-			String mat = s.getChildText("materiali");
-			StringTokenizer tok = new StringTokenizer(mat, "#");
-			while (tok.hasMoreTokens()) {
-				materiali.add(tok.nextToken());
-			}
+			note = s.getChildText("note");
 			// creazione della session
 			Session newSes = new Session(id, hash, workid, costumerid,
-					sessiondata, hours, spesa, materiali);
+					sessiondata, hours, spesa, note);
 			sessions.add(newSes);
 		}
 		// si crea il DataManager e lo si restituisce
@@ -435,17 +429,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Element spesa = new Element("spesa");
 			spesa.setText(Integer.toString(s.getSpesa()));
 			newS.addContent(spesa);
-			// materiali
-			StringBuilder build = new StringBuilder();
-			for (String m : s.getMateriali()) {
-				build.append(m + "#");
-			}
-			if (build.length() > 0) {
-				build.deleteCharAt(build.length() - 1);
-			}
-			Element materiali = new Element("materiali");
-			materiali.setText(build.toString());
-			newS.addContent(materiali);
+			//note
+			Element note = new Element("note");
+			note.setText(s.getNote());
+			newS.addContent(note);
 			// si aggiunge al document
 			doc.getRootElement().addContent(newS);
 		}
@@ -654,7 +641,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	@Override
 	public void addSession(String workid, Calendar sessiondata, int hours,
-			int spesa, List<String> materiali)
+			int spesa, String note)
 			throws SessionAlreadyExistsException, InsufficientDataException,
 			IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
@@ -673,7 +660,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			String costumerid = worksMan.getWorkByID(workid).getCostumerID();
 			// si chiama il metodo
 			sessionsMan.addSession(workid, costumerid, sessiondata, hours,
-					spesa, materiali);
+					spesa,note);
 			// si lancia l'aggiornamento
 			this.fireDataUpdatePerformed(ElementType.Session);
 		}
