@@ -44,7 +44,7 @@ public class SessionDetailWindow extends JFrame {
 	private JLabel lblData;
 	private JLabel lblOre;
 	private JLabel lblSpesa;
-	private JLabel lblMateriali;
+	private JLabel lblNote;
 	private JSeparator separator;
 	private JButton btnModificaSessione;
 	private DataManager data;
@@ -59,7 +59,7 @@ public class SessionDetailWindow extends JFrame {
 	private JTextField txtDataSessione;
 	private JTextField txtOre;
 	private JTextField txtSpesa;
-	private JTextField txtMateriali;
+	private JTextField txtNote;
 	private JButton btnSalvaSessione;
 	private JTextField txtLavoroID;
 	private JTextField txtClienteID;
@@ -134,9 +134,9 @@ public class SessionDetailWindow extends JFrame {
 		lblSpesa = new JLabel("Spesa:");
 		lblSpesa.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblSpesa.setForeground(Color.BLUE);
-		lblMateriali = new JLabel("Materiali:");
-		lblMateriali.setForeground(Color.BLUE);
-		lblMateriali.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNote = new JLabel("Note:");
+		lblNote.setForeground(Color.BLUE);
+		lblNote.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		separator = new JSeparator();
 
@@ -178,9 +178,9 @@ public class SessionDetailWindow extends JFrame {
 		txtSpesa = new JTextField();
 		txtSpesa.setEditable(false);
 		txtSpesa.setColumns(10);
-		txtMateriali = new JTextField();
-		txtMateriali.setEditable(false);
-		txtMateriali.setColumns(10);
+		txtNote = new JTextField();
+		txtNote.setEditable(false);
+		txtNote.setColumns(10);
 		btnSalvaSessione = new JButton("Salva");
 		btnSalvaSessione.addActionListener(new BtnSalvaSessioneActionListener());
 		btnSalvaSessione.setEnabled(false);
@@ -346,9 +346,9 @@ public class SessionDetailWindow extends JFrame {
 					.addComponent(txtSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(12)
-					.addComponent(lblMateriali, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lblNote, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
 					.addGap(5)
-					.addComponent(txtMateriali, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+					.addComponent(txtNote, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(5)
 					.addComponent(btnModificaSessione)
@@ -482,8 +482,8 @@ public class SessionDetailWindow extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(2)
-							.addComponent(lblMateriali))
-						.addComponent(txtMateriali, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblNote))
+						.addComponent(txtNote, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(13)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnModificaSessione)
@@ -597,11 +597,7 @@ public class SessionDetailWindow extends JFrame {
 		txtSessioneID.setText(sessionID);
 		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
 		txtDataSessione.setText(f.format(session.getSessionData().getTime()));
-		StringBuilder b = new StringBuilder();
-		for (String t : session.getMateriali()) {
-			b.append(t + ",");
-		}
-		txtMateriali.setText(b.toString());
+		txtNote.setText(session.getNote());
 		// si ricava il costumer
 		try {
 			costumer = data.getCostumerFromSession(sessionID);
@@ -647,7 +643,7 @@ public class SessionDetailWindow extends JFrame {
 			txtDataSessione.setEditable(true);
 			txtOre.setEditable(true);
 			txtSpesa.setEditable(true);
-			txtMateriali.setEditable(true);
+			txtNote.setEditable(true);
 			// si abilita il pulsante salva
 			btnSalvaSessione.setEnabled(true);
 			btnModificaSessione.setEnabled(false);
@@ -667,13 +663,7 @@ public class SessionDetailWindow extends JFrame {
 			}
 			session.setHours(Integer.parseInt(txtOre.getText()));
 			session.setSpesa(Integer.parseInt(txtSpesa.getText()));
-			List<String> materiali = new ArrayList<>();
-			StringTokenizer tok = new StringTokenizer(txtMateriali.getText(),
-					",");
-			while (tok.hasMoreTokens()) {
-				materiali.add(tok.nextToken());
-			}
-			session.setMateriali(materiali);
+			session.setNote(txtNote.getText());
 			// si disabilitano i pulsanti
 			lblIstrSessione.setText("");
 			btnModificaSessione.setEnabled(true);
@@ -681,7 +671,7 @@ public class SessionDetailWindow extends JFrame {
 			txtDataSessione.setEditable(false);
 			txtOre.setEditable(false);
 			txtSpesa.setEditable(false);
-			txtMateriali.setEditable(false);
+			txtNote.setEditable(false);
 			//si lancia l'aggiornamento
 			data.fireDataUpdatePerformed(ElementType.Session);
 		}

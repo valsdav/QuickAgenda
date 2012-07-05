@@ -98,7 +98,7 @@ public class SessionsManager {
 	 *             esiste già-
 	 */
 	public void addSession(String workid, String costumerid,
-			Calendar sessiondata, int hours, int spesa, List<String> materiali)
+			Calendar sessiondata, int hours, int spesa, String note)
 			throws SessionAlreadyExistsException {
 		// si ricava un id valido
 		String id = this.getValidID();
@@ -107,7 +107,7 @@ public class SessionsManager {
 				sessiondata);
 		// si crea la session
 		Session newSes = new Session(id, hash, workid, costumerid, sessiondata,
-				hours, spesa, materiali);
+				hours, spesa, note);
 		// si controlla se esiste già con l'hash
 		if (hashMap.containsKey(hash)) {
 			// si lancia l'eccezione
@@ -648,5 +648,38 @@ public class SessionsManager {
 	public List<Session> queryByMinSpesa(int spesa) {
 		return this.queryByMinSpesa(spesa, this.getAllSessions());
 	}
-	// non si eseguono query per i materiali
+
+	/**
+	 * Metodo che filtra le Session in base alle note. Il metodo cerca nelle
+	 * note delle Session il testo passato come parametro
+	 * 
+	 * @param text
+	 *            testo da cercare
+	 * @param set
+	 *            lista di Session in cui cercare
+	 * @return ritorna la lista delle session che corrtispondono ai criteri di
+	 *         ricerca
+	 */
+	private List<Session> queryByNote(String text, List<Session> set) {
+		List<Session> temp = new ArrayList<>();
+		for (Session ses : set) {
+			if (ses.getNote().contains(text)) {
+				temp.add(ses);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Metodo che filtra le Session in base alle note. Il metodo cerca nelle
+	 * note delle Session il testo passato come parametro
+	 * 
+	 * @param text
+	 *            testo da cercare
+	 * @return ritorna la lista delle session che corrtispondono ai criteri di
+	 *         ricerca
+	 */
+	public List<Session> queryByNote(String text) {
+		return this.queryByNote(text, this.getAllSessions());
+	}
 }

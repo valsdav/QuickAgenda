@@ -583,7 +583,7 @@ public class WorkDetailWindow extends JFrame {
 		// si recuperano le session
 		List<Session> sessions = new ArrayList<>();
 		// colonne
-		String[] columns = { "ID", "Data", "N° di ore", "Spesa", "Materiali" };
+		String[] columns = { "ID", "Data", "N° di ore", "Spesa", "Note" };
 
 		public SessionTableModel(String workID) {
 			sessions = data.getSessionsFromWorkID(workID);
@@ -620,11 +620,7 @@ public class WorkDetailWindow extends JFrame {
 			case 3:
 				return sessions.get(row).getSpesa();
 			case 4:
-				StringBuilder build = new StringBuilder();
-				for (String s : sessions.get(row).getMateriali()) {
-					build.append(s + ", ");
-				}
-				return build.toString();
+				return sessions.get(row).getNote();
 			default:
 				return null;
 			}

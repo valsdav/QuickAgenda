@@ -20,10 +20,7 @@ import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.Font;
 import javax.swing.JFrame;
 import java.awt.Toolkit;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.JTextPane;
 import javax.swing.JButton;
@@ -84,7 +81,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		txtOre = new javax.swing.JTextField();
 		txtSpesa = new javax.swing.JTextField();
 		lblSpesa = new javax.swing.JLabel();
-		lblMateriali = new javax.swing.JLabel();
+		lblNote = new javax.swing.JLabel();
 		lblImmagine = new JLabel("");
 		jToolBar = new javax.swing.JToolBar();
 		jToolBar.setFloatable(false);
@@ -125,7 +122,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		lblSpesa.setText("Spesa:");
 		lblSpesa.setName("txtTelefono");
 
-		lblMateriali.setText("Materiali:");
+		lblNote.setText("Note:");
 
 		jToolBar.setRollover(true);
 
@@ -146,8 +143,8 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 
 		lblAvviso
 				.setText("N.B.: i campi contrassegnati con l'asterisco* sono obbligatori");
-		txtMateriali = new JTextPane();
-		txtMateriali.setToolTipText("");
+		txtNote = new JTextPane();
+		txtNote.setToolTipText("");
 
 		btnIDLavoro = new JButton("...");
 		btnIDLavoro.addActionListener(new BtnIDLavoroActionListener());
@@ -234,14 +231,14 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 																										Alignment.LEADING,
 																										layout.createSequentialGroup()
 																												.addComponent(
-																														lblMateriali,
+																														lblNote,
 																														GroupLayout.PREFERRED_SIZE,
 																														70,
 																														GroupLayout.PREFERRED_SIZE)
 																												.addPreferredGap(
 																														ComponentPlacement.RELATED)
 																												.addComponent(
-																														txtMateriali))
+																														txtNote))
 																								.addGroup(
 																										layout.createSequentialGroup()
 																												.addComponent(
@@ -352,12 +349,12 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 										layout.createParallelGroup(
 												Alignment.LEADING)
 												.addComponent(
-														lblMateriali,
+														lblNote,
 														GroupLayout.PREFERRED_SIZE,
 														31,
 														GroupLayout.PREFERRED_SIZE)
 												.addComponent(
-														txtMateriali,
+														txtNote,
 														GroupLayout.DEFAULT_SIZE,
 														59, Short.MAX_VALUE))
 								.addPreferredGap(ComponentPlacement.RELATED)
@@ -373,7 +370,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 	private javax.swing.JLabel lblData;
 	private javax.swing.JLabel lblOre;
 	private javax.swing.JLabel lblSpesa;
-	private javax.swing.JLabel lblMateriali;
+	private javax.swing.JLabel lblNote;
 	private javax.swing.JLabel lblIstruzioni;
 	private javax.swing.JLabel lblAvviso;
 	private javax.swing.JTextField txtIDLavoro;
@@ -381,7 +378,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 	private javax.swing.JTextField txtSpesa;
 	private javax.swing.JToolBar jToolBar;
 	private javax.swing.JLabel lblImmagine;
-	private JTextPane txtMateriali;
+	private JTextPane txtNote;
 	private JButton btnIDLavoro;
 	private JDateChooser dateChooser;
 	private AddSessionWindow currentWindow;
@@ -396,15 +393,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 			// si aggiunge la session
 			// si aggiunge un costumer
 			try {
-				List<String> materiali = new ArrayList<>();
-				// si ricavano i materiali
-				if (!txtMateriali.getText().equals("")) {
-					StringTokenizer tok = new StringTokenizer(
-							txtMateriali.getText(), ",");
-					while (tok.hasMoreTokens()) {
-						materiali.add(tok.nextToken());
-					}
-				}
+				String note = txtNote.getText();
 				int nore, spesa;
 				if (txtSpesa.getText().equals("")) {
 					spesa = 0;
@@ -417,7 +406,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 					nore = Integer.parseInt(txtOre.getText());
 				}
 				sessionsMan.addSession(txtIDLavoro.getText().toUpperCase(),
-						dateChooser.getCalendar(), nore, spesa, materiali);
+						dateChooser.getCalendar(), nore, spesa, note);
 				// si svuotano i campi
 				lblAvviso.setText("Sessione aggiunta con successo!");
 				lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class
@@ -426,8 +415,8 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 				dateChooser.cleanup();
 				txtOre.setText("");
 				txtSpesa.setText("");
-				txtMateriali
-						.setText("Inserire i materiali separati da virgola");
+				txtNote
+						.setText("");
 			} catch (SessionAlreadyExistsException exc) {
 				// si avvisa
 				lblAvviso.setText("Session già presente nei dati!");

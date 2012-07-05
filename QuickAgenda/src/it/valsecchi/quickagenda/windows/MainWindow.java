@@ -461,7 +461,7 @@ public class MainWindow extends JFrame {
 		List<Session> sessions = new ArrayList<>();
 		// colonne
 		String[] columns = { "ID", "Nome Lavoro", "Azienda Cliente","Indirizzo Cliente",
-				"N° di ore", "Spesa", "Materiali" };
+				"N° di ore", "Spesa", "Note" };
 
 		public SessionTableModel(Calendar d) {
 			sessions = data.querySessionsByDate(d);
@@ -520,11 +520,7 @@ public class MainWindow extends JFrame {
 			case 5:
 				return sessions.get(row).getSpesa();
 			case 6:
-				StringBuilder build = new StringBuilder();
-				for (String s : sessions.get(row).getMateriali()) {
-					build.append(s + ", ");
-				}
-				return build.toString();
+				return sessions.get(row).getNote();
 			default:
 				return null;
 			}
