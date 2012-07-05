@@ -107,7 +107,7 @@ public class CostumersManagerWindow extends JFrame {
 		btnRimuovi = new JButton("Rimuovi Clienti Selezionati");
 		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
 		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnRimuovi.setIcon(new ImageIcon(CostumersManagerWindow.class.getResource("/ico_small/edit_remove.png")));
+		btnRimuovi.setIcon(new ImageIcon(CostumersManagerWindow.class.getResource("/ico_small/deletered.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)

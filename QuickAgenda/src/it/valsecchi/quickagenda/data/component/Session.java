@@ -1,5 +1,7 @@
 package it.valsecchi.quickagenda.data.component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,6 +35,8 @@ public class Session {
 	private int spesa;
 	/** Lista dei materiali della sessione */
 	private List<String> materiali;
+	/** Formattatore per le date*/
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 
 	/** Costruttore di Session */
 	public Session(String id, String workid, String costumerid,
@@ -75,9 +79,25 @@ public class Session {
 	public Calendar getSessionData() {
 		return sessionData;
 	}
+	
+	/** Metodo che restituisce la SessionData come stringa già formattata*/
+	public String getSessionDataString(){
+		return formatter.format(this.sessionData.getTime());
+	}
 
 	public void setSessionData(Calendar calendar) {
 		sessionData = calendar;
+	}
+	
+	/** 
+	 * Metodo che imposta la SessionData accettando come parametro una stringa nel formato "dd/MM/yy".
+	 * @param data stringa che rappresenta la data
+	 * @throws ParseException
+	 */
+	public void setSessionData(String data) throws ParseException{
+		Calendar c = Calendar.getInstance();
+		c.setTime(formatter.parse(data));
+		this.sessionData= c;
 	}
 
 	public int getHours() {
@@ -118,5 +138,9 @@ public class Session {
 
 	public String getCostumerID() {
 		return costumerID;
+	}
+
+	public void setCostumerID(String costumerID) {
+		this.costumerID = costumerID;
 	}
 }

@@ -2,6 +2,8 @@ package it.valsecchi.quickagenda.data.component;
 
 import it.valsecchi.quickagenda.data.Utility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -28,6 +30,7 @@ public class Work {
 	private Calendar inizioLavori;
 	private Calendar fineLavori;
 	private boolean completed = false;
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 
 	/** Costruttore di Word */
 	public Work(String id, String costumerid, String _nome,String _indirizzo,
@@ -92,18 +95,50 @@ public class Work {
 	public Calendar getInizioLavori() {
 		return inizioLavori;
 	}
+	
+	/** Metodo che restituisce l'InizioLavori come stringa già formattata*/
+	public String getInizioLavoriString(){
+		return formatter.format(this.inizioLavori.getTime());
+	}
 
 	public void setInizioLavori(Calendar inizioLavori) {
 		this.inizioLavori = inizioLavori;
+	}
+	
+	/** 
+	 * Metodo che imposta l'InizioLavori accettando come parametro una stringa nel formato "dd/MM/yy".
+	 * @param inizioLavori stringa che rappresenta la data
+	 * @throws ParseException
+	 */
+	public void setInizioLavori(String inizioLavori) throws ParseException{
+		Calendar c = Calendar.getInstance();
+		c.setTime(formatter.parse(inizioLavori));
+		this.inizioLavori= c;
 	}
 
 	public Calendar getFineLavori() {
 		return fineLavori;
 	}
+	
+	/** Metodo che restituisce il FineLavori come stringa già formattata*/
+	public String getFineLavoriString(){
+		return formatter.format(this.fineLavori.getTime());
+	}
 
 	public void setFineLavori(Calendar fineLavori) {
 		this.fineLavori = fineLavori;
 	}
+	 
+	/** 
+	 * Metodo che imposta il FineLavori accettando come parametro una stringa nel formato "dd/MM/yy".
+	 * @param fineLavori stringa che rappresenta la data
+	 * @throws ParseException
+	 */
+	public void setFineLavori(String fineLavori) throws ParseException{
+		Calendar c = Calendar.getInstance();
+		c.setTime(formatter.parse(fineLavori));
+		this.fineLavori= c;
+	}	
 
 	public boolean isCompleted() {
 		return completed;
@@ -123,6 +158,10 @@ public class Work {
 
 	public String getCostumerID() {
 		return costumerID;
+	}
+	
+	public void setCostumerID(String costumerID){
+		this.costumerID= costumerID;
 	}
 
 }
