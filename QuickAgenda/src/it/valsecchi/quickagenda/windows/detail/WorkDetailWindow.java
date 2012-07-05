@@ -12,8 +12,6 @@ import it.valsecchi.quickagenda.windows.CostumersManagerWindow;
 import it.valsecchi.quickagenda.windows.addelements.AddSessionWindow;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -36,12 +34,10 @@ import java.util.List;
 
 import javax.swing.JTable;
 
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemListener;
 
 public class WorkDetailWindow extends JFrame {
 
@@ -716,7 +712,7 @@ public class WorkDetailWindow extends JFrame {
 	private class BtnModificaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si rendono editabili i campi
-			txtIDLavoro.setEditable(true);
+			txtIDCliente.setEditable(true);
 			btnCambiaCliente.setEnabled(true);
 			txtNomeLavoro.setEditable(true);
 			txtInizioLavori.setEditable(true);
@@ -754,7 +750,7 @@ public class WorkDetailWindow extends JFrame {
 			// si lancia l'aggiornamento Work
 			data.fireDataUpdatePerformed(ElementType.Work);
 			// Si disabilita
-			txtIDLavoro.setEditable(false);
+			txtIDCliente.setEditable(false);
 			btnCambiaCliente.setEnabled(false);
 			txtNomeLavoro.setEditable(false);
 			txtInizioLavori.setEditable(false);

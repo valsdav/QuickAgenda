@@ -147,7 +147,6 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		lblAvviso
 				.setText("N.B.: i campi contrassegnati con l'asterisco* sono obbligatori");
 		txtMateriali = new JTextPane();
-		txtMateriali.setText("Inserire i materiali separati da virgola");
 		txtMateriali.setToolTipText("");
 
 		btnIDLavoro = new JButton("...");
