@@ -360,9 +360,6 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si aggiunge al document
 			doc.getRootElement().addContent(newC);
 		}
-		// oggetto per formattare le date in stringhe
-		SimpleDateFormat formatdata = new SimpleDateFormat("dd/MM/yy");
-		formatdata.setLenient(false);
 		// ciclo sui work
 		for (Work w : worksMan.getAllWorks()) {
 			// nuovo work
@@ -389,14 +386,12 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			newW.addContent(indirizzo);
 			// iniziolavori
 			Element iniziolavori = new Element("iniziolavori");
-			iniziolavori.setText(formatdata.format(w.getInizioLavori()
-					.getTime()));
+			iniziolavori.setText(w.getInizioLavoriString());
 			newW.addContent(iniziolavori);
 			// finelavori
 			Element finelavori = new Element("finelavori");
 			if (w.getFineLavori() != null) {
-				finelavori.setText(formatdata.format(w.getFineLavori()
-						.getTime()));
+				finelavori.setText(w.getFineLavoriString());
 			} else {
 				finelavori.setText("null");
 			}
@@ -431,7 +426,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// sessiondata
 			Element sessiondata = new Element("sessiondata");
 			sessiondata
-					.setText(formatdata.format(s.getSessionData().getTime()));
+					.setText(s.getSessionDataString());
 			newS.addContent(sessiondata);
 			// hours
 			Element hours = new Element("hours");
@@ -697,6 +692,15 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		return sessionsMan.getSessionByID(id);
 	}
 
+	/**
+	 * Metodo di collegamento che restituisce tutte le sessioni di un determinato Work
+	 * @param workID ID del Work di cui restituire le sessioni
+	 * @return ritorna una lista di sessioni che appartengono a un certo work identificato con l'id
+	 */
+	public List<Session> getSessionsFromWorkID(String workID){
+		return sessionsMan.queryByWorkID(workID);
+	}
+	
 	/**
 	 * Ricerca i Costumer in base a un campo e a un valore.
 	 * 

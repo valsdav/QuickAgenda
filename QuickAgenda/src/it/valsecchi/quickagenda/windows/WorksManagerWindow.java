@@ -7,6 +7,7 @@ import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import it.valsecchi.quickagenda.data.interfaces.WorkSelectionListener;
 import it.valsecchi.quickagenda.windows.addelements.AddWorkWindow;
+import it.valsecchi.quickagenda.windows.detail.WorkDetailWindow;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -34,6 +35,8 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.Toolkit;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class WorksManagerWindow extends JFrame {
 
@@ -99,7 +102,7 @@ public class WorksManagerWindow extends JFrame {
 		
 		btnRimuovi = new JButton("Rimuovi Lavori selezionati");
 		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
-		btnRimuovi.setIcon(new ImageIcon(WorksManagerWindow.class.getResource("/ico_small/edit_remove.png")));
+		btnRimuovi.setIcon(new ImageIcon(WorksManagerWindow.class.getResource("/ico_small/deletered.png")));
 		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -156,6 +159,7 @@ public class WorksManagerWindow extends JFrame {
 		);
 		panel.setLayout(new BorderLayout(0, 0));
 		table = new JTable(this.getTableModel("", ""));
+		table.addMouseListener(new TableMouseListener());
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		table.setAutoCreateRowSorter(true);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -255,6 +259,20 @@ public class WorksManagerWindow extends JFrame {
 					//questa eccezione non dovrebbe accadere
 					Log.error("Cliente non trovato");
 				}
+			}
+		}
+	}
+	private class TableMouseListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent arg) {
+			//si controlla se è un doppio click
+			if(arg.getClickCount() ==2){
+				//si ricava l'id selezionato
+				String id = (String) table
+						.getValueAt(table.getSelectedRow(), 0);
+				//si apre la finestra dettagli lavoro
+				WorkDetailWindow detail = new WorkDetailWindow(id,data);
+				detail.setVisible(true);
 			}
 		}
 	}

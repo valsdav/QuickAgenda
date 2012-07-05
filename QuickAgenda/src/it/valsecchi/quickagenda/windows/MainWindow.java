@@ -112,7 +112,7 @@ public class MainWindow extends JFrame {
 
 		btnNewSession = new JButton("Aggiungi Nuova Sessione...");
 		btnNewSession.addActionListener(new BtnNewSessionActionListener());
-		btnNewSession.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnNewSession.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewSession.setIcon(new ImageIcon(MainWindow.class
 				.getResource("/ico_small/add1.png")));
 		separator = new JSeparator();
@@ -121,9 +121,8 @@ public class MainWindow extends JFrame {
 		panel = new JPanel();
 		btnRimuovi = new JButton("Rimuovi Sessioni selezionate");
 		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
-		btnRimuovi.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnRimuovi.setIcon(new ImageIcon(MainWindow.class
-				.getResource("/ico_small/edit_remove.png")));
+		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnRimuovi.setIcon(new ImageIcon(MainWindow.class.getResource("/ico_small/deletered.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -150,7 +149,9 @@ public class MainWindow extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 502, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(panel, GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+									.addGap(3))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(calendar, GroupLayout.PREFERRED_SIZE, 339, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
@@ -158,7 +159,7 @@ public class MainWindow extends JFrame {
 									.addGap(18)
 									.addComponent(btnRimuovi)))
 							.addGap(22)))
-					.addContainerGap())
+					.addGap(10))
 		);
 		panel.setLayout(new BorderLayout(0, 0));
 
@@ -353,6 +354,7 @@ public class MainWindow extends JFrame {
 			progress.setVisible(true);
 			try {
 				// SALVATAGGIO DATI
+				Log.info("Salvataggio dati e preferenze");
 				data.saveData();
 				// si salvano le preferenze
 				SettingsManager.writeSettings();
@@ -412,6 +414,7 @@ public class MainWindow extends JFrame {
 				// si ricava l'id selezionato
 				String id = (String) table
 						.getValueAt(table.getSelectedRow(), 0);
+				//si apre la finestra dettagli sessione
 				SessionDetailWindow detail = new SessionDetailWindow(id, data);
 				detail.setVisible(true);
 			}
