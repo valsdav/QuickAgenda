@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
+import it.valsecchi.quickagenda.data.exception.FileDataVersionNotValid;
 import it.valsecchi.quickagenda.data.exception.InvalidPasswordException;
 import it.valsecchi.quickagenda.settings.*;
 import java.awt.event.ActionListener;
@@ -140,63 +141,164 @@ public class OpenDataWindow extends JFrame {
 		progressBar.setIndeterminate(true);
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(10)
-									.addComponent(lblimmagine))
-								.addComponent(lblPass, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(txtPass)
-								.addComponent(cbPath, 0, 336, Short.MAX_VALUE)
-								.addComponent(lblLog, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(confirmImage)
-							.addGap(135)))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnNext, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnSfoglia, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(114))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(lblimmagine))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(22)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(cbPath, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnSfoglia))))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-									.addComponent(lblPass)
-									.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnNext))
-							.addGap(125))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap(137, Short.MAX_VALUE)
-							.addComponent(confirmImage)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblLog)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-					.addGap(11))
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap(
+												GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																Alignment.TRAILING,
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addGap(10)
+																										.addComponent(
+																												lblimmagine))
+																						.addComponent(
+																								lblPass,
+																								GroupLayout.PREFERRED_SIZE,
+																								79,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING,
+																								false)
+																						.addComponent(
+																								txtPass)
+																						.addComponent(
+																								cbPath,
+																								0,
+																								336,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								lblLog,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								progressBar,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE))
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED))
+														.addGroup(
+																Alignment.TRAILING,
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addComponent(
+																				confirmImage)
+																		.addGap(135)))
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING,
+																false)
+														.addComponent(
+																btnNext,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addComponent(
+																btnSfoglia,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+										.addGap(114)));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addContainerGap()
+																										.addComponent(
+																												lblimmagine))
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addGap(22)
+																										.addGroup(
+																												gl_contentPane
+																														.createParallelGroup(
+																																Alignment.BASELINE)
+																														.addComponent(
+																																cbPath,
+																																GroupLayout.PREFERRED_SIZE,
+																																GroupLayout.DEFAULT_SIZE,
+																																GroupLayout.PREFERRED_SIZE)
+																														.addComponent(
+																																btnSfoglia))))
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								gl_contentPane
+																										.createParallelGroup(
+																												Alignment.BASELINE)
+																										.addComponent(
+																												lblPass)
+																										.addComponent(
+																												txtPass,
+																												GroupLayout.PREFERRED_SIZE,
+																												GroupLayout.DEFAULT_SIZE,
+																												GroupLayout.PREFERRED_SIZE))
+																						.addComponent(
+																								btnNext))
+																		.addGap(125))
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addContainerGap(
+																				137,
+																				Short.MAX_VALUE)
+																		.addComponent(
+																				confirmImage)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)))
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addComponent(lblLog)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addComponent(progressBar,
+												GroupLayout.PREFERRED_SIZE, 27,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(11)));
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -219,6 +321,7 @@ public class OpenDataWindow extends JFrame {
 						timer1.stop();
 						// si eseguono le operazionio
 						try {
+							// si crea e si legge il DataManager
 							data = DataManager.loadDataManager(path,
 									txtPass.getPassword());
 							confirmImage.setIcon(new ImageIcon(
@@ -238,7 +341,7 @@ public class OpenDataWindow extends JFrame {
 								}
 							});
 							timer2.start();
-							
+
 						} catch (IOException e1) {
 							confirmImage.setIcon(new ImageIcon(
 									OpenDataWindow.class
@@ -262,6 +365,14 @@ public class OpenDataWindow extends JFrame {
 									OpenDataWindow.class
 											.getResource("/ico_128/divieto.png")));
 							lblLog.setText("Password errata!");
+							txtPass.setText("");
+						} catch (FileDataVersionNotValid e3) {
+							confirmImage.setIcon(new ImageIcon(
+									OpenDataWindow.class
+											.getResource("/ico_128/divieto.png")));
+							lblLog.setText("Errore! File dati non compatibile con la " +
+									"versione corrente del programma! Aggiornare il programma" +
+									" per leggere il file dati!");
 							txtPass.setText("");
 						}
 					}
@@ -307,9 +418,10 @@ public class OpenDataWindow extends JFrame {
 			}
 		}
 	}
+
 	private class CbPathItemListener implements ItemListener {
 		public void itemStateChanged(ItemEvent arg0) {
-			//si imposta l'icona giusta
+			// si imposta l'icona giusta
 			confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
 					.getResource("/ico_128/lock_pass.png")));
 			lblLog.setText("Scegli un file, inserisci la password e premi la freccia");

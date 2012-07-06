@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.crypto.BadPaddingException;
@@ -31,6 +30,7 @@ import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.WorkAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
+import it.valsecchi.quickagenda.data.exception.FileDataVersionNotValid;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.exception.InvalidPasswordException;
 import it.valsecchi.quickagenda.data.interfaces.*;
@@ -55,6 +55,8 @@ import it.valsecchi.quickagenda.data.interfaces.*;
 public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		AddWorkInterface {
 
+	/** Intero che rappresenta la versione corrente del file dati. */
+	public static final int currentFileDataVersion = 2;
 	/** Gestore dei Costumer */
 	private CostumersManager costumersMan;
 	/** Gestore dei Work */
@@ -169,17 +171,19 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 * @throws InvalidPasswordException
 	 *             lanciata in caso di utilizzo di password scorretta
 	 * @throws ParseException
+	 * @throws FileDataVersionNotValid
 	 */
 	public static DataManager loadDataManager(String path, char[] password)
 			throws IOException, CryptographyException, JDOMException,
-			InvalidPasswordException, ParseException {
+			InvalidPasswordException, ParseException, FileDataVersionNotValid {
 		Document doc;
 		try {
-			// si cerca di caricare in dati con DataReaderWriter
 			Log.info("creazione del reader per leggere i dati");
+			// si cerca di caricare in dati con DataReaderWriter
 			DataReaderWriter reader = DataReaderWriter.createDataReaderWriter(
 					path, DataReaderWriter.READ_MODE);
 			Log.info("lettura del document");
+			// si legge
 			doc = reader.readData(password);
 			// si elimina il reader
 			reader = null;
@@ -202,6 +206,17 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Log.error("Errore password!");
 			throw e;
 		}
+		// si controlla la versione del file dati
+		try {
+			DataManager.checkFileDataVersion(doc);
+		} catch (FileDataVersionNotValid e) {
+			Log.error("Versione file dati non compatibile! Aggiornare il programma. Corrente: "
+					+ DataManager.currentFileDataVersion
+					+ "; File dati: "
+					+ e.getFileVersion());
+			throw e;
+		}
+
 		// si leggono i dati
 		Log.info("lettura e caricamento singoli oggetti");
 		Element root = doc.getRootElement();
@@ -256,7 +271,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		List<Element> sessionElem = root.getChildren("session");
 		List<Session> sessions = new ArrayList<>();
 		for (Element s : sessionElem) {
-			String id, hash, workid, costumerid ,note;
+			String id, hash, workid, costumerid, note;
 			GregorianCalendar sessiondata = null;
 			int hours = 0;
 			int spesa = 0;
@@ -429,13 +444,17 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Element spesa = new Element("spesa");
 			spesa.setText(Integer.toString(s.getSpesa()));
 			newS.addContent(spesa);
-			//note
+			// note
 			Element note = new Element("note");
 			note.setText(s.getNote());
 			newS.addContent(note);
 			// si aggiunge al document
 			doc.getRootElement().addContent(newS);
 		}
+		// si scrive la versione corrente della struttura del file dati
+		doc.getRootElement().addContent(
+				new Element("version").setText(Integer
+						.toString(DataManager.currentFileDataVersion)));
 
 		// ora si inizializza il writer
 		Log.info("creazione writer");
@@ -458,6 +477,77 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		} catch (CryptographyException e) {
 			throw new CryptographyException("Errore di criptografia generico!");
 		}
+	}
+
+	/**
+	 * Metodo che verifica che la versione del file dati che si sta leggendo sia
+	 * compatibile con quella supportata dal programma. Se la versione è
+	 * precedente la si aggiorna con gli opportuni cambiamenti. Se è successiva
+	 * si lancia un errore avvisando che il software deve essere aggiornato.
+	 * 
+	 * @param doc
+	 *            Document da controllare
+	 * @throws FileDataVersionNotValid
+	 *             eccezione lanciata se la versione del file dati è posteriore,
+	 *             quindi incompatibile con in programma nella versione
+	 *             corrente.
+	 */
+	private static void checkFileDataVersion(Document doc)
+			throws FileDataVersionNotValid {
+		// si ricava l'elemento version
+		int version = Integer.parseInt(doc.getRootElement().getChildText(
+				"version"));
+		// si controlla che sia uguale
+		if (version == DataManager.currentFileDataVersion) {
+			// ri restituisce true
+			return;
+		} else if (version < DataManager.currentFileDataVersion) {
+			// si modifica il documento in base alle esigenze del cambio di
+			// versione
+			DataManager.updateDocumentStructure(doc, version);
+		} else if (version > DataManager.currentFileDataVersion) {
+			// si lancia l'eccezione
+			throw new FileDataVersionNotValid(version);
+		}
+	}
+
+	/**
+	 * Metodo che aggiorna la struttura di un file di dati se la sua versione è
+	 * inferiore a quella corrente. I cambiamenti vengono applicati a seconda
+	 * della versione di partenza. Questo metodo permette la conversione dei
+	 * file di dati delle versioni precedenti in file di dati della versione
+	 * attuale, mantenendo i dati ed eliminando solo quelli rimossi dalla
+	 * struttura dati.
+	 * 
+	 * @param doc
+	 *            Document da modificare
+	 * @param version
+	 *            versione corrente del document
+	 * @return restituisce il Document aggiornato
+	 */
+	private static Document updateDocumentStructure(Document doc, int version) {
+		switch (version) {
+		case 1:
+			// se la versione del document è 1 bisogna cambiare il campo
+			// materiali delle sessioni con il campo note.
+			// si ricava lista di Sessions
+			List<Element> sessionElem = doc.getRootElement().getChildren(
+					"session");
+			for (Element s : sessionElem) {
+				// si elimina il campo materiali
+				s.removeChild("materiali");
+				// si aggiunge il campo note
+				s.addContent(new Element("note"));
+			}
+			// si aggiorna la versione del document
+			doc.getRootElement()
+					.getChild("version")
+					.setText(
+							Integer.toString(DataManager.currentFileDataVersion));
+			break;
+		}
+		// si restituisce il document aggiornato4
+		return doc;
 	}
 
 	/**
@@ -641,9 +731,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	@Override
 	public void addSession(String workid, Calendar sessiondata, int hours,
-			int spesa, String note)
-			throws SessionAlreadyExistsException, InsufficientDataException,
-			IDNotFoundException {
+			int spesa, String note) throws SessionAlreadyExistsException,
+			InsufficientDataException, IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
 		// nulli
 		if (workid == null || workid.equals("") || (sessiondata == null)) {
@@ -660,7 +749,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			String costumerid = worksMan.getWorkByID(workid).getCostumerID();
 			// si chiama il metodo
 			sessionsMan.addSession(workid, costumerid, sessiondata, hours,
-					spesa,note);
+					spesa, note);
 			// si lancia l'aggiornamento
 			this.fireDataUpdatePerformed(ElementType.Session);
 		}
