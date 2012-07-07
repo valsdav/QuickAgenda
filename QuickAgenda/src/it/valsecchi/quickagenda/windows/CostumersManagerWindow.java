@@ -73,7 +73,7 @@ public class CostumersManagerWindow extends JFrame {
 	}
 
 	public void initComponent() {
-		setBounds(100, 100, 972, 867);
+		setBounds(100, 100, 1051, 867);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
