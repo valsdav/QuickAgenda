@@ -70,7 +70,7 @@ public class WorksManagerWindow extends JFrame {
 	}
 
 	private void initComponent() {
-		setBounds(100, 100, 990, 885);
+		setBounds(100, 100, 1166, 885);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -301,7 +301,7 @@ public class WorksManagerWindow extends JFrame {
 				}
 				lblIstr.setText("");
 			} catch (ParseException e) {
-				lblIstr.setText("inserire la data nel formato giorno/mese/anno");
+				lblIstr.setText("Inserire la data nel formato giorno/mese/anno");
 			}
 		}
 
@@ -384,7 +384,7 @@ public class WorksManagerWindow extends JFrame {
 			if(type!=ElementType.Work){
 				return;
 			}
-			//si aggiornano i dati mantenendo i parametri di ricerca correnti
+			//si aggiornano i dati mostrando tutto senza filtri
 			WorkTableModel m = (WorkTableModel) table.getModel();
 			m.changeData("","");
 			table.updateUI();

@@ -3,7 +3,6 @@ package it.valsecchi.quickagenda.data.component;
 import it.valsecchi.quickagenda.data.Utility;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -30,7 +29,6 @@ public class Work {
 	private Calendar inizioLavori;
 	private Calendar fineLavori;
 	private boolean completed = false;
-	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 
 	/** Costruttore di Word */
 	public Work(String id, String costumerid, String _nome,String _indirizzo,
@@ -98,7 +96,7 @@ public class Work {
 	
 	/** Metodo che restituisce l'InizioLavori come stringa già formattata*/
 	public String getInizioLavoriString(){
-		return formatter.format(this.inizioLavori.getTime());
+		return Utility.formatCalendarToString(this.inizioLavori);
 	}
 
 	public void setInizioLavori(Calendar inizioLavori) {
@@ -111,9 +109,7 @@ public class Work {
 	 * @throws ParseException
 	 */
 	public void setInizioLavori(String inizioLavori) throws ParseException{
-		Calendar c = Calendar.getInstance();
-		c.setTime(formatter.parse(inizioLavori));
-		this.inizioLavori= c;
+		this.inizioLavori = Utility.parseStringToCalendar(inizioLavori);
 	}
 
 	public Calendar getFineLavori() {
@@ -122,7 +118,7 @@ public class Work {
 	
 	/** Metodo che restituisce il FineLavori come stringa già formattata*/
 	public String getFineLavoriString(){
-		return formatter.format(this.fineLavori.getTime());
+		return Utility.formatCalendarToString(this.fineLavori);
 	}
 
 	public void setFineLavori(Calendar fineLavori) {
@@ -135,9 +131,7 @@ public class Work {
 	 * @throws ParseException
 	 */
 	public void setFineLavori(String fineLavori) throws ParseException{
-		Calendar c = Calendar.getInstance();
-		c.setTime(formatter.parse(fineLavori));
-		this.fineLavori= c;
+		this.fineLavori= Utility.parseStringToCalendar(fineLavori);
 	}	
 
 	public boolean isCompleted() {

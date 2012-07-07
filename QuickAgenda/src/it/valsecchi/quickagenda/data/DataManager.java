@@ -494,9 +494,11 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	private static void checkFileDataVersion(Document doc)
 			throws FileDataVersionNotValid {
+		Log.info("controllo versione file dati");
 		// si ricava l'elemento version
 		int version = Integer.parseInt(doc.getRootElement().getChildText(
 				"version"));
+		Log.info("versione:" + Integer.toString(version));
 		// si controlla che sia uguale
 		if (version == DataManager.currentFileDataVersion) {
 			// ri restituisce true
@@ -505,8 +507,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si modifica il documento in base alle esigenze del cambio di
 			// versione
 			DataManager.updateDocumentStructure(doc, version);
+			Log.info("struttura file dati aggiornata alla versione corrente");
 		} else if (version > DataManager.currentFileDataVersion) {
 			// si lancia l'eccezione
+			Log.error("errore! Versione file dati posteriore alla versione corrente!");
 			throw new FileDataVersionNotValid(version);
 		}
 	}
@@ -778,6 +782,68 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	public List<Session> getSessionsFromWorkID(String workID) {
 		return sessionsMan.queryByWorkID(workID);
+	}
+
+	/**
+	 * Ricerca le Session in base all'ID del Work a cui appartengono e in base a
+	 * un campo e a un valore.
+	 * 
+	 * @param workID
+	 *            ID del Work
+	 * @param campo
+	 *            campo da ricerca
+	 * @param value
+	 *            valore da ricercare
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<Session> querySessionByArg(String workID, String campo,
+			String value) throws ParseException {
+		List<Session> found = new ArrayList<>();
+		// si filtrano le Session in base al workID
+		found = this.getSessionsFromWorkID(workID);
+		List<Session> results = new ArrayList<>();
+		// si filtrano
+		switch (campo) {
+		case "ID":
+			for (Session s : found) {
+				if (s.getID().equals(value)) {
+					results.add(s);
+				}
+			}
+			break;
+		case "Data":
+			results.addAll(SessionsManager.queryBySessionData(
+					Utility.parseStringToCalendar(value), found));
+			break;
+		case "N° Ore":
+			results.addAll(SessionsManager.queryByHours(
+					Integer.parseInt(value), found));
+			break;
+		case "Minimo N° Ore":
+			results.addAll(SessionsManager.queryByMinHours(Integer.parseInt(value), found));
+			break;
+		case "Massimo N° Ore":
+			results.addAll(SessionsManager.queryByMaxHours(Integer.parseInt(value), found));
+			break;
+		case "Spesa":
+			results.addAll(SessionsManager.queryBySpesa(Integer.parseInt(value), found));
+			break;
+		case "Minimo Spesa":
+			results.addAll(SessionsManager.queryByMinSpesa(Integer.parseInt(value), found));
+			break;
+		case "Massimo Spesa":
+			results.addAll(SessionsManager.queryByMaxSpesa(Integer.parseInt(value), found));
+			break;
+		case "Note":
+			results.addAll(SessionsManager.queryByNote(value, found));
+			break;
+		default:
+			// si restituiscono tutte le session
+			return sessionsMan.getAllSessions();
+		}
+		// si restituiscono i risultato
+		return results;
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class InfoWindow extends JFrame {
 		{
 			txtQuickAgendaVersione = new JTextArea();
 			txtQuickAgendaVersione.setEditable(false);
-			txtQuickAgendaVersione.setText("Quick Agenda\r\n\r\nVersione:  1.0.2_beta\r\nAutore:  Davide Valsecchi\r\n\r\n");
+			txtQuickAgendaVersione.setText("Quick Agenda\r\n\r\nVersione:  1.0.6_beta\r\nAutore:  Davide Valsecchi\r\n\r\n");
 			contentPane.add(txtQuickAgendaVersione, BorderLayout.CENTER);
 		}
 	}
