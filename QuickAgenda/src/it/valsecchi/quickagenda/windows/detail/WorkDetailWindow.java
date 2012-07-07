@@ -87,11 +87,11 @@ public class WorkDetailWindow extends JFrame {
 
 	public WorkDetailWindow(String workId, DataManager _data) {
 		setTitle("Dettagli Lavoro");
+		workID = workId;
 		data = _data;
 		// Si registrano i listener per gli aggiornamenti dati
 		data.addDataUpdateListener(new UpdateListener(), ElementType.Work);
 		data.addDataUpdateListener(new UpdateListener(), ElementType.Session);
-		workID = workId;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				WorkDetailWindow.class.getResource("/ico_small/work2.png")));
 		initComponent();
@@ -100,7 +100,7 @@ public class WorkDetailWindow extends JFrame {
 
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 917, 870);
+		setBounds(100, 100, 918, 870);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -208,6 +208,8 @@ public class WorkDetailWindow extends JFrame {
 		btnVisualizzaTutto = new JButton("Visualizza tutto");
 		btnVisualizzaTutto.addActionListener(new BtnVisualizzaTuttoActionListener());
 		lblIstr = new JLabel("");
+		
+		lblIstr = new JLabel("");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -266,21 +268,24 @@ public class WorkDetailWindow extends JFrame {
 							.addGap(12)
 							.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 865, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(12)
+							.addGap(9)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
 									.addComponent(label, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
 									.addGap(7)
 									.addComponent(lblSessioniDelLavoro))
-								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE))
-							.addGap(21)
-							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+									.addGap(9)
+									.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)))
+							.addGap(12)
 							.addComponent(btnCerca)
-							.addGap(25)
+							.addGap(12)
 							.addComponent(btnVisualizzaTutto)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblIstr))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lblIstr, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(12)
 							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 865, GroupLayout.PREFERRED_SIZE))
@@ -291,7 +296,7 @@ public class WorkDetailWindow extends JFrame {
 							.addComponent(btnRimuoviSessioniSelezionate, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
 							.addGap(24)
 							.addComponent(btnStampaTabellaSessioni)))
-					.addContainerGap(12, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -356,20 +361,19 @@ public class WorkDetailWindow extends JFrame {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(16)
 									.addComponent(lblSessioniDelLavoro)))
-							.addGap(13)
-							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(21)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(77)
-							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(60)
+							.addGap(62)
 							.addComponent(btnCerca))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(76)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnVisualizzaTutto)
-								.addComponent(lblIstr))))
-					.addGap(14)
+							.addGap(78)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblIstr, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnVisualizzaTutto))))
+					.addGap(13)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE)
 					.addGap(13)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -613,6 +617,7 @@ public class WorkDetailWindow extends JFrame {
 	private class BtnCercaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			//si aggiornano i dati
+			lblIstr.setText("");
 			SessionTableModel m = (SessionTableModel) table.getModel();
 			m.changeData(workID,(String) cbCerca.getSelectedItem(), txtCerca.getText());
 			table.updateUI();

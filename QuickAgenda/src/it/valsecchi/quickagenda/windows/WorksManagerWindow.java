@@ -63,8 +63,8 @@ public class WorksManagerWindow extends JFrame {
 				WorksManagerWindow.class.getResource("/ico_small/agenda.png")));
 		setTitle("Gestione Lavori");
 		data = _data;
-		//si registra il listener
-		data.addDataUpdateListener(new WorkUpdateListener(),ElementType.Work);
+		// si registra il listener
+		data.addDataUpdateListener(new WorkUpdateListener(), ElementType.Work);
 		mode = _mode;
 		initComponent();
 	}
@@ -99,64 +99,171 @@ public class WorksManagerWindow extends JFrame {
 				.getResource("/ico_small/check.png")));
 		panel = new JPanel();
 		lblIstr = new JLabel("");
-		
+
 		btnRimuovi = new JButton("Rimuovi Lavori selezionati");
 		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
-		btnRimuovi.setIcon(new ImageIcon(WorksManagerWindow.class.getResource("/ico_small/deletered.png")));
+		btnRimuovi.setIcon(new ImageIcon(WorksManagerWindow.class
+				.getResource("/ico_small/deletered.png")));
 		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblIstr)))
-							.addGap(12)
-							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(9)
-							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(13)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblIstr)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(9)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-									.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-									.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-								.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-					.addGap(18)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 637, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																panel,
+																GroupLayout.DEFAULT_SIZE,
+																944,
+																Short.MAX_VALUE)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								txtCerca,
+																								GroupLayout.PREFERRED_SIZE,
+																								261,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addComponent(
+																												btnTutti,
+																												GroupLayout.PREFERRED_SIZE,
+																												201,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addPreferredGap(
+																												ComponentPlacement.RELATED)
+																										.addComponent(
+																												lblIstr)))
+																		.addGap(12)
+																		.addComponent(
+																				cbCerca,
+																				GroupLayout.PREFERRED_SIZE,
+																				127,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				btnCerca,
+																				GroupLayout.PREFERRED_SIZE,
+																				145,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				btnConferma,
+																				GroupLayout.PREFERRED_SIZE,
+																				151,
+																				GroupLayout.PREFERRED_SIZE))
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addComponent(
+																				btnAggiungi,
+																				GroupLayout.PREFERRED_SIZE,
+																				216,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				btnRimuovi,
+																				GroupLayout.PREFERRED_SIZE,
+																				247,
+																				GroupLayout.PREFERRED_SIZE)))
+										.addContainerGap()));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(9)
+																		.addComponent(
+																				txtCerca,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(13)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.BASELINE)
+																						.addComponent(
+																								btnTutti,
+																								GroupLayout.PREFERRED_SIZE,
+																								36,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								lblIstr)))
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(9)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								gl_contentPane
+																										.createParallelGroup(
+																												Alignment.BASELINE)
+																										.addComponent(
+																												btnCerca,
+																												GroupLayout.PREFERRED_SIZE,
+																												57,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addComponent(
+																												btnConferma,
+																												GroupLayout.PREFERRED_SIZE,
+																												73,
+																												GroupLayout.PREFERRED_SIZE))
+																						.addComponent(
+																								cbCerca,
+																								GroupLayout.PREFERRED_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.PREFERRED_SIZE))))
+										.addGap(18)
+										.addComponent(panel,
+												GroupLayout.PREFERRED_SIZE,
+												637, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.UNRELATED)
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																btnAggiungi,
+																GroupLayout.PREFERRED_SIZE,
+																73,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																btnRimuovi,
+																GroupLayout.PREFERRED_SIZE,
+																73,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(
+												GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)));
 		panel.setLayout(new BorderLayout(0, 0));
 		table = new JTable(this.getTableModel("", ""));
 		table.addMouseListener(new TableMouseListener());
@@ -244,34 +351,36 @@ public class WorksManagerWindow extends JFrame {
 			w.setVisible(true);
 		}
 	}
+
 	private class BtnRimuoviActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//Si ricavano le sessioni selezionate
+			// Si ricavano le sessioni selezionate
 			int[] selected = table.getSelectedRows();
 			List<String> ids = new ArrayList<>();
-			for(int i :selected){
+			for (int i : selected) {
 				ids.add((String) table.getValueAt(i, 0));
 			}
-			for(String id :ids){
+			for (String id : ids) {
 				try {
 					data.removeWork(id);
 				} catch (IDNotFoundException e2) {
-					//questa eccezione non dovrebbe accadere
+					// questa eccezione non dovrebbe accadere
 					Log.error("Cliente non trovato");
 				}
 			}
 		}
 	}
+
 	private class TableMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg) {
-			//si controlla se è un doppio click
-			if(arg.getClickCount() ==2){
-				//si ricava l'id selezionato
+			// si controlla se è un doppio click
+			if (arg.getClickCount() == 2) {
+				// si ricava l'id selezionato
 				String id = (String) table
 						.getValueAt(table.getSelectedRow(), 0);
-				//si apre la finestra dettagli lavoro
-				WorkDetailWindow detail = new WorkDetailWindow(id,data);
+				// si apre la finestra dettagli lavoro
+				WorkDetailWindow detail = new WorkDetailWindow(id, data);
 				detail.setVisible(true);
 			}
 		}
@@ -296,7 +405,7 @@ public class WorksManagerWindow extends JFrame {
 		public void changeData(String campo, String value) {
 			try {
 				lavori = data.queryWorkByArg(campo, value);
-				if(lavori ==null){
+				if (lavori == null) {
 					lavori = new ArrayList<>();
 				}
 				lblIstr.setText("");
@@ -377,16 +486,16 @@ public class WorksManagerWindow extends JFrame {
 			return o.getClass();
 		}
 	}
-	
-	private class WorkUpdateListener implements DataUpdateListener{
+
+	private class WorkUpdateListener implements DataUpdateListener {
 		@Override
 		public void DataUpdatePerformed(ElementType type) {
-			if(type!=ElementType.Work){
+			if (type != ElementType.Work) {
 				return;
 			}
-			//si aggiornano i dati mostrando tutto senza filtri
+			// si aggiornano i dati mostrando tutto senza filtri
 			WorkTableModel m = (WorkTableModel) table.getModel();
-			m.changeData("","");
+			m.changeData("", "");
 			table.updateUI();
 		}
 	}

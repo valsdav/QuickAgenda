@@ -840,7 +840,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			break;
 		default:
 			// si restituiscono tutte le session
-			return sessionsMan.getAllSessions();
+			return found;
 		}
 		// si restituiscono i risultato
 		return results;
