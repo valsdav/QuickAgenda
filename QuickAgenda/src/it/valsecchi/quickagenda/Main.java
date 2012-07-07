@@ -8,6 +8,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class Main {
 	public static void main(String[] args) {
+		Log.info("controllo presenza provider criptografico");
 		checkProvider();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -29,6 +30,7 @@ public class Main {
 	private static void checkProvider() {
 		if (Security.getProvider("BouncyCastleProvider") == null) {
 			// si aggiunge
+			Log.info("provider non trovato! Aggiunta dinamica del provider...");
 			Security.addProvider(new BouncyCastleProvider());
 		}
 	}
