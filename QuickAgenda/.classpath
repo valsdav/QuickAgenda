@@ -13,5 +13,10 @@
 	<classpathentry exported="true" kind="lib" path="D:/Java Projects/jcalendar-1.4/lib/jcalendar-1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="D:/Java Projects/bcprov-jdk15on-147.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="D:/Java Projects/itext-5.3.0/itextpdf-5.3.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/D:/Java Projects/itext-5.3.0/itextpdf-5.3.0-javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
