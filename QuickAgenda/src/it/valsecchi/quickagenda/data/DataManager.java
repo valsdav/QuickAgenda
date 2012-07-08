@@ -719,6 +719,18 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
+	 * Metodo che restituisce tutti i Work di un determinato Costumer. Se non
+	 * viene trovato il costumerID viene restituito un arraylist vuoto.
+	 * 
+	 * @param costumerID
+	 *            ID del Costumer di cui ricercare i Work
+	 * @return restituisce la lista di Works appartenenti al Costumer
+	 */
+	public List<Work> getWorksByCostumerID(String costumerID) {
+		return worksMan.queryByCostumerID(costumerID);
+	}
+
+	/**
 	 * Metodo di collegamento con il sessionsManager. Il metodo ricerca le
 	 * Sessions eseguita in una certa data passata come parametro.
 	 * 
@@ -821,19 +833,24 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 					Integer.parseInt(value), found));
 			break;
 		case "Minimo N° Ore":
-			results.addAll(SessionsManager.queryByMinHours(Integer.parseInt(value), found));
+			results.addAll(SessionsManager.queryByMinHours(
+					Integer.parseInt(value), found));
 			break;
 		case "Massimo N° Ore":
-			results.addAll(SessionsManager.queryByMaxHours(Integer.parseInt(value), found));
+			results.addAll(SessionsManager.queryByMaxHours(
+					Integer.parseInt(value), found));
 			break;
 		case "Spesa":
-			results.addAll(SessionsManager.queryBySpesa(Integer.parseInt(value), found));
+			results.addAll(SessionsManager.queryBySpesa(
+					Integer.parseInt(value), found));
 			break;
 		case "Minimo Spesa":
-			results.addAll(SessionsManager.queryByMinSpesa(Integer.parseInt(value), found));
+			results.addAll(SessionsManager.queryByMinSpesa(
+					Integer.parseInt(value), found));
 			break;
 		case "Massimo Spesa":
-			results.addAll(SessionsManager.queryByMaxSpesa(Integer.parseInt(value), found));
+			results.addAll(SessionsManager.queryByMaxSpesa(
+					Integer.parseInt(value), found));
 			break;
 		case "Note":
 			results.addAll(SessionsManager.queryByNote(value, found));

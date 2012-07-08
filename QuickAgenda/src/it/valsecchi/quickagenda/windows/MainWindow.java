@@ -89,7 +89,7 @@ public class MainWindow extends JFrame {
 
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 1409, 612);
+		setBounds(100, 100, 1456, 612);
 		contentPane = new JPanel();
 		contentPane.setBackground(UIManager.getColor("Panel.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
