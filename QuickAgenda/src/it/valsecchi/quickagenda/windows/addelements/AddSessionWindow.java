@@ -21,8 +21,6 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import java.awt.Toolkit;
 import java.util.Calendar;
-
-import javax.swing.JTextPane;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTextArea;
@@ -149,6 +147,8 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		btnIDLavoro.addActionListener(new BtnIDLavoroActionListener());
 		dateChooser = new JDateChooser();
 		txtNote = new JTextArea();
+		txtNote.setWrapStyleWord(true);
+		txtNote.setLineWrap(true);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());

@@ -2,8 +2,10 @@ package it.valsecchi.quickagenda.data;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
 import java.io.FileNotFoundException;
@@ -141,6 +143,12 @@ public class Utility {
 		return str.toString().toUpperCase();
 	}
 
+	/**
+	 * Metodo che confronta due Calendar. Restituisce true solo se essi rappresentano lo stesso giorno.
+	 * @param d1
+	 * @param d2
+	 * @return  Restituisce true solo se essi rappresentano lo stesso giorno.
+	 */
 	public static boolean equalsDate(Calendar d1, Calendar d2) {
 		if (d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR)) {
 			if (d1.get(Calendar.DAY_OF_YEAR) == d2.get(Calendar.DAY_OF_YEAR)) {
@@ -153,6 +161,30 @@ public class Utility {
 		}
 	}
 
+	/**
+	 * Metodo che formatta un Calendar in una stringa nel formato "dd/MM/yy".
+	 * @param c Calendar da formattare
+	 * @return restituisce una stringa nel formato "dd/MM/yy"
+	 */
+	public static String formatCalendarToString(Calendar c){
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+		return formatter.format(c.getTime());
+	}
+	
+	/**
+	 * Metodo che formatta una String nel formato "dd/MM/yy" in un Calendar
+	 * @param string_data Stringa da formattare
+	 * @return restituisce il Calendar corrispondente
+	 * @throws ParseException eccezione lanciata se la String non è nel formato "dd/MM/yy"
+	 */
+	public static Calendar parseStringToCalendar(String string_data) throws ParseException{
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+		Date d = formatter.parse(string_data);
+		Calendar c = Calendar.getInstance();
+		c.setTime(d);
+		return c;
+	}
+	
 	/**
 	 * Classe che fornisce i metodi per creare un log utile per il test e il
 	 * debug

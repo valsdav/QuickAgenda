@@ -317,26 +317,26 @@ public class SessionsManager {
 		List<Session> set = this.getAllSessions();
 		// si ricerca
 		if (workID != null && !workID.equals("")) {
-			set = this.queryByWorkID(workID, set);
+			set = SessionsManager.queryByWorkID(workID, set);
 		}
 		if (costumerID != null && !costumerID.equals("")) {
-			set = this.queryByCostumerID(costumerID, set);
+			set = SessionsManager.queryByCostumerID(costumerID, set);
 		}
 		if (sessionData != null) {
-			set = this.queryBySessionData(sessionData, set);
+			set = SessionsManager.queryBySessionData(sessionData, set);
 		}
 		if (hours != 0) {
 			// il param1 indica se bisogna cerca i valori uguali, maggiorni,
 			// minori
 			// (0=uguali; 1= maggiori; 2= minori);
 			if (param1 == 0) {
-				set = this.queryByHours(hours, set);
+				set = SessionsManager.queryByHours(hours, set);
 			} else if (param1 == 1) {
 				// si cercano quelli maggiori
-				set = this.queryByMinHours(hours, set);
+				set = SessionsManager.queryByMinHours(hours, set);
 			} else if (param1 == 2) {
 				// si cercano quelli minori
-				set = this.queryByMaxHours(hours, set);
+				set = SessionsManager.queryByMaxHours(hours, set);
 			}
 		}
 		if (spesa != 0) {
@@ -344,13 +344,13 @@ public class SessionsManager {
 			// minori
 			// (0=uguali; 1= maggiori; 2= minori);
 			if (param2 == 0) {
-				set = this.queryBySpesa(spesa, set);
+				set = SessionsManager.queryBySpesa(spesa, set);
 			} else if (param2 == 1) {
 				// si cercano quelli maggiori
-				set = this.queryByMinSpesa(spesa, set);
+				set = SessionsManager.queryByMinSpesa(spesa, set);
 			} else if (param2 == 2) {
 				// si cercano quelli minori
-				set = this.queryByMaxSpesa(spesa, set);
+				set = SessionsManager.queryByMaxSpesa(spesa, set);
 			}
 		}
 		// si ritorna il risultato
@@ -366,7 +366,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByWorkID(String workID, List<Session> set) {
+	public static List<Session> queryByWorkID(String workID, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getWorkID().equals(workID)) {
@@ -385,11 +385,11 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByWorkID(String workID) {
-		return this.queryByWorkID(workID, this.getAllSessions());
+		return SessionsManager.queryByWorkID(workID, this.getAllSessions());
 	}
 
 	/**
-	 * Metodo che filtra le Session in base al'ID del Costumer
+	 * Metodo che filtra le Session in base al'ID del Costumer.
 	 * 
 	 * @param costumerID
 	 *            ID del Work da cercare
@@ -397,7 +397,8 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByCostumerID(String costumerID, List<Session> set) {
+	public static List<Session> queryByCostumerID(String costumerID,
+			List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getCostumerID().equals(costumerID)) {
@@ -416,7 +417,8 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByCostumerID(String costumerID) {
-		return this.queryByCostumerID(costumerID, this.getAllSessions());
+		return SessionsManager.queryByCostumerID(costumerID,
+				this.getAllSessions());
 	}
 
 	/**
@@ -428,7 +430,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryBySessionData(Calendar calendar2,
+	public static List<Session> queryBySessionData(Calendar calendar2,
 			List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
@@ -448,7 +450,8 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryBySessionData(Calendar calendar2) {
-		return this.queryBySessionData(calendar2, this.getAllSessions());
+		return SessionsManager.queryBySessionData(calendar2,
+				this.getAllSessions());
 	}
 
 	/**
@@ -461,7 +464,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByHours(int hours, List<Session> set) {
+	public static List<Session> queryByHours(int hours, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getHours() == hours) {
@@ -481,7 +484,7 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByHours(int hours) {
-		return this.queryByHours(hours, this.getAllSessions());
+		return SessionsManager.queryByHours(hours, this.getAllSessions());
 	}
 
 	/**
@@ -494,7 +497,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByMinHours(int hours, List<Session> set) {
+	public static List<Session> queryByMinHours(int hours, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getHours() >= hours) {
@@ -514,7 +517,7 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByMinHours(int hours) {
-		return this.queryByMinHours(hours, this.getAllSessions());
+		return SessionsManager.queryByMinHours(hours, this.getAllSessions());
 	}
 
 	/**
@@ -527,7 +530,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByMaxHours(int hours, List<Session> set) {
+	public static List<Session> queryByMaxHours(int hours, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getHours() <= hours) {
@@ -547,7 +550,7 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByMaxHours(int hours) {
-		return this.queryByMaxHours(hours, this.getAllSessions());
+		return SessionsManager.queryByMaxHours(hours, this.getAllSessions());
 	}
 
 	/**
@@ -560,7 +563,7 @@ public class SessionsManager {
 	 *            lista in cui cercare
 	 * @return ritorna la lista di Session trovate
 	 */
-	private List<Session> queryBySpesa(int spesa, List<Session> set) {
+	public static List<Session> queryBySpesa(int spesa, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getSpesa() == spesa) {
@@ -580,7 +583,7 @@ public class SessionsManager {
 	 * @return ritorna la lista di Session trovate
 	 */
 	public List<Session> queryBySpesa(int spesa) {
-		return this.queryBySpesa(spesa, this.getAllSessions());
+		return SessionsManager.queryBySpesa(spesa, this.getAllSessions());
 	}
 
 	/**
@@ -593,7 +596,7 @@ public class SessionsManager {
 	 *            lista in cui cercare
 	 * @return ritorna la lista di Session trovate
 	 */
-	private List<Session> queryByMaxSpesa(int spesa, List<Session> set) {
+	public static List<Session> queryByMaxSpesa(int spesa, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getSpesa() <= spesa) {
@@ -613,7 +616,7 @@ public class SessionsManager {
 	 * @return ritorna la lista di Session trovate
 	 */
 	public List<Session> queryByMaxSpesa(int spesa) {
-		return this.queryByMaxSpesa(spesa, this.getAllSessions());
+		return SessionsManager.queryByMaxSpesa(spesa, this.getAllSessions());
 	}
 
 	/**
@@ -626,7 +629,7 @@ public class SessionsManager {
 	 *            lista in cui cercare
 	 * @return ritorna la lista di Session trovate
 	 */
-	private List<Session> queryByMinSpesa(int spesa, List<Session> set) {
+	public static List<Session> queryByMinSpesa(int spesa, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getSpesa() >= spesa) {
@@ -646,7 +649,7 @@ public class SessionsManager {
 	 * @return ritorna la lista di Session trovate
 	 */
 	public List<Session> queryByMinSpesa(int spesa) {
-		return this.queryByMinSpesa(spesa, this.getAllSessions());
+		return SessionsManager.queryByMinSpesa(spesa, this.getAllSessions());
 	}
 
 	/**
@@ -660,7 +663,7 @@ public class SessionsManager {
 	 * @return ritorna la lista delle session che corrtispondono ai criteri di
 	 *         ricerca
 	 */
-	private List<Session> queryByNote(String text, List<Session> set) {
+	public static List<Session> queryByNote(String text, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getNote().contains(text)) {
@@ -680,6 +683,6 @@ public class SessionsManager {
 	 *         ricerca
 	 */
 	public List<Session> queryByNote(String text) {
-		return this.queryByNote(text, this.getAllSessions());
+		return SessionsManager.queryByNote(text, this.getAllSessions());
 	}
 }

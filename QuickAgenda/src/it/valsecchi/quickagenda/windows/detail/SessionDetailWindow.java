@@ -18,10 +18,6 @@ import java.awt.Font;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -652,6 +648,7 @@ public class SessionDetailWindow extends JFrame {
 
 	private class BtnSalvaSessioneActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			lblIstrSessione.setText("");
 			// si salvano i nuovi dati
 			try {
 				session.setSessionData(txtDataSessione.getText());
@@ -691,6 +688,7 @@ public class SessionDetailWindow extends JFrame {
 
 	private class BtnSalvaLavoroActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			lblIstrLavoro.setText("");
 			// si salvano i nuovi dati
 			try {
 				work.setInizioLavori(txtInizioLavori.getText());
