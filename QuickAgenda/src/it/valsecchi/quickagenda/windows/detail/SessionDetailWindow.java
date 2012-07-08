@@ -648,6 +648,7 @@ public class SessionDetailWindow extends JFrame {
 
 	private class BtnSalvaSessioneActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			lblIstrSessione.setText("");
 			// si salvano i nuovi dati
 			try {
 				session.setSessionData(txtDataSessione.getText());
@@ -687,6 +688,7 @@ public class SessionDetailWindow extends JFrame {
 
 	private class BtnSalvaLavoroActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			lblIstrLavoro.setText("");
 			// si salvano i nuovi dati
 			try {
 				work.setInizioLavori(txtInizioLavori.getText());

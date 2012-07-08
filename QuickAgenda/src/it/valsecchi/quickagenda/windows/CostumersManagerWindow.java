@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.ListSelectionModel;
+import javax.swing.JLabel;
 
 /**
  * Finestra che visualizza e gestisce i Costumer.
@@ -59,6 +60,8 @@ public class CostumersManagerWindow extends JFrame {
 	/** lista di listener per la selezione dei costumer */
 	private List<CostumerSelectionListener> listeners = new ArrayList<>();
 	private JButton btnRimuovi;
+	private JLabel immagine;
+	private JLabel label;
 
 	public CostumersManagerWindow(DataManager d, int _mode) {
 		data = d;
@@ -73,7 +76,7 @@ public class CostumersManagerWindow extends JFrame {
 	}
 
 	public void initComponent() {
-		setBounds(100, 100, 1051, 867);
+		setBounds(100, 100, 1167, 867);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -108,54 +111,8 @@ public class CostumersManagerWindow extends JFrame {
 		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
 		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnRimuovi.setIcon(new ImageIcon(CostumersManagerWindow.class.getResource("/ico_small/deletered.png")));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnAggiungiCliente)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 265, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnTutti))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnCerca)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnConferma)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(22)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnCerca)
-								.addComponent(btnConferma, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnRimuovi, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-						.addComponent(btnAggiungiCliente, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addContainerGap())
-		);
+		
+		immagine = new JLabel("");
 		panel.setLayout(new BorderLayout(0, 0));
 		{
 			table = new JTable(this.getTableModel("", ""));
@@ -172,6 +129,70 @@ public class CostumersManagerWindow extends JFrame {
 		} else if (mode == MODE_SELECTION) {
 			btnConferma.setVisible(true);
 		}
+		
+		label = new JLabel("");
+		label.setIcon(new ImageIcon(CostumersManagerWindow.class.getResource("/ico_small/users.png")));
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(8)
+									.addComponent(immagine))
+								.addComponent(label, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+							.addGap(12)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnTutti))
+							.addGap(12)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+							.addGap(7)
+							.addComponent(btnCerca)
+							.addGap(12)
+							.addComponent(btnConferma))
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btnAggiungiCliente)
+							.addGap(7)
+							.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 265, GroupLayout.PREFERRED_SIZE)))
+					.addGap(12))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(8)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(5)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(9)
+									.addComponent(immagine))
+								.addComponent(label, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(9)
+							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(13)
+							.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(9)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnCerca)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(1)
+							.addComponent(btnConferma)))
+					.addGap(23)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+					.addGap(7)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnAggiungiCliente)
+						.addComponent(btnRimuovi))
+					.addGap(13))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
