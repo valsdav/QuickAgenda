@@ -389,7 +389,7 @@ public class SessionsManager {
 	}
 
 	/**
-	 * Metodo che filtra le Session in base al'ID del Costumer
+	 * Metodo che filtra le Session in base al'ID del Costumer.
 	 * 
 	 * @param costumerID
 	 *            ID del Work da cercare
@@ -397,7 +397,8 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	public static List<Session> queryByCostumerID(String costumerID, List<Session> set) {
+	public static List<Session> queryByCostumerID(String costumerID,
+			List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getCostumerID().equals(costumerID)) {
@@ -416,7 +417,8 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByCostumerID(String costumerID) {
-		return SessionsManager.queryByCostumerID(costumerID, this.getAllSessions());
+		return SessionsManager.queryByCostumerID(costumerID,
+				this.getAllSessions());
 	}
 
 	/**
@@ -448,7 +450,8 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryBySessionData(Calendar calendar2) {
-		return SessionsManager.queryBySessionData(calendar2, this.getAllSessions());
+		return SessionsManager.queryBySessionData(calendar2,
+				this.getAllSessions());
 	}
 
 	/**

@@ -2,18 +2,22 @@ package it.valsecchi.quickagenda.data.report;
 
 /**
  * Classe che rappresenta un risultato di un report su un Work.
- *
+ * 
  * @author Davide Valsecchi
  * @version 1.0
- *
+ * 
  */
 public class WorkReportResult {
 
 	private int numberOfSessions;
 	private int totSpesa;
 	private int totHours;
-	
-	public WorkReportResult(int numberofSessions,int spesa,int ore){
+
+	/**
+	 * Costruttore che richiede il numero delle sessioni, la spesa totale, il
+	 * numero totale di ore.
+	 */
+	public WorkReportResult(int numberofSessions, int spesa, int ore) {
 		setNumberOfSessions(numberofSessions);
 		setTotSpesa(spesa);
 		setTotHours(ore);
@@ -42,5 +46,5 @@ public class WorkReportResult {
 	public void setTotHours(int totHours) {
 		this.totHours = totHours;
 	}
-	
+
 }
