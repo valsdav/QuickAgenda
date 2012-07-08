@@ -18,10 +18,6 @@ import java.awt.Font;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import javax.swing.JTextField;

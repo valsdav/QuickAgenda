@@ -8,6 +8,8 @@ import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.interfaces.CostumerSelectionListener;
 import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
+import it.valsecchi.quickagenda.data.report.ReportsManager;
+import it.valsecchi.quickagenda.data.report.WorkReportResult;
 import it.valsecchi.quickagenda.windows.CostumersManagerWindow;
 import it.valsecchi.quickagenda.windows.addelements.AddSessionWindow;
 import static it.valsecchi.quickagenda.data.Utility.Log;
@@ -84,6 +86,13 @@ public class WorkDetailWindow extends JFrame {
 	private JButton btnCerca;
 	private JButton btnVisualizzaTutto;
 	private JLabel lblIstr;
+	private JLabel lblIstr_1;
+	private JLabel lblTotaleNumeroSessioni;
+	private JTextField txtNSessioni;
+	private JLabel lblNTotaleDi;
+	private JTextField txtTotOre;
+	private JLabel lblSpesaTotale;
+	private JTextField txtTotSpesa;
 
 	public WorkDetailWindow(String workId, DataManager _data) {
 		setTitle("Dettagli Lavoro");
@@ -100,7 +109,7 @@ public class WorkDetailWindow extends JFrame {
 
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 918, 870);
+		setBounds(100, 100, 918, 949);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -183,12 +192,14 @@ public class WorkDetailWindow extends JFrame {
 		btnCambiaCliente
 				.addActionListener(new BtnCambiaClienteActionListener());
 		btnCambiaCliente.setEnabled(false);
-		btnResocontoLavoro = new JButton("Resoconto Lavoro");
-		btnResocontoLavoro.addActionListener(new BtnResocontoLavoroActionListener());
+		btnResocontoLavoro = new JButton("Calcola Resoconto Lavoro");
+		btnResocontoLavoro
+				.addActionListener(new BtnResocontoLavoroActionListener());
 		btnResocontoLavoro.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		btnStampaTabellaSessioni = new JButton("Stampa tabella sessioni");
-		btnStampaTabellaSessioni.addActionListener(new BtnStampaTabellaSessioniActionListener());
+		btnStampaTabellaSessioni
+				.addActionListener(new BtnStampaTabellaSessioniActionListener());
 		panel.setLayout(new BorderLayout(0, 0));
 		{
 			table = new JTable(new SessionTableModel(workID));
@@ -201,102 +212,142 @@ public class WorkDetailWindow extends JFrame {
 		txtCerca = new JTextField();
 		txtCerca.setColumns(10);
 		cbCerca = new JComboBox();
-		cbCerca.setModel(new DefaultComboBoxModel(new String[] {"ID", "Data", "N\u00B0 Ore", "Minimo N\u00B0 Ore", "Massimo N\u00B0 Ore", "Spesa", "Minima Spesa", "Massima Spesa", "Note"}));
+		cbCerca.setModel(new DefaultComboBoxModel(new String[] { "ID", "Data",
+				"N\u00B0 Ore", "Minimo N\u00B0 Ore", "Massimo N\u00B0 Ore",
+				"Spesa", "Minima Spesa", "Massima Spesa", "Note" }));
 		btnCerca = new JButton("Cerca");
 		btnCerca.addActionListener(new BtnCercaActionListener());
-		btnCerca.setIcon(new ImageIcon(WorkDetailWindow.class.getResource("/ico_small/search3.png")));
+		btnCerca.setIcon(new ImageIcon(WorkDetailWindow.class
+				.getResource("/ico_small/search3.png")));
 		btnVisualizzaTutto = new JButton("Visualizza tutto");
-		btnVisualizzaTutto.addActionListener(new BtnVisualizzaTuttoActionListener());
+		btnVisualizzaTutto
+				.addActionListener(new BtnVisualizzaTuttoActionListener());
 		lblIstr = new JLabel("");
-		
-		lblIstr = new JLabel("");
+
+		lblIstr_1 = new JLabel("");
+		{
+			lblTotaleNumeroSessioni = new JLabel("Totale numero sessioni:");
+		}
+		{
+			txtNSessioni = new JTextField();
+			txtNSessioni.setText((String) null);
+			txtNSessioni.setEditable(false);
+			txtNSessioni.setColumns(10);
+		}
+		{
+			lblNTotaleDi = new JLabel("N\u00B0 Totale di Ore:");
+		}
+		{
+			txtTotOre = new JTextField();
+			txtTotOre.setText((String) null);
+			txtTotOre.setEditable(false);
+			txtTotOre.setColumns(10);
+		}
+		{
+			lblSpesaTotale = new JLabel("Spesa Totale:");
+		}
+		{
+			txtTotSpesa = new JTextField();
+			txtTotSpesa.setText((String) null);
+			txtTotSpesa.setEditable(false);
+			txtTotSpesa.setColumns(10);
+		}
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(immagine1)
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(immagine1)
+							.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(lblIdCliente, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(btnCambiaCliente)
+							.addGap(29)
+							.addComponent(btnDettagliCliente))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblNomeLavoro)
 							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-									.addGap(5)
-									.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
-									.addGap(12)
-									.addComponent(lblIdCliente, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-									.addGap(5)
-									.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-									.addGap(12)
-									.addComponent(btnCambiaCliente)
-									.addGap(29)
-									.addComponent(btnDettagliCliente))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblNomeLavoro)
-									.addGap(18)
-									.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
-									.addGap(12)
-									.addComponent(lblIndirizzoLavoro)
-									.addGap(5)
-									.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-									.addGap(5)
-									.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
-									.addGap(12)
-									.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-									.addGap(5)
-									.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(146)
-							.addComponent(lblCompletato, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-							.addGap(1)
-							.addComponent(checkCompletato))
-						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
-							.addComponent(separator, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblIndirizzoLavoro)
+							.addGap(5)
+							.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(20)
-							.addComponent(btnModifica)
-							.addGap(7)
-							.addComponent(btnSalva)
-							.addGap(18)
-							.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
-							.addGap(189)
-							.addComponent(btnResocontoLavoro))
-						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
-							.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 865, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(9)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(3)
-									.addComponent(label, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-									.addGap(7)
-									.addComponent(lblSessioniDelLavoro))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-									.addGap(9)
-									.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)))
-							.addGap(12)
-							.addComponent(btnCerca)
-							.addGap(12)
-							.addComponent(btnVisualizzaTutto)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblIstr, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(12)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 865, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(12)
-							.addComponent(btnAggiungiSessione)
-							.addGap(9)
-							.addComponent(btnRimuoviSessioniSelezionate, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
-							.addGap(24)
-							.addComponent(btnStampaTabellaSessioni)))
+							.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(146)
+					.addComponent(lblCompletato, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(checkCompletato))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addComponent(lblTotaleNumeroSessioni)
+					.addGap(22)
+					.addComponent(txtNSessioni, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+					.addGap(26)
+					.addComponent(lblNTotaleDi, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addGap(5)
+					.addComponent(txtTotOre, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(lblSpesaTotale, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addComponent(txtTotSpesa, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(14)
+					.addComponent(label, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
+					.addComponent(lblSessioniDelLavoro)
+					.addGap(648))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(14)
+					.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
+					.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
+					.addComponent(btnCerca)
+					.addGap(7)
+					.addComponent(btnVisualizzaTutto)
+					.addPreferredGap(ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+					.addComponent(lblIstr_1, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 865, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(16)
+					.addComponent(btnAggiungiSessione)
+					.addGap(5)
+					.addComponent(btnRimuoviSessioniSelezionate, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
+					.addGap(13)
+					.addComponent(btnStampaTabellaSessioni))
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addGap(7)
+						.addComponent(btnModifica)
+						.addGap(12)
+						.addComponent(btnSalva)
+						.addGap(18)
+						.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnResocontoLavoro))
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addGap(1)
+						.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 882, GroupLayout.PREFERRED_SIZE)))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -343,37 +394,56 @@ public class WorkDetailWindow extends JFrame {
 						.addComponent(lblCompletato)
 						.addComponent(checkCompletato))
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(16)
+					.addGap(21)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnModifica)
-						.addComponent(btnSalva)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(3)
-							.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblTotaleNumeroSessioni))
+						.addComponent(txtNSessioni, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblNTotaleDi))
+						.addComponent(txtTotOre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSpesaTotale))
+						.addComponent(txtTotSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(28)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(1)
+								.addComponent(btnModifica))
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(1)
+								.addComponent(btnSalva))
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(4)
+								.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(btnResocontoLavoro))
-					.addGap(7)
+					.addGap(19)
 					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(17)
+					.addGap(13)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(label)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(19)
+							.addComponent(lblSessioniDelLavoro)))
+					.addGap(11)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(label)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(16)
-									.addComponent(lblSessioniDelLavoro)))
-							.addGap(21)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGap(17)
+							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(62)
-							.addComponent(btnCerca))
+							.addGap(17)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnCerca)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(78)
+							.addGap(16)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblIstr, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblIstr_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnVisualizzaTutto))))
-					.addGap(13)
+					.addGap(15)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE)
 					.addGap(13)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -412,17 +482,18 @@ public class WorkDetailWindow extends JFrame {
 
 		public SessionTableModel(String _workID) {
 			try {
-				sessions = data.querySessionByArg(_workID, "","");
+				sessions = data.querySessionByArg(_workID, "", "");
 			} catch (ParseException e) {
-				//non si può sollevare questa eccezione perchè viene passato il campo "".
+				// non si può sollevare questa eccezione perchè viene passato il
+				// campo "".
 			}
 		}
-		
-		public void changeData(String _workID,String campo,String value){
+
+		public void changeData(String _workID, String campo, String value) {
 			try {
-				sessions = data.querySessionByArg(_workID,campo,value);
+				sessions = data.querySessionByArg(_workID, campo, value);
 			} catch (ParseException e) {
-			 lblIstr.setText("Inserire la data nel formato giorno/mese/anno");
+				lblIstr.setText("Inserire la data nel formato giorno/mese/anno");
 			}
 		}
 
@@ -487,7 +558,7 @@ public class WorkDetailWindow extends JFrame {
 			} else if (type == ElementType.Session) {
 				// si aggiorna il table model
 				SessionTableModel m = (SessionTableModel) table.getModel();
-				m.changeData(workID,"","");
+				m.changeData(workID, "", "");
 				table.updateUI();
 			}
 		}
@@ -511,7 +582,8 @@ public class WorkDetailWindow extends JFrame {
 	private class BtnAggiungiSessioneActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si apre la finestra per l'aggiunta di nuove sessioni
-			AddSessionWindow add = new AddSessionWindow(data,Calendar.getInstance());
+			AddSessionWindow add = new AddSessionWindow(data,
+					Calendar.getInstance());
 			add.setWorkID(workID);
 			add.setVisible(true);
 		}
@@ -555,6 +627,7 @@ public class WorkDetailWindow extends JFrame {
 	private class BtnSalvaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// si salvano i dati
+			lblIstrLavoro.setText("");
 			if (txtIDCliente.getText().equals("")) {
 				lblIstrLavoro.setText("Scegliere un Cliente per il lavoro!");
 				return;
@@ -599,35 +672,45 @@ public class WorkDetailWindow extends JFrame {
 			cost.setVisible(true);
 		}
 	}
+
 	private class BtnResocontoLavoroActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			
+			//si calcola il resoconto del lavoro
+			WorkReportResult report = ReportsManager.performWorkReport(workID, data);
+			txtNSessioni.setText(Integer.toString(report.getNumberOfSessions()));
+			txtTotSpesa.setText(Integer.toString(report.getTotSpesa()));
+			txtTotOre.setText(Integer.toString(report.getTotHours()));
 		}
 	}
-	private class BtnStampaTabellaSessioniActionListener implements ActionListener {
+
+	private class BtnStampaTabellaSessioniActionListener implements
+			ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//si stampa la tabella
-			try{
-			table.print(JTable.PrintMode.FIT_WIDTH);}
-			catch(PrinterException e2){
+			// si stampa la tabella
+			try {
+				table.print(JTable.PrintMode.FIT_WIDTH);
+			} catch (PrinterException e2) {
 				Log.error("stampa fallita");
 			}
 		}
 	}
+
 	private class BtnCercaActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			//si aggiornano i dati
+			// si aggiornano i dati
 			lblIstr.setText("");
 			SessionTableModel m = (SessionTableModel) table.getModel();
-			m.changeData(workID,(String) cbCerca.getSelectedItem(), txtCerca.getText());
+			m.changeData(workID, (String) cbCerca.getSelectedItem(),
+					txtCerca.getText());
 			table.updateUI();
 		}
 	}
+
 	private class BtnVisualizzaTuttoActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			//si riinseriscono tutti i dati
+			// si riinseriscono tutti i dati
 			SessionTableModel m = (SessionTableModel) table.getModel();
-			m.changeData(workID,"","");
+			m.changeData(workID, "", "");
 			table.updateUI();
 		}
 	}

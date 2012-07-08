@@ -8,6 +8,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class Main {
 	public static void main(String[] args) {
+		Log.info("Avvio QuickAgenda!");
 		Log.info("controllo presenza provider criptografico");
 		checkProvider();
 		EventQueue.invokeLater(new Runnable() {

@@ -1,6 +1,5 @@
 package it.valsecchi.quickagenda.data.report;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.valsecchi.quickagenda.data.DataManager;
