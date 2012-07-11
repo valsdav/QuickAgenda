@@ -9,9 +9,6 @@ import it.valsecchi.quickagenda.data.interfaces.AddWorkInterface;
 import it.valsecchi.quickagenda.data.interfaces.CostumerSelectionListener;
 import it.valsecchi.quickagenda.windows.CostumersManagerWindow;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -58,6 +55,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 	private JLabel lblImmagine;
 	private AddWorkWindow currentWindow;
 	private AddWorkInterface workMan;
+	private JButton btnIndirizzo;
 
 	public AddWorkWindow(AddWorkInterface workman) {
 		workMan = workman;
@@ -70,7 +68,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 	private void initComponent() {
 		currentWindow = this;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 466, 530);
+		setBounds(100, 100, 501, 530);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -93,7 +91,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 		btnIDCliente = new JButton("...");
 		btnIDCliente.addActionListener(new BtnIDClienteActionListener());
 		lblIndirizzo = new JLabel();
-		lblIndirizzo.setText("Indirizzo:");
+		lblIndirizzo.setText("Indirizzo*:");
 		lblIndirizzo.setName("txtNome");
 		txtIndirizzo = new JTextField();
 		dcInizioLavori = new JDateChooser();
@@ -115,6 +113,9 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 		lblImmagine = new JLabel("");
 		lblImmagine.setIcon(new ImageIcon(AddWorkWindow.class
 				.getResource("/ico_small/edit.png")));
+
+		btnIndirizzo = new JButton("...");
+		btnIndirizzo.addActionListener(new BtnIndirizzoActionListener());
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane
 				.setHorizontalGroup(gl_contentPane
@@ -128,83 +129,6 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 										.addComponent(lblAggiungiUnNuovo,
 												GroupLayout.PREFERRED_SIZE,
 												362, GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																labelNome,
-																GroupLayout.PREFERRED_SIZE,
-																70,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																lblIdCliente,
-																GroupLayout.PREFERRED_SIZE,
-																70,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																lblIndirizzo,
-																GroupLayout.PREFERRED_SIZE,
-																70,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																lblInizioLavori))
-										.addGap(12)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING,
-																false)
-														.addComponent(txtNome)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								txtIndirizzo,
-																								GroupLayout.PREFERRED_SIZE,
-																								298,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addComponent(
-																												txtIDCliente,
-																												GroupLayout.PREFERRED_SIZE,
-																												241,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addGap(18)
-																										.addComponent(
-																												btnIDCliente))
-																						.addComponent(
-																								dcInizioLavori,
-																								GroupLayout.PREFERRED_SIZE,
-																								314,
-																								GroupLayout.PREFERRED_SIZE))))
-										.addGap(217)
-										.addComponent(button,
-												GroupLayout.PREFERRED_SIZE, 45,
-												GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(lblFineLavori,
-												GroupLayout.PREFERRED_SIZE, 81,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(12)
-										.addComponent(dcFineLavori,
-												GroupLayout.PREFERRED_SIZE,
-												314, GroupLayout.PREFERRED_SIZE))
 						.addGroup(
 								gl_contentPane
 										.createSequentialGroup()
@@ -228,6 +152,106 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 										.addGap(174)
 										.addComponent(lblImmagine,
 												GroupLayout.PREFERRED_SIZE, 79,
+												GroupLayout.PREFERRED_SIZE))
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.TRAILING,
+																false)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addComponent(
+																				lblFineLavori,
+																				GroupLayout.PREFERRED_SIZE,
+																				81,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(12)
+																		.addComponent(
+																				dcFineLavori,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				Short.MAX_VALUE))
+														.addGroup(
+																Alignment.LEADING,
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								labelNome,
+																								GroupLayout.PREFERRED_SIZE,
+																								70,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								lblIdCliente,
+																								GroupLayout.PREFERRED_SIZE,
+																								70,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								lblIndirizzo,
+																								GroupLayout.PREFERRED_SIZE,
+																								70,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								lblInizioLavori))
+																		.addGap(12)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING,
+																								false)
+																						.addComponent(
+																								txtNome,
+																								GroupLayout.PREFERRED_SIZE,
+																								350,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addGroup(
+																												gl_contentPane
+																														.createParallelGroup(
+																																Alignment.TRAILING,
+																																false)
+																														.addComponent(
+																																txtIndirizzo,
+																																Alignment.LEADING)
+																														.addComponent(
+																																txtIDCliente,
+																																Alignment.LEADING,
+																																GroupLayout.DEFAULT_SIZE,
+																																299,
+																																Short.MAX_VALUE))
+																										.addPreferredGap(
+																												ComponentPlacement.RELATED,
+																												GroupLayout.DEFAULT_SIZE,
+																												Short.MAX_VALUE)
+																										.addGroup(
+																												gl_contentPane
+																														.createParallelGroup(
+																																Alignment.LEADING)
+																														.addComponent(
+																																btnIndirizzo,
+																																GroupLayout.PREFERRED_SIZE,
+																																45,
+																																GroupLayout.PREFERRED_SIZE)
+																														.addComponent(
+																																btnIDCliente)))
+																						.addComponent(
+																								dcInizioLavori,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE))))
+										.addGap(218)
+										.addComponent(button,
+												GroupLayout.PREFERRED_SIZE, 45,
 												GroupLayout.PREFERRED_SIZE)));
 		gl_contentPane
 				.setVerticalGroup(gl_contentPane
@@ -288,12 +312,12 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 																								31,
 																								GroupLayout.PREFERRED_SIZE)
 																						.addComponent(
-																								btnIDCliente)
-																						.addComponent(
 																								txtIDCliente,
 																								GroupLayout.PREFERRED_SIZE,
 																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))))
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btnIDCliente))))
 										.addPreferredGap(
 												ComponentPlacement.RELATED)
 										.addGroup(
@@ -309,7 +333,9 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 																txtIndirizzo,
 																GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																btnIndirizzo))
 										.addPreferredGap(
 												ComponentPlacement.RELATED)
 										.addGroup(
@@ -317,14 +343,14 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 														.createParallelGroup(
 																Alignment.LEADING)
 														.addComponent(
-																dcInizioLavori,
-																GroupLayout.PREFERRED_SIZE,
-																25,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
 																lblInizioLavori,
 																GroupLayout.PREFERRED_SIZE,
 																31,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																dcInizioLavori,
+																GroupLayout.PREFERRED_SIZE,
+																25,
 																GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(
 												ComponentPlacement.RELATED,
@@ -333,8 +359,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 										.addGroup(
 												gl_contentPane
 														.createParallelGroup(
-																Alignment.LEADING,
-																false)
+																Alignment.LEADING)
 														.addComponent(
 																lblFineLavori,
 																GroupLayout.PREFERRED_SIZE,
@@ -437,7 +462,8 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 				lblImmagine.setIcon(new ImageIcon(AddWorkWindow.class
 						.getResource("/ico_small/attention.png")));
 				// si cambia l'avviso
-				lblAvviso.setText("Inserire Nome, ID Cliente e Inizio Lavori!");
+				lblAvviso
+						.setText("Inserire Nome, ID Cliente, Indirizzo e Inizio Lavori!");
 				return;
 			} catch (IDNotFoundException e2) {
 				lblImmagine.setIcon(new ImageIcon(AddSessionWindow.class
@@ -459,6 +485,22 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 			// si registra il listener
 			w.addCostumerSelectionListener(currentWindow);
 			w.setVisible(true);
+		}
+	}
+
+	private class BtnIndirizzoActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			// si inserisce direttamento l'indirizzo del costumer
+			if (!txtIDCliente.getText().equals("")) {
+				try {
+					txtIndirizzo.setText(((DataManager) workMan)
+							.getCostumerByID(txtIDCliente.getText())
+							.getIndirizzo());
+				} catch (IDNotFoundException e) {
+					// non dovrebbe essere sollevata questa eccezione
+					return;
+				}
+			}
 		}
 	}
 

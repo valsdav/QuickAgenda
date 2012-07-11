@@ -2,6 +2,7 @@ package it.valsecchi.quickagenda.data.component;
 
 import it.valsecchi.quickagenda.data.Utility;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 /**
@@ -92,18 +93,46 @@ public class Work {
 	public Calendar getInizioLavori() {
 		return inizioLavori;
 	}
+	
+	/** Metodo che restituisce l'InizioLavori come stringa già formattata*/
+	public String getInizioLavoriString(){
+		return Utility.formatCalendarToString(this.inizioLavori);
+	}
 
 	public void setInizioLavori(Calendar inizioLavori) {
 		this.inizioLavori = inizioLavori;
+	}
+	
+	/** 
+	 * Metodo che imposta l'InizioLavori accettando come parametro una stringa nel formato "dd/MM/yy".
+	 * @param inizioLavori stringa che rappresenta la data
+	 * @throws ParseException
+	 */
+	public void setInizioLavori(String inizioLavori) throws ParseException{
+		this.inizioLavori = Utility.parseStringToCalendar(inizioLavori);
 	}
 
 	public Calendar getFineLavori() {
 		return fineLavori;
 	}
+	
+	/** Metodo che restituisce il FineLavori come stringa già formattata*/
+	public String getFineLavoriString(){
+		return Utility.formatCalendarToString(this.fineLavori);
+	}
 
 	public void setFineLavori(Calendar fineLavori) {
 		this.fineLavori = fineLavori;
 	}
+	 
+	/** 
+	 * Metodo che imposta il FineLavori accettando come parametro una stringa nel formato "dd/MM/yy".
+	 * @param fineLavori stringa che rappresenta la data
+	 * @throws ParseException
+	 */
+	public void setFineLavori(String fineLavori) throws ParseException{
+		this.fineLavori= Utility.parseStringToCalendar(fineLavori);
+	}	
 
 	public boolean isCompleted() {
 		return completed;
@@ -123,6 +152,10 @@ public class Work {
 
 	public String getCostumerID() {
 		return costumerID;
+	}
+	
+	public void setCostumerID(String costumerID){
+		this.costumerID= costumerID;
 	}
 
 }

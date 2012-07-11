@@ -1,7 +1,6 @@
 package it.valsecchi.quickagenda.data.component;
 
 import it.valsecchi.quickagenda.data.Utility;
-import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
@@ -49,7 +48,7 @@ public class SessionsManager {
 			// si controlla se l'id della sessione esiste già
 			if (sessionsMap.containsKey(session.getID())) {
 				throw new IDAlreadyExistsException(ElementType.Session,
-						session.getID(),session);
+						session.getID(), session);
 			} else {
 				// si aggiunge
 				sessionsMap.put(session.getID(), session);
@@ -99,8 +98,8 @@ public class SessionsManager {
 	 *             esiste già-
 	 */
 	public void addSession(String workid, String costumerid,
-			Calendar sessiondata, int hours, int spesa,
-			List<String> materiali) throws SessionAlreadyExistsException {
+			Calendar sessiondata, int hours, int spesa, String note)
+			throws SessionAlreadyExistsException {
 		// si ricava un id valido
 		String id = this.getValidID();
 		// si ricava l'hash
@@ -108,7 +107,7 @@ public class SessionsManager {
 				sessiondata);
 		// si crea la session
 		Session newSes = new Session(id, hash, workid, costumerid, sessiondata,
-				hours, spesa, materiali);
+				hours, spesa, note);
 		// si controlla se esiste già con l'hash
 		if (hashMap.containsKey(hash)) {
 			// si lancia l'eccezione
@@ -130,7 +129,7 @@ public class SessionsManager {
 	 * @throws IDNotFoundException
 	 *             eccezione lanciata se l'id non è stato trovato
 	 */
-	public void removeWorkByID(String ID) throws IDNotFoundException {
+	public void removeSessionByID(String ID) throws IDNotFoundException {
 		if (sessionsMap.containsKey(ID)) {
 			// si ricava l'hash
 			String hash = sessionsMap.get(ID).getHash();
@@ -167,6 +166,41 @@ public class SessionsManager {
 	}
 
 	/**
+	 * Metodo che rimuove le sessioni identificate con l'ID del Work
+	 * 
+	 * @param workID
+	 *            id del Work
+	 */
+	public void removeSessionsByWorkID(String workID) {
+		List<Session> ses = this.queryByWorkID(workID);
+		for (Session s : ses) {
+			try {
+				this.removeSessionByID(s.getID());
+			} catch (IDNotFoundException e) {
+				// la sessione verrà trovata di sicuro perchè è appena stata
+				// cercata.
+			}
+		}
+	}
+
+	/**
+	 * Metodo che rimuove le sessioni identificate con l'ID del Costumer
+	 * 
+	 * @param costumerID
+	 */
+	public void removeSessionsByCostumerID(String costumerID) {
+		List<Session> ses = this.queryByCostumerID(costumerID);
+		for (Session s : ses) {
+			try {
+				this.removeSessionByID(s.getID());
+			} catch (IDNotFoundException e) {
+				// la sessione verrà trovata di sicuro perchè è appena stata
+				// cercata.
+			}
+		}
+	}
+
+	/**
 	 * Metodo che restituisce la Session avente come ID il parametro passato al
 	 * metodo. Se la Session non viene trovata viene lanciata l'eccezione
 	 * IDNotFoundException
@@ -177,11 +211,11 @@ public class SessionsManager {
 	 * @throws IDNotFoundException
 	 *             lanciata se non viene trovato l'Id
 	 */
-	public Session getSessionByID(String id) throws IDNotFoundException {
-		if (sessionsMap.containsKey(id)) {
-			return sessionsMap.get(id);
+	public Session getSessionByID(String ID) throws IDNotFoundException {
+		if (sessionsMap.containsKey(ID)) {
+			return sessionsMap.get(ID);
 		} else {
-			throw new IDNotFoundException(ElementType.Session, id);
+			throw new IDNotFoundException(ElementType.Session, ID);
 		}
 	}
 
@@ -208,19 +242,23 @@ public class SessionsManager {
 		}
 	}
 
-	/** Metodo che restituisce tutte le Session nei dati*/
-	public List<Session> getAllSessions(){
+	/** Metodo che restituisce tutte le Session nei dati */
+	public List<Session> getAllSessions() {
 		List<Session> all = new ArrayList<>();
-		for(Session s: sessionsMap.values()){
+		for (Session s : sessionsMap.values()) {
 			all.add(s);
 		}
 		return all;
 	}
-	
+
 	/**
-	 * Metodo che verifica l'esistenza di una Session identificata dall'id passato come parametro.
-	 * @param ID id da controllare
-	 * @return restituisce True se esiste la session con l'id passato come parametro
+	 * Metodo che verifica l'esistenza di una Session identificata dall'id
+	 * passato come parametro.
+	 * 
+	 * @param ID
+	 *            id da controllare
+	 * @return restituisce True se esiste la session con l'id passato come
+	 *         parametro
 	 */
 	public boolean exists(String ID) {
 		if (sessionsMap.containsKey(ID)) {
@@ -229,7 +267,7 @@ public class SessionsManager {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Metodo che restituisce un ID valido da utilizzare. Il metodo genera ID
 	 * finchè non ne trova uno non ancora utilizzato e lo restituisce
@@ -276,29 +314,29 @@ public class SessionsManager {
 			GregorianCalendar sessionData, int hours, int param1, int spesa,
 			int param2) {
 		// si ricavano tutte le session da cercare
-		List<Session> set =this.getAllSessions();
+		List<Session> set = this.getAllSessions();
 		// si ricerca
 		if (workID != null && !workID.equals("")) {
-			set = this.queryByWorkID(workID, set);
+			set = SessionsManager.queryByWorkID(workID, set);
 		}
-		if (costumerID != null && !costumerID .equals("")) {
-			set = this.queryByCostumerID(costumerID, set);
+		if (costumerID != null && !costumerID.equals("")) {
+			set = SessionsManager.queryByCostumerID(costumerID, set);
 		}
 		if (sessionData != null) {
-			set = this.queryBySessionData(sessionData, set);
+			set = SessionsManager.queryBySessionData(sessionData, set);
 		}
 		if (hours != 0) {
 			// il param1 indica se bisogna cerca i valori uguali, maggiorni,
 			// minori
 			// (0=uguali; 1= maggiori; 2= minori);
 			if (param1 == 0) {
-				set = this.queryByHours(hours, set);
+				set = SessionsManager.queryByHours(hours, set);
 			} else if (param1 == 1) {
 				// si cercano quelli maggiori
-				set = this.queryByMinHours(hours, set);
+				set = SessionsManager.queryByMinHours(hours, set);
 			} else if (param1 == 2) {
 				// si cercano quelli minori
-				set = this.queryByMaxHours(hours, set);
+				set = SessionsManager.queryByMaxHours(hours, set);
 			}
 		}
 		if (spesa != 0) {
@@ -306,13 +344,13 @@ public class SessionsManager {
 			// minori
 			// (0=uguali; 1= maggiori; 2= minori);
 			if (param2 == 0) {
-				set = this.queryBySpesa(spesa, set);
+				set = SessionsManager.queryBySpesa(spesa, set);
 			} else if (param2 == 1) {
 				// si cercano quelli maggiori
-				set = this.queryByMinSpesa(spesa, set);
+				set = SessionsManager.queryByMinSpesa(spesa, set);
 			} else if (param2 == 2) {
 				// si cercano quelli minori
-				set = this.queryByMaxSpesa(spesa, set);
+				set = SessionsManager.queryByMaxSpesa(spesa, set);
 			}
 		}
 		// si ritorna il risultato
@@ -328,7 +366,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByWorkID(String workID, List<Session> set) {
+	public static List<Session> queryByWorkID(String workID, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getWorkID().equals(workID)) {
@@ -347,11 +385,11 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByWorkID(String workID) {
-		return this.queryByWorkID(workID, this.getAllSessions());
+		return SessionsManager.queryByWorkID(workID, this.getAllSessions());
 	}
 
 	/**
-	 * Metodo che filtra le Session in base al'ID del Costumer
+	 * Metodo che filtra le Session in base al'ID del Costumer.
 	 * 
 	 * @param costumerID
 	 *            ID del Work da cercare
@@ -359,7 +397,8 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByCostumerID(String costumerID,List<Session> set) {
+	public static List<Session> queryByCostumerID(String costumerID,
+			List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getCostumerID().equals(costumerID)) {
@@ -378,7 +417,8 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByCostumerID(String costumerID) {
-		return this.queryByCostumerID(costumerID,this.getAllSessions());
+		return SessionsManager.queryByCostumerID(costumerID,
+				this.getAllSessions());
 	}
 
 	/**
@@ -390,7 +430,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryBySessionData(Calendar calendar2,
+	public static List<Session> queryBySessionData(Calendar calendar2,
 			List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
@@ -410,7 +450,8 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryBySessionData(Calendar calendar2) {
-		return this.queryBySessionData(calendar2,this.getAllSessions());
+		return SessionsManager.queryBySessionData(calendar2,
+				this.getAllSessions());
 	}
 
 	/**
@@ -423,7 +464,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByHours(int hours, List<Session> set) {
+	public static List<Session> queryByHours(int hours, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getHours() == hours) {
@@ -443,7 +484,7 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByHours(int hours) {
-		return this.queryByHours(hours, this.getAllSessions());
+		return SessionsManager.queryByHours(hours, this.getAllSessions());
 	}
 
 	/**
@@ -456,7 +497,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByMinHours(int hours, List<Session> set) {
+	public static List<Session> queryByMinHours(int hours, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getHours() >= hours) {
@@ -476,7 +517,7 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByMinHours(int hours) {
-		return this.queryByMinHours(hours, this.getAllSessions());
+		return SessionsManager.queryByMinHours(hours, this.getAllSessions());
 	}
 
 	/**
@@ -489,7 +530,7 @@ public class SessionsManager {
 	 *            lista di Session in cui cercare
 	 * @return ritorna le Session trovate
 	 */
-	private List<Session> queryByMaxHours(int hours, List<Session> set) {
+	public static List<Session> queryByMaxHours(int hours, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getHours() <= hours) {
@@ -509,7 +550,7 @@ public class SessionsManager {
 	 * @return ritorna le Session trovate
 	 */
 	public List<Session> queryByMaxHours(int hours) {
-		return this.queryByMaxHours(hours, this.getAllSessions());
+		return SessionsManager.queryByMaxHours(hours, this.getAllSessions());
 	}
 
 	/**
@@ -522,7 +563,7 @@ public class SessionsManager {
 	 *            lista in cui cercare
 	 * @return ritorna la lista di Session trovate
 	 */
-	private List<Session> queryBySpesa(int spesa, List<Session> set) {
+	public static List<Session> queryBySpesa(int spesa, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getSpesa() == spesa) {
@@ -542,7 +583,7 @@ public class SessionsManager {
 	 * @return ritorna la lista di Session trovate
 	 */
 	public List<Session> queryBySpesa(int spesa) {
-		return this.queryBySpesa(spesa,this.getAllSessions());
+		return SessionsManager.queryBySpesa(spesa, this.getAllSessions());
 	}
 
 	/**
@@ -555,7 +596,7 @@ public class SessionsManager {
 	 *            lista in cui cercare
 	 * @return ritorna la lista di Session trovate
 	 */
-	private List<Session> queryByMaxSpesa(int spesa, List<Session> set) {
+	public static List<Session> queryByMaxSpesa(int spesa, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getSpesa() <= spesa) {
@@ -575,7 +616,7 @@ public class SessionsManager {
 	 * @return ritorna la lista di Session trovate
 	 */
 	public List<Session> queryByMaxSpesa(int spesa) {
-		return this.queryByMaxSpesa(spesa,this.getAllSessions());
+		return SessionsManager.queryByMaxSpesa(spesa, this.getAllSessions());
 	}
 
 	/**
@@ -588,7 +629,7 @@ public class SessionsManager {
 	 *            lista in cui cercare
 	 * @return ritorna la lista di Session trovate
 	 */
-	private List<Session> queryByMinSpesa(int spesa, List<Session> set) {
+	public static List<Session> queryByMinSpesa(int spesa, List<Session> set) {
 		List<Session> temp = new ArrayList<>();
 		for (Session ses : set) {
 			if (ses.getSpesa() >= spesa) {
@@ -608,7 +649,40 @@ public class SessionsManager {
 	 * @return ritorna la lista di Session trovate
 	 */
 	public List<Session> queryByMinSpesa(int spesa) {
-		return this.queryByMinSpesa(spesa,this.getAllSessions());
+		return SessionsManager.queryByMinSpesa(spesa, this.getAllSessions());
 	}
-	// non si eseguono query per i materiali
+
+	/**
+	 * Metodo che filtra le Session in base alle note. Il metodo cerca nelle
+	 * note delle Session il testo passato come parametro
+	 * 
+	 * @param text
+	 *            testo da cercare
+	 * @param set
+	 *            lista di Session in cui cercare
+	 * @return ritorna la lista delle session che corrtispondono ai criteri di
+	 *         ricerca
+	 */
+	public static List<Session> queryByNote(String text, List<Session> set) {
+		List<Session> temp = new ArrayList<>();
+		for (Session ses : set) {
+			if (ses.getNote().contains(text)) {
+				temp.add(ses);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Metodo che filtra le Session in base alle note. Il metodo cerca nelle
+	 * note delle Session il testo passato come parametro
+	 * 
+	 * @param text
+	 *            testo da cercare
+	 * @return ritorna la lista delle session che corrtispondono ai criteri di
+	 *         ricerca
+	 */
+	public List<Session> queryByNote(String text) {
+		return SessionsManager.queryByNote(text, this.getAllSessions());
+	}
 }

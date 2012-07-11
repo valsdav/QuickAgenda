@@ -1,11 +1,14 @@
 package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
+import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import it.valsecchi.quickagenda.data.interfaces.WorkSelectionListener;
 import it.valsecchi.quickagenda.windows.addelements.AddWorkWindow;
-
+import it.valsecchi.quickagenda.windows.detail.WorkDetailWindow;
+import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,6 +35,8 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.Toolkit;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class WorksManagerWindow extends JFrame {
 
@@ -51,18 +56,22 @@ public class WorksManagerWindow extends JFrame {
 	private int mode;
 	private List<WorkSelectionListener> listeners = new ArrayList<>();
 	private JLabel lblIstr;
+	private JButton btnRimuovi;
+	private JLabel label;
 
 	public WorksManagerWindow(DataManager _data, int _mode) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				WorksManagerWindow.class.getResource("/ico_small/agenda.png")));
 		setTitle("Gestione Lavori");
 		data = _data;
+		// si registra il listener
+		data.addDataUpdateListener(new WorkUpdateListener(), ElementType.Work);
 		mode = _mode;
 		initComponent();
 	}
 
 	private void initComponent() {
-		setBounds(100, 100, 990, 684);
+		setBounds(100, 100, 1166, 885);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -81,6 +90,7 @@ public class WorksManagerWindow extends JFrame {
 				.getResource("/ico_small/search3.png")));
 		btnCerca.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnAggiungi = new JButton("Aggiungi Lavoro");
+		btnAggiungi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnAggiungi.addActionListener(new BtnAggiungiActionListener());
 		btnAggiungi.setIcon(new ImageIcon(WorksManagerWindow.class
 				.getResource("/ico_small/add1.png")));
@@ -90,58 +100,15 @@ public class WorksManagerWindow extends JFrame {
 				.getResource("/ico_small/check.png")));
 		panel = new JPanel();
 		lblIstr = new JLabel("");
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblIstr)))
-							.addGap(12)
-							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(9)
-									.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(13)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblIstr)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(9)
-									.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(20)
-							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+
+		btnRimuovi = new JButton("Rimuovi Lavori selezionati");
+		btnRimuovi.addActionListener(new BtnRimuoviActionListener());
+		btnRimuovi.setIcon(new ImageIcon(WorksManagerWindow.class
+				.getResource("/ico_small/deletered.png")));
+		btnRimuovi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.setLayout(new BorderLayout(0, 0));
 		table = new JTable(this.getTableModel("", ""));
+		table.addMouseListener(new TableMouseListener());
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		table.setAutoCreateRowSorter(true);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -153,6 +120,64 @@ public class WorksManagerWindow extends JFrame {
 		} else if (mode == MODE_SELECTION) {
 			btnConferma.setVisible(true);
 		}
+		
+		label = new JLabel("");
+		label.setIcon(new ImageIcon(WorksManagerWindow.class.getResource("/ico_small/work2.png")));
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(label, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(139)
+									.addComponent(lblIstr))
+								.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE))
+							.addGap(12)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(btnCerca, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1114, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btnAggiungi, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(btnRimuovi, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)))
+					.addGap(12))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(8)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(label, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(13)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(1)
+									.addComponent(lblIstr))
+								.addComponent(btnTutti, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(7)
+							.addComponent(btnCerca))
+						.addComponent(btnConferma, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+					.addGap(19)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+					.addGap(13)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnAggiungi)
+						.addComponent(btnRimuovi))
+					.addGap(7))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -227,6 +252,40 @@ public class WorksManagerWindow extends JFrame {
 		}
 	}
 
+	private class BtnRimuoviActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// Si ricavano le sessioni selezionate
+			int[] selected = table.getSelectedRows();
+			List<String> ids = new ArrayList<>();
+			for (int i : selected) {
+				ids.add((String) table.getValueAt(i, 0));
+			}
+			for (String id : ids) {
+				try {
+					data.removeWork(id);
+				} catch (IDNotFoundException e2) {
+					// questa eccezione non dovrebbe accadere
+					Log.error("Cliente non trovato");
+				}
+			}
+		}
+	}
+
+	private class TableMouseListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent arg) {
+			// si controlla se è un doppio click
+			if (arg.getClickCount() == 2) {
+				// si ricava l'id selezionato
+				String id = (String) table
+						.getValueAt(table.getSelectedRow(), 0);
+				// si apre la finestra dettagli lavoro
+				WorkDetailWindow detail = new WorkDetailWindow(id, data);
+				detail.setVisible(true);
+			}
+		}
+	}
+
 	private class WorkTableModel extends AbstractTableModel {
 		private static final long serialVersionUID = 5909182725751767737L;
 		String[] columns = { "ID", "Nome Lavoro", "Cognome Cliente",
@@ -237,6 +296,7 @@ public class WorksManagerWindow extends JFrame {
 		public WorkTableModel(String campo, String value) {
 			try {
 				lavori = data.queryWorkByArg(campo, value);
+				lblIstr.setText("");
 			} catch (ParseException e) {
 				lblIstr.setText("inserire la data nel formato giorno/mese/anno");
 			}
@@ -245,8 +305,12 @@ public class WorksManagerWindow extends JFrame {
 		public void changeData(String campo, String value) {
 			try {
 				lavori = data.queryWorkByArg(campo, value);
+				if (lavori == null) {
+					lavori = new ArrayList<>();
+				}
+				lblIstr.setText("");
 			} catch (ParseException e) {
-				lblIstr.setText("inserire la data nel formato giorno/mese/anno");
+				lblIstr.setText("Inserire la data nel formato giorno/mese/anno");
 			}
 		}
 
@@ -320,6 +384,19 @@ public class WorksManagerWindow extends JFrame {
 				o = new Object();
 			}
 			return o.getClass();
+		}
+	}
+
+	private class WorkUpdateListener implements DataUpdateListener {
+		@Override
+		public void DataUpdatePerformed(ElementType type) {
+			if (type != ElementType.Work) {
+				return;
+			}
+			// si aggiornano i dati mostrando tutto senza filtri
+			WorkTableModel m = (WorkTableModel) table.getModel();
+			m.changeData("", "");
+			table.updateUI();
 		}
 	}
 }

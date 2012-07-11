@@ -1,5 +1,7 @@
 package it.valsecchi.quickagenda.data.component.exception;
 
+import it.valsecchi.quickagenda.data.component.ElementType;
+
 /**
  * Classe che rappresenta l'eccezione lanciata quando non viene trovato un ID
  * @author Davide Valsecchi

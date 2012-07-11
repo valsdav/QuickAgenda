@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.crypto.BadPaddingException;
@@ -20,17 +19,18 @@ import org.jdom2.JDOMException;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import it.valsecchi.quickagenda.data.component.Costumer;
 import it.valsecchi.quickagenda.data.component.CostumersManager;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Session;
 import it.valsecchi.quickagenda.data.component.SessionsManager;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.WorksManager;
 import it.valsecchi.quickagenda.data.component.exception.CostumerAlreadyExistsException;
-import it.valsecchi.quickagenda.data.component.exception.ElementType;
 import it.valsecchi.quickagenda.data.component.exception.IDAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
 import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.WorkAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
+import it.valsecchi.quickagenda.data.exception.FileDataVersionNotValid;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.exception.InvalidPasswordException;
 import it.valsecchi.quickagenda.data.interfaces.*;
@@ -40,10 +40,13 @@ import it.valsecchi.quickagenda.data.interfaces.*;
  * dati, la loro scrittura attraverso DataReaderWriter. Gestisce tutti i
  * componenti grazia a un CostumersManager, un WorksManager e un
  * SessionsManager. Fornisce tutte le funzioni di ricerca, aggiunta ed rimozione
- * dei dati al codice client.
+ * dei dati al codice client. Inoltre fornisce un meccanismo di notifica
+ * dell'aggiornamento dei dati tramite listeners;
  * 
  * La classe implementa varie interfaccie che stabiliscono tutte le azioni che
  * può compiere: -AddCostumerInterface: funzionalità di aggiunta di un Costumer
+ * -AddSessionInterface: funzionalità di aggiunta di un Costumer
+ * -AddWorkInterface: funzionalità di aggiunta di un Work
  * 
  * @author Davide Valsecchi
  * @version 1.0
@@ -52,11 +55,24 @@ import it.valsecchi.quickagenda.data.interfaces.*;
 public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		AddWorkInterface {
 
+	/** Intero che rappresenta la versione corrente del file dati. */
+	public static final int currentFileDataVersion = 2;
+	/** Gestore dei Costumer */
 	private CostumersManager costumersMan;
+	/** Gestore dei Work */
 	private WorksManager worksMan;
+	/** Gestore delle Session */
 	private SessionsManager sessionsMan;
+	// si memorizza password e path
 	private char[] password;
 	private String path;
+
+	/** Listener per l'evento di aggiornamento dei dati dei Costumers */
+	private List<DataUpdateListener> costumersListeners = new ArrayList<>();
+	/** Listener per l'evento di aggiornamento dei dati dei Works */
+	private List<DataUpdateListener> worksListeners = new ArrayList<>();
+	/** Listener per l'evento di aggiornamento dei dati delle Sessions */
+	private List<DataUpdateListener> sessionsListeners = new ArrayList<>();
 
 	/**
 	 * Costruttore privato della classe che accetta 3 liste con i dati: i
@@ -155,17 +171,19 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 * @throws InvalidPasswordException
 	 *             lanciata in caso di utilizzo di password scorretta
 	 * @throws ParseException
+	 * @throws FileDataVersionNotValid
 	 */
 	public static DataManager loadDataManager(String path, char[] password)
 			throws IOException, CryptographyException, JDOMException,
-			InvalidPasswordException, ParseException {
+			InvalidPasswordException, ParseException, FileDataVersionNotValid {
 		Document doc;
 		try {
-			// si cerca di caricare in dati con DataReaderWriter
 			Log.info("creazione del reader per leggere i dati");
+			// si cerca di caricare in dati con DataReaderWriter
 			DataReaderWriter reader = DataReaderWriter.createDataReaderWriter(
 					path, DataReaderWriter.READ_MODE);
 			Log.info("lettura del document");
+			// si legge
 			doc = reader.readData(password);
 			// si elimina il reader
 			reader = null;
@@ -188,6 +206,17 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Log.error("Errore password!");
 			throw e;
 		}
+		// si controlla la versione del file dati
+		try {
+			DataManager.checkFileDataVersion(doc);
+		} catch (FileDataVersionNotValid e) {
+			Log.error("Versione file dati non compatibile! Aggiornare il programma. Corrente: "
+					+ DataManager.currentFileDataVersion
+					+ "; File dati: "
+					+ e.getFileVersion());
+			throw e;
+		}
+
 		// si leggono i dati
 		Log.info("lettura e caricamento singoli oggetti");
 		Element root = doc.getRootElement();
@@ -216,7 +245,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		List<Element> workElem = root.getChildren("work");
 		List<Work> works = new ArrayList<>();
 		for (Element w : workElem) {
-			String id, hash, costumerid, indirizzo,nome;
+			String id, hash, costumerid, indirizzo, nome;
 			GregorianCalendar inizio, fine;
 			boolean completed;
 			id = w.getChildText("id");
@@ -234,19 +263,18 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			}
 			completed = Boolean.parseBoolean(w.getChildText("completed"));
 			// creazione della work
-			Work newWork = new Work(id, costumerid,nome, indirizzo, inizio,
-					fine, completed,hash);
+			Work newWork = new Work(id, costumerid, nome, indirizzo, inizio,
+					fine, completed, hash);
 			works.add(newWork);
 		}
 		// si ricava lista di Sessions
 		List<Element> sessionElem = root.getChildren("session");
 		List<Session> sessions = new ArrayList<>();
 		for (Element s : sessionElem) {
-			String id, hash, workid, costumerid = "";
+			String id, hash, workid, costumerid, note;
 			GregorianCalendar sessiondata = null;
 			int hours = 0;
 			int spesa = 0;
-			List<String> materiali = new ArrayList<>();
 			id = s.getChildText("id");
 			hash = s.getChildText("hash");
 			workid = s.getChildText("workid");
@@ -256,15 +284,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 					.setTime(formatdata.parse(s.getChildText("sessiondata")));
 			hours = Integer.parseInt("+" + s.getChildText("hours"));
 			spesa = Integer.parseInt("+" + s.getChildText("spesa"));
-			 //StringTokenizer per i materiali
-			String mat = s.getChildText("materiali");
-			StringTokenizer tok = new StringTokenizer(mat, "#");
-			while (tok.hasMoreTokens()) {
-				materiali.add(tok.nextToken());
-			}
+			note = s.getChildText("note");
 			// creazione della session
 			Session newSes = new Session(id, hash, workid, costumerid,
-					sessiondata, hours, spesa, materiali);
+					sessiondata, hours, spesa, note);
 			sessions.add(newSes);
 		}
 		// si crea il DataManager e lo si restituisce
@@ -337,7 +360,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			newC.addContent(indirizzo);
 			// tel
 			Element tel = new Element("tel");
-			tel.setText(c.getTel());
+			tel.setText(c.getTelefono());
 			newC.addContent(tel);
 			// email
 			Element email = new Element("email");
@@ -346,9 +369,6 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si aggiunge al document
 			doc.getRootElement().addContent(newC);
 		}
-		// oggetto per formattare le date in stringhe
-		SimpleDateFormat formatdata = new SimpleDateFormat("dd/MM/yy");
-		formatdata.setLenient(false);
 		// ciclo sui work
 		for (Work w : worksMan.getAllWorks()) {
 			// nuovo work
@@ -365,7 +385,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Element costumerid = new Element("costumerid");
 			costumerid.setText(w.getCostumerID());
 			newW.addContent(costumerid);
-			//nome 
+			// nome
 			Element nome = new Element("nome");
 			nome.setText(w.getNome());
 			newW.addContent(nome);
@@ -375,14 +395,12 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			newW.addContent(indirizzo);
 			// iniziolavori
 			Element iniziolavori = new Element("iniziolavori");
-			iniziolavori.setText(formatdata.format(w.getInizioLavori()
-					.getTime()));
+			iniziolavori.setText(w.getInizioLavoriString());
 			newW.addContent(iniziolavori);
 			// finelavori
 			Element finelavori = new Element("finelavori");
 			if (w.getFineLavori() != null) {
-				finelavori.setText(formatdata.format(w.getFineLavori()
-						.getTime()));
+				finelavori.setText(w.getFineLavoriString());
 			} else {
 				finelavori.setText("null");
 			}
@@ -416,8 +434,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			newS.addContent(costumerid);
 			// sessiondata
 			Element sessiondata = new Element("sessiondata");
-			sessiondata
-					.setText(formatdata.format(s.getSessionData().getTime()));
+			sessiondata.setText(s.getSessionDataString());
 			newS.addContent(sessiondata);
 			// hours
 			Element hours = new Element("hours");
@@ -427,19 +444,17 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			Element spesa = new Element("spesa");
 			spesa.setText(Integer.toString(s.getSpesa()));
 			newS.addContent(spesa);
-			// materiali
-			StringBuilder build = new StringBuilder();
-			for (String m : s.getMateriali()) {
-				build.append(m + "#");
-			}
-			if(build.length()>0){
-			build.deleteCharAt(build.length() - 1);}
-			Element materiali = new Element("materiali");
-			materiali.setText(build.toString());
-			newS.addContent(materiali);
+			// note
+			Element note = new Element("note");
+			note.setText(s.getNote());
+			newS.addContent(note);
 			// si aggiunge al document
 			doc.getRootElement().addContent(newS);
 		}
+		// si scrive la versione corrente della struttura del file dati
+		doc.getRootElement().addContent(
+				new Element("version").setText(Integer
+						.toString(DataManager.currentFileDataVersion)));
 
 		// ora si inizializza il writer
 		Log.info("creazione writer");
@@ -462,6 +477,81 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		} catch (CryptographyException e) {
 			throw new CryptographyException("Errore di criptografia generico!");
 		}
+	}
+
+	/**
+	 * Metodo che verifica che la versione del file dati che si sta leggendo sia
+	 * compatibile con quella supportata dal programma. Se la versione è
+	 * precedente la si aggiorna con gli opportuni cambiamenti. Se è successiva
+	 * si lancia un errore avvisando che il software deve essere aggiornato.
+	 * 
+	 * @param doc
+	 *            Document da controllare
+	 * @throws FileDataVersionNotValid
+	 *             eccezione lanciata se la versione del file dati è posteriore,
+	 *             quindi incompatibile con in programma nella versione
+	 *             corrente.
+	 */
+	private static void checkFileDataVersion(Document doc)
+			throws FileDataVersionNotValid {
+		Log.info("controllo versione file dati");
+		// si ricava l'elemento version
+		int version = Integer.parseInt(doc.getRootElement().getChildText(
+				"version"));
+		Log.info("versione:" + Integer.toString(version));
+		// si controlla che sia uguale
+		if (version == DataManager.currentFileDataVersion) {
+			// ri restituisce true
+			return;
+		} else if (version < DataManager.currentFileDataVersion) {
+			// si modifica il documento in base alle esigenze del cambio di
+			// versione
+			DataManager.updateDocumentStructure(doc, version);
+			Log.info("struttura file dati aggiornata alla versione corrente");
+		} else if (version > DataManager.currentFileDataVersion) {
+			// si lancia l'eccezione
+			Log.error("errore! Versione file dati posteriore alla versione corrente!");
+			throw new FileDataVersionNotValid(version);
+		}
+	}
+
+	/**
+	 * Metodo che aggiorna la struttura di un file di dati se la sua versione è
+	 * inferiore a quella corrente. I cambiamenti vengono applicati a seconda
+	 * della versione di partenza. Questo metodo permette la conversione dei
+	 * file di dati delle versioni precedenti in file di dati della versione
+	 * attuale, mantenendo i dati ed eliminando solo quelli rimossi dalla
+	 * struttura dati.
+	 * 
+	 * @param doc
+	 *            Document da modificare
+	 * @param version
+	 *            versione corrente del document
+	 * @return restituisce il Document aggiornato
+	 */
+	private static Document updateDocumentStructure(Document doc, int version) {
+		switch (version) {
+		case 1:
+			// se la versione del document è 1 bisogna cambiare il campo
+			// materiali delle sessioni con il campo note.
+			// si ricava lista di Sessions
+			List<Element> sessionElem = doc.getRootElement().getChildren(
+					"session");
+			for (Element s : sessionElem) {
+				// si elimina il campo materiali
+				s.removeChild("materiali");
+				// si aggiunge il campo note
+				s.addContent(new Element("note"));
+			}
+			// si aggiorna la versione del document
+			doc.getRootElement()
+					.getChild("version")
+					.setText(
+							Integer.toString(DataManager.currentFileDataVersion));
+			break;
+		}
+		// si restituisce il document aggiornato4
+		return doc;
 	}
 
 	/**
@@ -488,6 +578,57 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
+	 * Metodo che registra i listeners per gli eventi di aggiornamento dei dati
+	 * in base al tipo di dato: Costumer,Work o Session.
+	 * 
+	 * @param listener
+	 *            oggetto listener
+	 * @param type
+	 *            tipo di listener da registrare
+	 */
+	public void addDataUpdateListener(DataUpdateListener listener,
+			ElementType type) {
+		switch (type) {
+		case Costumer:
+			this.costumersListeners.add(listener);
+			break;
+		case Work:
+			this.worksListeners.add(listener);
+			break;
+		case Session:
+			this.sessionsListeners.add(listener);
+			break;
+		}
+	}
+
+	/**
+	 * Metodo che lancia la notifica dell'evento di aggiornamento dei dati ai
+	 * listener a seconda del tipo passato come parametro.
+	 * 
+	 * @param type
+	 *            tipo di dati per il quale lanciare l'aggiornamento
+	 */
+	public void fireDataUpdatePerformed(ElementType type) {
+		switch (type) {
+		case Costumer:
+			for (DataUpdateListener l : this.costumersListeners) {
+				l.DataUpdatePerformed(type);
+			}
+			break;
+		case Work:
+			for (DataUpdateListener l : this.worksListeners) {
+				l.DataUpdatePerformed(type);
+			}
+			break;
+		case Session:
+			for (DataUpdateListener l : this.sessionsListeners) {
+				l.DataUpdatePerformed(type);
+			}
+			break;
+		}
+	}
+
+	/**
 	 * Metodo di collegamento con il costumersManager. Il metodo aggiunge un
 	 * 
 	 * costumer ai dati, richiedendo come parametri le varie caratteristiche del
@@ -509,15 +650,15 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			String indirizzo, String tel, String email)
 			throws CostumerAlreadyExistsException, InsufficientDataException {
 		// si controlla che almeno nome cognome non siamo nulli
-		if ((nome == null || nome.equals(""))
-				|| (cognome == null || cognome.equals(""))) {
+		if (indirizzo == null || indirizzo.equals("")) {
 			// si lancia l'eccezione
 			throw new InsufficientDataException("DataManager.addCostumer",
-					"nome/cognome", "parametri insufficiente");
-
+					"Indirizzo", "parametri insufficiente");
 		}
 		// si chiama il metodo
 		costumersMan.addCostumer(nome, cognome, azienda, indirizzo, tel, email);
+		// si lancia l'aggiornamento
+		this.fireDataUpdatePerformed(ElementType.Costumer);
 	}
 
 	/**
@@ -527,6 +668,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	public void addCostumer(Costumer costumer)
 			throws CostumerAlreadyExistsException, IDAlreadyExistsException {
 		costumersMan.addCostumer(costumer);
+		// si lancia l'aggiornamento
+		this.fireDataUpdatePerformed(ElementType.Costumer);
 	}
 
 	/**
@@ -576,6 +719,18 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
+	 * Metodo che restituisce tutti i Work di un determinato Costumer. Se non
+	 * viene trovato il costumerID viene restituito un arraylist vuoto.
+	 * 
+	 * @param costumerID
+	 *            ID del Costumer di cui ricercare i Work
+	 * @return restituisce la lista di Works appartenenti al Costumer
+	 */
+	public List<Work> getWorksByCostumerID(String costumerID) {
+		return worksMan.queryByCostumerID(costumerID);
+	}
+
+	/**
 	 * Metodo di collegamento con il sessionsManager. Il metodo ricerca le
 	 * Sessions eseguita in una certa data passata come parametro.
 	 * 
@@ -592,12 +747,11 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	@Override
 	public void addSession(String workid, Calendar sessiondata, int hours,
-			int spesa, List<String> materiali)
-			throws SessionAlreadyExistsException, InsufficientDataException,
-			IDNotFoundException {
+			int spesa, String note) throws SessionAlreadyExistsException,
+			InsufficientDataException, IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
 		// nulli
-		if ((workid == null || workid.equals("")) || (sessiondata == null)) {
+		if (workid == null || workid.equals("") || (sessiondata == null)) {
 			// si lancia una InsufficientDataException
 			throw new InsufficientDataException("DataManager.addSession", "",
 					"parametri insufficiente");
@@ -611,7 +765,9 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			String costumerid = worksMan.getWorkByID(workid).getCostumerID();
 			// si chiama il metodo
 			sessionsMan.addSession(workid, costumerid, sessiondata, hours,
-					spesa, materiali);
+					spesa, note);
+			// si lancia l'aggiornamento
+			this.fireDataUpdatePerformed(ElementType.Session);
 		}
 	}
 
@@ -625,6 +781,86 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	public Session getSession(String id) throws IDNotFoundException {
 		return sessionsMan.getSessionByID(id);
+	}
+
+	/**
+	 * Metodo di collegamento che restituisce tutte le sessioni di un
+	 * determinato Work
+	 * 
+	 * @param workID
+	 *            ID del Work di cui restituire le sessioni
+	 * @return ritorna una lista di sessioni che appartengono a un certo work
+	 *         identificato con l'id
+	 */
+	public List<Session> getSessionsFromWorkID(String workID) {
+		return sessionsMan.queryByWorkID(workID);
+	}
+
+	/**
+	 * Ricerca le Session in base all'ID del Work a cui appartengono e in base a
+	 * un campo e a un valore.
+	 * 
+	 * @param workID
+	 *            ID del Work
+	 * @param campo
+	 *            campo da ricerca
+	 * @param value
+	 *            valore da ricercare
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<Session> querySessionByArg(String workID, String campo,
+			String value) throws ParseException {
+		List<Session> found = new ArrayList<>();
+		// si filtrano le Session in base al workID
+		found = this.getSessionsFromWorkID(workID);
+		List<Session> results = new ArrayList<>();
+		// si filtrano
+		switch (campo) {
+		case "ID":
+			for (Session s : found) {
+				if (s.getID().equals(value)) {
+					results.add(s);
+				}
+			}
+			break;
+		case "Data":
+			results.addAll(SessionsManager.queryBySessionData(
+					Utility.parseStringToCalendar(value), found));
+			break;
+		case "N° Ore":
+			results.addAll(SessionsManager.queryByHours(
+					Integer.parseInt(value), found));
+			break;
+		case "Minimo N° Ore":
+			results.addAll(SessionsManager.queryByMinHours(
+					Integer.parseInt(value), found));
+			break;
+		case "Massimo N° Ore":
+			results.addAll(SessionsManager.queryByMaxHours(
+					Integer.parseInt(value), found));
+			break;
+		case "Spesa":
+			results.addAll(SessionsManager.queryBySpesa(
+					Integer.parseInt(value), found));
+			break;
+		case "Minimo Spesa":
+			results.addAll(SessionsManager.queryByMinSpesa(
+					Integer.parseInt(value), found));
+			break;
+		case "Massimo Spesa":
+			results.addAll(SessionsManager.queryByMaxSpesa(
+					Integer.parseInt(value), found));
+			break;
+		case "Note":
+			results.addAll(SessionsManager.queryByNote(value, found));
+			break;
+		default:
+			// si restituiscono tutte le session
+			return found;
+		}
+		// si restituiscono i risultato
+		return results;
 	}
 
 	/**
@@ -758,10 +994,12 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			throws InsufficientDataException, WorkAlreadyExistsException,
 			IDNotFoundException {
 		if (nome == null || nome.equals("") && costumerid == null
-				|| costumerid.equals("") || iniziolavori == null) {
+				|| costumerid.equals("") || indirizzo == null
+				|| indirizzo.equals("") || iniziolavori == null) {
 			// si lancia una eccezione per parametri insufficienti
 			throw new InsufficientDataException("DataManager.addWork",
-					"nome/costumerid/iniziolavori", "parametri insufficienti");
+					"nome/costumerid/indirizzo/iniziolavori",
+					"parametri insufficienti");
 		} else {
 			// si controlla l'esistenza del cliente
 			if (!costumersMan.exists(costumerid)) {
@@ -771,6 +1009,89 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si aggiunge
 			worksMan.addWork(nome, indirizzo, costumerid, iniziolavori,
 					finelavori, completed);
+			// si lancia l'aggiornamento
+			this.fireDataUpdatePerformed(ElementType.Work);
 		}
+	}
+
+	/**
+	 * Metodo di collegamento che rimuove una sessione.Il metodo provoca anche
+	 * l'evento DataUpdate.
+	 * 
+	 * @param ID
+	 *            id della sessione da rimuovere
+	 * @throws IDNotFoundException
+	 */
+	public void removeSession(String ID) throws IDNotFoundException {
+		// si cancella a sessione
+		sessionsMan.removeSessionByID(ID);
+		// si lancia l'evento
+		this.fireDataUpdatePerformed(ElementType.Session);
+	}
+
+	/**
+	 * Metodo che rimuove un Costumer eliminando di conseguenza anche tutti i
+	 * relativi Work e Session. Il metodo provoca anche l'evento DataUpdate.
+	 * 
+	 * @param ID
+	 *            ID del Costumer da rimuovere
+	 * @throws IDNotFoundException
+	 */
+	public void removeCostumer(String ID) throws IDNotFoundException {
+		// si cancellano le sessioni del costumer
+		sessionsMan.removeSessionsByCostumerID(ID);
+		// si cancellano i Work del Costumer
+		worksMan.removeWorksByCostumerID(ID);
+		// si cancella il cliente
+		costumersMan.removeCostumerByID(ID);
+		// si lanciano gli eventi
+		this.fireDataUpdatePerformed(ElementType.Session);
+		this.fireDataUpdatePerformed(ElementType.Work);
+		this.fireDataUpdatePerformed(ElementType.Costumer);
+	}
+
+	/**
+	 * Metodo che rimuove un Work eliminando di conseguenza anche tutte le
+	 * relative Session. Il metodo provoca anche l'evento DataUpdate.
+	 * 
+	 * @param ID
+	 * @throws IDNotFoundException
+	 */
+	public void removeWork(String ID) throws IDNotFoundException {
+		// si cancellano le relative sessioni
+		sessionsMan.removeSessionsByWorkID(ID);
+		// si cancella il cliente
+		worksMan.removeWorkByID(ID);
+		// si lanciano gli eventi
+		this.fireDataUpdatePerformed(ElementType.Session);
+		this.fireDataUpdatePerformed(ElementType.Work);
+	}
+
+	/**
+	 * Metodo che cambia il Costumer a cui è riferito un Work. Per far questo
+	 * bisogna anche cambiare il CostumerID anche di tutte le session del Work.
+	 * 
+	 * @param workid
+	 *            id del work a cui cambiare il costumerID
+	 * @param newCostumerid
+	 *            ID del nuovo costumer del Work
+	 * @throws IDNotFoundException
+	 *             lanciato nel caso non si trovi il Work o il Costumer
+	 */
+	public void changeWorkCostumerID(String workID, String newCostumerID)
+			throws IDNotFoundException {
+		if (!costumersMan.exists(newCostumerID)) {
+			throw new IDNotFoundException(ElementType.Costumer, newCostumerID);
+		}
+		// si cambia l'id al work
+		worksMan.getWorkByID(workID).setCostumerID(newCostumerID);
+		// si ricavano le sessioni
+		List<Session> sessions = sessionsMan.queryByWorkID(workID);
+		for (Session s : sessions) {
+			s.setCostumerID(newCostumerID);
+		}
+		// si lancia un aggiornamento delle session. l'aggiornamento dei Work
+		// verrà lanciato dal codice chiamante
+		this.fireDataUpdatePerformed(ElementType.Session);
 	}
 }
