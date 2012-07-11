@@ -393,7 +393,7 @@ public class OpenDataWindow extends JFrame {
 
 				public boolean accept(File f) {
 					if (f.isDirectory()) {
-						return false;
+						return true;
 					}
 					String name = f.getName();
 					String ext = name.split("\\.")[1];
