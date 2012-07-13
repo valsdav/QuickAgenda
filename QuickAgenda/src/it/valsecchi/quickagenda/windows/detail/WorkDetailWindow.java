@@ -109,7 +109,7 @@ public class WorkDetailWindow extends JFrame {
 
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 918, 949);
+		setBounds(100, 100, 931, 949);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -316,7 +316,8 @@ public class WorkDetailWindow extends JFrame {
 					.addComponent(lblIstr_1, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(12)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 865, GroupLayout.PREFERRED_SIZE))
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
+					.addGap(13))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(16)
 					.addComponent(btnAggiungiSessione)
@@ -324,7 +325,7 @@ public class WorkDetailWindow extends JFrame {
 					.addComponent(btnRimuoviSessioniSelezionate, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
 					.addGap(13)
 					.addComponent(btnStampaTabellaSessioni))
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 					.addGroup(gl_contentPane.createSequentialGroup()
 						.addGap(7)
 						.addComponent(btnModifica)
@@ -334,7 +335,7 @@ public class WorkDetailWindow extends JFrame {
 						.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(btnResocontoLavoro))
-					.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createSequentialGroup()
 						.addGap(12)
 						.addComponent(lblTotaleNumeroSessioni)
 						.addGap(22)
@@ -444,12 +445,13 @@ public class WorkDetailWindow extends JFrame {
 							.addGap(16)
 							.addComponent(lblIstr_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)))
 					.addGap(15)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
 					.addGap(13)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnAggiungiSessione)
 						.addComponent(btnRimuoviSessioniSelezionate)
-						.addComponent(btnStampaTabellaSessioni)))
+						.addComponent(btnStampaTabellaSessioni))
+					.addGap(2))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
