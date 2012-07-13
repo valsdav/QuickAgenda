@@ -58,6 +58,7 @@ public class WorksManagerWindow extends JFrame {
 	private JLabel lblIstr;
 	private JButton btnRimuovi;
 	private JLabel label;
+	protected WorkDetailWindow workDetailWindow;
 
 	public WorksManagerWindow(DataManager _data, int _mode) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -280,8 +281,8 @@ public class WorksManagerWindow extends JFrame {
 				String id = (String) table
 						.getValueAt(table.getSelectedRow(), 0);
 				// si apre la finestra dettagli lavoro
-				WorkDetailWindow detail = new WorkDetailWindow(id, data);
-				detail.setVisible(true);
+				workDetailWindow= new WorkDetailWindow(id, data);
+				workDetailWindow.setVisible(true);
 			}
 		}
 	}

@@ -68,6 +68,7 @@ public class MainWindow extends JFrame {
 	private CostumersManagerWindow costsWindow;
 	private WorksManagerWindow worksWindow;
 	private AddSessionWindow addSessionWindow;
+	private SessionDetailWindow sessionDetailWindow;
 	private JPanel panel;
 	private JTable table;
 	private JButton btnRimuovi;
@@ -279,10 +280,14 @@ public class MainWindow extends JFrame {
 				costsWindow.dispose();
 			}
 			if (worksWindow != null) {
+				worksWindow.workDetailWindow.dispose();
 				worksWindow.dispose();
 			}
 			if (addSessionWindow != null) {
 				addSessionWindow.dispose();
+			}
+			if(sessionDetailWindow !=null){
+				sessionDetailWindow.dispose();
 			}
 			// controllo salvataggio
 			int r = JOptionPane.showConfirmDialog(contentPane,
@@ -415,8 +420,8 @@ public class MainWindow extends JFrame {
 				String id = (String) table
 						.getValueAt(table.getSelectedRow(), 0);
 				//si apre la finestra dettagli sessione
-				SessionDetailWindow detail = new SessionDetailWindow(id, data);
-				detail.setVisible(true);
+				sessionDetailWindow = new SessionDetailWindow(id, data);
+				sessionDetailWindow.setVisible(true);
 			}
 		}
 	}
