@@ -57,7 +57,7 @@ public class WorksManagerWindow extends JFrame {
 	private JLabel lblIstr;
 	private JButton btnRimuovi;
 	private JLabel label;
-	protected WorkDetailWindow workDetailWindow;
+	private List<WorkDetailWindow> workDetailWindowList = new ArrayList<>();
 
 	public WorksManagerWindow(DataManager _data, int _mode) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -286,10 +286,12 @@ public class WorksManagerWindow extends JFrame {
 		this.listeners.remove(listener);
 	}
 
-	/** Metodo che chiude la finestra dettagli cliente eventualmente aperta*/
+	/** Metodo che chiude le finestre dettagli cliente eventualmente aperte */
 	public void closeWorkDetailWindow() {
-		if (workDetailWindow != null) {
-			workDetailWindow.dispose();
+		for (WorkDetailWindow d : workDetailWindowList) {
+			if (d != null) {
+				d.dispose();
+			}
 		}
 	}
 
@@ -382,8 +384,9 @@ public class WorksManagerWindow extends JFrame {
 				String id = (String) table
 						.getValueAt(table.getSelectedRow(), 0);
 				// si apre la finestra dettagli lavoro
-				workDetailWindow = new WorkDetailWindow(id, data);
+				WorkDetailWindow workDetailWindow = new WorkDetailWindow(id, data);
 				workDetailWindow.setVisible(true);
+				workDetailWindowList.add(workDetailWindow);
 			}
 		}
 	}
