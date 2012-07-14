@@ -1,6 +1,7 @@
 package it.valsecchi.quickagenda.data;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,6 +17,8 @@ import javax.crypto.IllegalBlockSizeException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.output.XMLOutputter;
+
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import it.valsecchi.quickagenda.data.component.Costumer;
 import it.valsecchi.quickagenda.data.component.CostumersManager;
@@ -350,6 +353,23 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		} catch (CryptographyException e) {
 			throw new CryptographyException("Errore di criptografia generico!");
 		}
+	}
+
+	/**
+	 * Metodo che salva i dati su file senza criptazione per creare un file di
+	 * backup in xml. Viene utilizzata la path iniziale del file con l'aggiunta di "_backup.xml".
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void saveDataBackup() throws FileNotFoundException, IOException {
+		// si crea il document
+		Document doc = this.createDocumentToSave();
+		// si scrive il document su disco senza criptarlo, usando path +
+		// "_backup"
+		String path_backup = this.path + "_backup.xml";
+		XMLOutputter outputter = new XMLOutputter();
+		outputter.output(doc, new FileOutputStream(path_backup));
 	}
 
 	/**
