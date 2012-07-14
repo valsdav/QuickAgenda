@@ -121,6 +121,7 @@ public class StartWindow extends JFrame {
 												.addComponent(btnNuovo))
 								.addGap(55)));
 		contentPane.setLayout(gl_contentPane);
+		getRootPane().setDefaultButton(btnOpen);
 	}
 
 	private class ThisWindowListener extends WindowAdapter {

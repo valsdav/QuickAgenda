@@ -336,6 +336,7 @@ public class AddCostumerWindow extends javax.swing.JFrame {
 								.addComponent(lblImmagine)
 								.addContainerGap(22, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
+		getRootPane().setDefaultButton(addButton);
 		pack();
 	}
 

@@ -13,6 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 
+/**
+ * Finestra utile per mostrare il trascorrere di un'operazione.
+ * 
+ * @author Davide Valsecchi
+ * @version 1.0
+ * 
+ */
 public class ShowProgressWindow extends JFrame {
 
 	private static final long serialVersionUID = 5344633569411391027L;
@@ -22,19 +29,24 @@ public class ShowProgressWindow extends JFrame {
 	private JLabel immagine;
 
 	/**
+	 * Costruttore che inizializza la finestra con messaggio e titolo
+	 * 
 	 * @wbp.parser.constructor
 	 */
-	public ShowProgressWindow(String mess,String title) {
-		initComponent(mess,title);
+	public ShowProgressWindow(String mess, String title) {
+		initComponent(mess, title);
 	}
 
-	public ShowProgressWindow(String mess, String title, Icon ico){
-		initComponent(mess,title);
+	/** Costruttore che inizializza la finestra con messaggio, titolo e icona. */
+	public ShowProgressWindow(String mess, String title, Icon ico) {
+		initComponent(mess, title);
 		immagine.setIcon(ico);
 	}
-	
-	private void initComponent(String mess,String title){
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ShowProgressWindow.class.getResource("/ico_small/view_refresh.png")));
+
+	private void initComponent(String mess, String title) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				ShowProgressWindow.class
+						.getResource("/ico_small/view_refresh.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 650, 200);
 		contentPane = new JPanel();
@@ -47,40 +59,61 @@ public class ShowProgressWindow extends JFrame {
 		this.setTitle(title);
 		lblMess = new JLabel(mess);
 		lblMess.setFont(new Font("Tahoma", Font.BOLD, 15));
-		
+
 		immagine = new JLabel("");
-		immagine.setIcon(new ImageIcon(ShowProgressWindow.class.getResource("/ico_small/view_refresh.png")));
+		immagine.setIcon(new ImageIcon(ShowProgressWindow.class
+				.getResource("/ico_small/view_refresh.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(immagine)
-							.addGap(42)
-							.addComponent(lblMess))
-						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 606, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(immagine)
-						.addComponent(lblMess))
-					.addGap(18)
-					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-					.addGap(32))
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addComponent(
+																				immagine)
+																		.addGap(42)
+																		.addComponent(
+																				lblMess))
+														.addComponent(
+																progressBar,
+																GroupLayout.PREFERRED_SIZE,
+																606,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(
+												GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane.createParallelGroup(
+						Alignment.TRAILING).addGroup(
+						gl_contentPane
+								.createSequentialGroup()
+								.addGroup(
+										gl_contentPane
+												.createParallelGroup(
+														Alignment.TRAILING)
+												.addComponent(immagine)
+												.addComponent(lblMess))
+								.addGap(18)
+								.addComponent(progressBar,
+										GroupLayout.PREFERRED_SIZE, 65,
+										GroupLayout.PREFERRED_SIZE).addGap(32)));
 		contentPane.setLayout(gl_contentPane);
 	}
-	
-	public void setMessage(String mess){
+
+	public void setMessage(String mess) {
 		lblMess.setText(mess);
 	}
-	
-	public void setIcon(Icon ico){
+
+	public void setIcon(Icon ico) {
 		immagine.setIcon(ico);
 	}
 }

@@ -69,6 +69,7 @@ public class MainWindow extends JFrame {
 	private WorksManagerWindow worksWindow;
 	private AddSessionWindow addSessionWindow;
 	private SessionDetailWindow sessionDetailWindow;
+	private OptionsWindow optionsWindow;
 	private JPanel panel;
 	private JTable table;
 	private JButton btnRimuovi;
@@ -199,6 +200,7 @@ public class MainWindow extends JFrame {
 		}
 
 		btnOpzioni = new JButton("Opzioni");
+		btnOpzioni.addActionListener(new BtnOpzioniActionListener());
 		btnOpzioni.setBackground(UIManager
 				.getColor("ToolBar.dockingBackground"));
 		btnOpzioni.setIcon(new ImageIcon(MainWindow.class
@@ -275,12 +277,12 @@ public class MainWindow extends JFrame {
 	private class ThisWindowListener extends WindowAdapter {
 		@Override
 		public void windowClosing(WindowEvent arg0) {
-			// si chiudono le altre finestra
+			// si chiudono le altre finestre
 			if (costsWindow != null) {
 				costsWindow.dispose();
 			}
 			if (worksWindow != null) {
-				worksWindow.workDetailWindow.dispose();
+				worksWindow.closeWorkDetailWindow();
 				worksWindow.dispose();
 			}
 			if (addSessionWindow != null) {
@@ -288,6 +290,9 @@ public class MainWindow extends JFrame {
 			}
 			if(sessionDetailWindow !=null){
 				sessionDetailWindow.dispose();
+			}
+			if(optionsWindow != null){
+				optionsWindow.dispose();
 			}
 			// controllo salvataggio
 			int r = JOptionPane.showConfirmDialog(contentPane,
@@ -359,7 +364,7 @@ public class MainWindow extends JFrame {
 			progress.setVisible(true);
 			try {
 				// SALVATAGGIO DATI
-				Log.info("Salvataggio dati e preferenze");
+				Log.info("salvataggio dati e preferenze");
 				data.saveData();
 				// si salvano le preferenze
 				SettingsManager.writeSettings();
@@ -456,6 +461,13 @@ public class MainWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//si apre la finestra info
 			new InfoWindow().setVisible(true);
+		}
+	}
+	private class BtnOpzioniActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			//si apre la finestra opzioni
+			optionsWindow = new OptionsWindow(data);
+			optionsWindow.setVisible(true);
 		}
 	}
 

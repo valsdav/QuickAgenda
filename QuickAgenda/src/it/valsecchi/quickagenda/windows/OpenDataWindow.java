@@ -300,6 +300,7 @@ public class OpenDataWindow extends JFrame {
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(11)));
 		contentPane.setLayout(gl_contentPane);
+		getRootPane().setDefaultButton(btnNext);
 	}
 
 	private class NextClickHandler implements ActionListener {
@@ -315,7 +316,7 @@ public class OpenDataWindow extends JFrame {
 				confirmImage.setIcon(new ImageIcon(OpenDataWindow.class
 						.getResource("/ico_128/refresh.png")));
 				lblLog.setText("Caricamento in corso...");
-				timer1 = new Timer(1000, new ActionListener() {
+				timer1 = new Timer(500, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						timer1.stop();
@@ -330,7 +331,7 @@ public class OpenDataWindow extends JFrame {
 							lblLog.setText("Caricamento completato con successo!");
 
 							// si apre la finestra principale
-							timer2 = new Timer(1000, new ActionListener() {
+							timer2 = new Timer(500, new ActionListener() {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									timer2.stop();

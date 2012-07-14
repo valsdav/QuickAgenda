@@ -357,7 +357,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 
 	/**
 	 * Metodo che salva i dati su file senza criptazione per creare un file di
-	 * backup in xml. Viene utilizzata la path iniziale del file con l'aggiunta di "_backup.xml".
+	 * backup in xml. Viene utilizzata la path iniziale del file con l'aggiunta
+	 * di "_backup.xml".
 	 * 
 	 * @throws FileNotFoundException
 	 * @throws IOException
@@ -367,6 +368,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		Document doc = this.createDocumentToSave();
 		// si scrive il document su disco senza criptarlo, usando path +
 		// "_backup"
+		Log.info("salvataggio file di backup dati non criptato");
 		String path_backup = this.path + "_backup.xml";
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(doc, new FileOutputStream(path_backup));
@@ -383,6 +385,10 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		Log.info("creazione Document con i dati del DataManager");
 		Document doc = new Document();
 		doc.setRootElement(new Element("quickagenda_data"));
+		// si scrive la versione corrente della struttura del file dati
+		doc.getRootElement().addContent(
+				new Element("version").setText(Integer
+						.toString(DataManager.currentFileDataVersion)));
 		// ciclo sui costumer
 		for (Costumer c : costumersMan.getAllCostumers()) {
 			// nuovo costumer
@@ -504,10 +510,6 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			// si aggiunge al document
 			doc.getRootElement().addContent(newS);
 		}
-		// si scrive la versione corrente della struttura del file dati
-		doc.getRootElement().addContent(
-				new Element("version").setText(Integer
-						.toString(DataManager.currentFileDataVersion)));
 		// si restituisce il document
 		return doc;
 	}
