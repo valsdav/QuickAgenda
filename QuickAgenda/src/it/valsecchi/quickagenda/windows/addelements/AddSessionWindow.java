@@ -233,6 +233,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 					.addContainerGap())
 		);
 		getContentPane().setLayout(layout);
+		getRootPane().setDefaultButton(addButton);
 		pack();
 	}
 

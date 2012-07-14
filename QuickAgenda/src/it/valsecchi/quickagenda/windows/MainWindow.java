@@ -68,6 +68,8 @@ public class MainWindow extends JFrame {
 	private CostumersManagerWindow costsWindow;
 	private WorksManagerWindow worksWindow;
 	private AddSessionWindow addSessionWindow;
+	private SessionDetailWindow sessionDetailWindow;
+	private OptionsWindow optionsWindow;
 	private JPanel panel;
 	private JTable table;
 	private JButton btnRimuovi;
@@ -198,6 +200,7 @@ public class MainWindow extends JFrame {
 		}
 
 		btnOpzioni = new JButton("Opzioni");
+		btnOpzioni.addActionListener(new BtnOpzioniActionListener());
 		btnOpzioni.setBackground(UIManager
 				.getColor("ToolBar.dockingBackground"));
 		btnOpzioni.setIcon(new ImageIcon(MainWindow.class
@@ -274,15 +277,22 @@ public class MainWindow extends JFrame {
 	private class ThisWindowListener extends WindowAdapter {
 		@Override
 		public void windowClosing(WindowEvent arg0) {
-			// si chiudono le altre finestra
+			// si chiudono le altre finestre
 			if (costsWindow != null) {
 				costsWindow.dispose();
 			}
 			if (worksWindow != null) {
+				worksWindow.closeWorkDetailWindow();
 				worksWindow.dispose();
 			}
 			if (addSessionWindow != null) {
 				addSessionWindow.dispose();
+			}
+			if(sessionDetailWindow !=null){
+				sessionDetailWindow.dispose();
+			}
+			if(optionsWindow != null){
+				optionsWindow.dispose();
 			}
 			// controllo salvataggio
 			int r = JOptionPane.showConfirmDialog(contentPane,
@@ -354,7 +364,7 @@ public class MainWindow extends JFrame {
 			progress.setVisible(true);
 			try {
 				// SALVATAGGIO DATI
-				Log.info("Salvataggio dati e preferenze");
+				Log.info("salvataggio dati e preferenze");
 				data.saveData();
 				// si salvano le preferenze
 				SettingsManager.writeSettings();
@@ -415,8 +425,8 @@ public class MainWindow extends JFrame {
 				String id = (String) table
 						.getValueAt(table.getSelectedRow(), 0);
 				//si apre la finestra dettagli sessione
-				SessionDetailWindow detail = new SessionDetailWindow(id, data);
-				detail.setVisible(true);
+				sessionDetailWindow = new SessionDetailWindow(id, data);
+				sessionDetailWindow.setVisible(true);
 			}
 		}
 	}
@@ -451,6 +461,13 @@ public class MainWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//si apre la finestra info
 			new InfoWindow().setVisible(true);
+		}
+	}
+	private class BtnOpzioniActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			//si apre la finestra opzioni
+			optionsWindow = new OptionsWindow(data);
+			optionsWindow.setVisible(true);
 		}
 	}
 

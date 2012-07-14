@@ -421,6 +421,7 @@ public class AddWorkWindow extends JFrame implements CostumerSelectionListener {
 			toolBar.add(btnEsci);
 		}
 		contentPane.setLayout(gl_contentPane);
+		getRootPane().setDefaultButton(btnAggiungi);
 	}
 
 	@Override
