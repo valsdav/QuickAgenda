@@ -318,8 +318,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	/**
 	 * Metodo che salva i dati su file con criptazione utilizzando un'istanza
 	 * della classe DataReaderWriter e la path e la password memorizzate nel
-	 * DataManager. Il metodo prima costuisce un document formattando tutti i
-	 * dati in memoria poi lo passa a
+	 * DataManager. Il metodo prima richiede un Document contenente tutti i dati
+	 * in memoria al metodo {@link #createDocumentToSave()} e poi lo passa a
 	 * {@link DataReaderWriter#writeData(Document, String)} che lo scrive su
 	 * file criptato.
 	 * 
@@ -327,7 +327,40 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 * @throws IOException
 	 */
 	public void saveData() throws CryptographyException, IOException {
+		// si crea il document
+		Document doc = this.createDocumentToSave();
+		// ora si inizializza il writer
+		Log.info("creazione writer");
+		DataReaderWriter writer = DataReaderWriter.createDataReaderWriter(
+				this.path, DataReaderWriter.WRITE_MODE);
+		try {
+			Log.info("scrittura e criptazione dati");
+			writer.writeData(doc, this.password);
+			Log.info("scrittura dati completata");
+			// si elimina il writer
+			writer = null;
+		} catch (FileNotFoundException e) {
+			throw e;
+		} catch (IllegalBlockSizeException e) {
+			throw new CryptographyException("Errore di criptografia generico!");
+		} catch (BadPaddingException e) {
+			throw new CryptographyException("Errore di criptografia generico!");
+		} catch (IOException e) {
+			throw e;
+		} catch (CryptographyException e) {
+			throw new CryptographyException("Errore di criptografia generico!");
+		}
+	}
+
+	/**
+	 * Metodo che crea un Document e lo riempie con tutti i dati contenuti nel
+	 * DataManager per poi essere salvato su file, criptato o non criptato.
+	 * 
+	 * @return restituisce un Document contenente tutti i dati del DataManager.
+	 */
+	private Document createDocumentToSave() {
 		// si crea il document con tutti i dati
+		Log.info("creazione Document con i dati del DataManager");
 		Document doc = new Document();
 		doc.setRootElement(new Element("quickagenda_data"));
 		// ciclo sui costumer
@@ -455,28 +488,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		doc.getRootElement().addContent(
 				new Element("version").setText(Integer
 						.toString(DataManager.currentFileDataVersion)));
-
-		// ora si inizializza il writer
-		Log.info("creazione writer");
-		DataReaderWriter writer = DataReaderWriter.createDataReaderWriter(
-				this.path, DataReaderWriter.WRITE_MODE);
-		try {
-			Log.info("scrittura e criptazione dati");
-			writer.writeData(doc, this.password);
-			Log.info("scrittura dati completata");
-			// si elimina il writer
-			writer = null;
-		} catch (FileNotFoundException e) {
-			throw e;
-		} catch (IllegalBlockSizeException e) {
-			throw new CryptographyException("Errore di criptografia generico!");
-		} catch (BadPaddingException e) {
-			throw new CryptographyException("Errore di criptografia generico!");
-		} catch (IOException e) {
-			throw e;
-		} catch (CryptographyException e) {
-			throw new CryptographyException("Errore di criptografia generico!");
-		}
+		// si restituisce il document
+		return doc;
 	}
 
 	/**
