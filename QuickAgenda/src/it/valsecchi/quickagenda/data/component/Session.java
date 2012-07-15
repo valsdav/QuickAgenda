@@ -69,6 +69,15 @@ public class Session {
 			Calendar sessiondata2) {
 		return Utility.getHash(workid + costumerid + sessiondata2.toString());
 	}
+	
+	/**
+	 * Metodo che ricalcola l'hash della Session. La assegna alla Session e la restituisce.
+	 * @return restituisce la nuova hash della Session
+	 */
+	public String recalculateSessionHash(){
+		this.hash = Utility.getHash(this.workID+this.costumerID+this.getSessionDataString());
+		return this.hash;
+	}
 
 	public Calendar getSessionData() {
 		return sessionData;

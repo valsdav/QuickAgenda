@@ -40,8 +40,8 @@ public class Work {
 		inizioLavori = iniziolavori;
 		fineLavori = finelavori;
 		completed = _completed;
-		// si crea l'hash unendo (id,clienteid,indirizzo,iniziolavori)
-		hash = Utility.getHash(costumerid + indirizzo + iniziolavori.toString());
+		// si crea l'hash unendo (clienteid,nome,indirizzo,iniziolavori)
+		hash = Utility.getHash(costumerID +nome+ indirizzo + Utility.formatCalendarToString(iniziolavori));
 	}
 
 	/** Costruttore di Work con Hash */
@@ -63,9 +63,18 @@ public class Work {
 	 */
 	public static String calculateWorkHash(String costumereid,String nome,
 			String indirizzo, Calendar inizio) {
-		return Utility.getHash(costumereid + nome+ indirizzo + inizio.toString());
+		return Utility.getHash(costumereid + nome+ indirizzo + Utility.formatCalendarToString(inizio));
 	}
 
+	/**
+	 * Metodo che ricalcola l'hash della Work. La assegna al Work e la restituisce.
+	 * @return restituisce la nuova hash del Work
+	 */
+	public String recalculateWorkHash(){
+		this.hash = Utility.getHash(this.costumerID+this.nome+this.indirizzo+this.getInizioLavoriString());
+		return hash;
+	}
+	
 	/** Metodo che calcola l'arco di tempo in cui il lavoro è stato attivo */
 	public long getWorkNumberOfDays() {
 		long start = inizioLavori.getTimeInMillis();

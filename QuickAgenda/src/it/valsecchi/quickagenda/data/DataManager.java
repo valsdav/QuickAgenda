@@ -1103,30 +1103,58 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
-	 * Metodo che cambia il Costumer a cui è riferito un Work. Per far questo
-	 * bisogna anche cambiare il CostumerID anche di tutte le session del Work.
+	 * Metodo di collegamento al metodo di modifica dei Work del WorkManager.
+	 * Inoltre il metodo aggiorna tutte le sessioni al corretto costumerID del
+	 * Work.
 	 * 
-	 * @param workid
-	 *            id del work a cui cambiare il costumerID
-	 * @param newCostumerid
-	 *            ID del nuovo costumer del Work
+	 * @param workID
+	 * @param nome
+	 * @param indirizzo
+	 * @param costumerid
+	 * @param iniziolavori
+	 * @param finelavori
+	 * @param completed
 	 * @throws IDNotFoundException
-	 *             lanciato nel caso non si trovi il Work o il Costumer
+	 * @throws WorkAlreadyExistsException
 	 */
-	public void changeWorkCostumerID(String workID, String newCostumerID)
-			throws IDNotFoundException {
-		if (!costumersMan.exists(newCostumerID)) {
-			throw new IDNotFoundException(ElementType.Costumer, newCostumerID);
+	public void modifyWork(String workID, String nome, String indirizzo,
+			String costumerid, Calendar iniziolavori, Calendar finelavori,
+			boolean completed) throws IDNotFoundException,
+			WorkAlreadyExistsException {
+		// si controlla prima di tutto che esista il costumerid
+		if (!costumersMan.exists(costumerid)) {
+			throw new IDNotFoundException(ElementType.Costumer, costumerid);
 		}
-		// si cambia l'id al work
-		worksMan.getWorkByID(workID).setCostumerID(newCostumerID);
+		// si modifica il Work
+		try {
+			worksMan.modifyWork(workID, nome, indirizzo, costumerid,
+					iniziolavori, finelavori, completed);
+		} catch (WorkAlreadyExistsException e) {
+			Log.error("impossibile cambiare dati, Work esiste già.");
+			throw e;
+		}
+		// ora bisogna aggiornare tutte le sessioni al corretto costumerid
 		// si ricavano le sessioni
 		List<Session> sessions = sessionsMan.queryByWorkID(workID);
 		for (Session s : sessions) {
-			s.setCostumerID(newCostumerID);
+			s.setCostumerID(costumerid);
 		}
-		// si lancia un aggiornamento delle session. l'aggiornamento dei Work
-		// verrà lanciato dal codice chiamante
+		// si lancia un aggiornamento delle Session
+		this.fireDataUpdatePerformed(ElementType.Session);
+		// si lancia l'aggiornamento dei Work
+		this.fireDataUpdatePerformed(ElementType.Work);
+	}
+
+	/**
+	 * Metodo di collegamento al metodo di modifica delle Session del
+	 * SessionManager
+	 */
+	public void modifySession(String sessionID, Calendar sessiondata,
+			int hours, int spesa, String note)
+			throws SessionAlreadyExistsException, IDNotFoundException {
+		// si modifica la sessione
+		sessionsMan.modifySession(sessionID, sessiondata, hours, spesa, note);
+		// si lancia l'aggiornamento
 		this.fireDataUpdatePerformed(ElementType.Session);
 	}
 }

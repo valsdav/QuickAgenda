@@ -288,6 +288,48 @@ public class SessionsManager {
 	}
 
 	/**
+	 * Metodo che modifica i dati di una Session impostando la nuova hash ed
+	 * inserendola nella lista {@link #hashMap}.
+	 * 
+	 * @param sessionID
+	 * @param sessiondata
+	 * @param hours
+	 * @param spesa
+	 * @param note
+	 * @throws IDNotFoundException
+	 * @throws SessionAlreadyExistsException
+	 */
+	public void modifySession(String sessionID, Calendar sessiondata,
+			int hours, int spesa, String note) throws IDNotFoundException,
+			SessionAlreadyExistsException {
+		// si ricava la sessione
+		if (sessionsMap.containsKey(sessionID)) {
+			Session s = sessionsMap.get(sessionID);
+			String vecchiaHash = s.getHash();
+			// viene calcolata la nuova hash
+			String newHash = Session.calculateSessionHash(s.getWorkID(),
+					s.getCostumerID(), sessiondata);
+			// si controlla che non esisti già
+			if (hashMap.containsKey(newHash)) {
+				// si lancia l'eccezione SessionAlreadyExistsException
+				throw new SessionAlreadyExistsException(s);
+			}
+			// si impostano i nuovi dati
+			s.setSessionData(sessiondata);
+			s.setHours(hours);
+			s.setSpesa(spesa);
+			s.setNote(note);
+			// si cancella l'hash vecchia
+			hashMap.remove(vecchiaHash);
+			// si inserisce quella nuova
+			hashMap.put(newHash, s.getID());
+		} else {
+			// si restituisce l'eccezione IDNotFoundException
+			throw new IDNotFoundException(ElementType.Session, sessionID);
+		}
+	}
+
+	/**
 	 * Metodo pubblico che filtra le Session secondo vari parametri. Se non si
 	 * vuole utilizzare un parametro impostarlo a null;
 	 * 
