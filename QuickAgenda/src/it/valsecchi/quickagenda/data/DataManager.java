@@ -107,7 +107,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			try {
 				costumersMan.addCostumer(c);
 			} catch (CostumerAlreadyExistsException | IDAlreadyExistsException e) {
-				// in caso si errore si tralascia
+				// in caso di errore si tralascia
 				continue;
 			}
 		}
@@ -128,7 +128,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		for (Session s : sessions) {
 			try {
 				sessionsMan.addSession(s);
-			} catch (SessionAlreadyExistsException | IDAlreadyExistsException e) {
+			} catch (IDAlreadyExistsException e) {
 				// in caso si errore si tralascia
 				continue;
 			}
@@ -782,8 +782,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	@Override
 	public void addSession(String workid, Calendar sessiondata, int hours,
-			int spesa, String note) throws SessionAlreadyExistsException,
-			InsufficientDataException, IDNotFoundException {
+			int spesa, String note) throws InsufficientDataException,
+			IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
 		// nulli
 		if (workid == null || workid.equals("") || (sessiondata == null)) {
@@ -1151,7 +1151,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	public void modifySession(String sessionID, Calendar sessiondata,
 			int hours, int spesa, String note)
-			throws SessionAlreadyExistsException, IDNotFoundException {
+			throws  IDNotFoundException {
 		// si modifica la sessione
 		sessionsMan.modifySession(sessionID, sessiondata, hours, spesa, note);
 		// si lancia l'aggiornamento

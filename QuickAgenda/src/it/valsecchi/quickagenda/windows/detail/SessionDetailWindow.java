@@ -1023,9 +1023,6 @@ public class SessionDetailWindow extends JFrame {
 			// si modifica
 			try {
 				data.modifySession(sessionID, _data, hours, spesa, note);
-			} catch (SessionAlreadyExistsException e1) {
-				lblIstrSessione.setText("Sessione già presente nei dati!");
-				return;
 			} catch (IDNotFoundException e1) {
 				// non dovrebbe verificarsi questa eccezione
 				Log.error("Sessione non trovata! " + e1.getID());
