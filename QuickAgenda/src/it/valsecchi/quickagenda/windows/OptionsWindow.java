@@ -23,6 +23,7 @@ public class OptionsWindow extends JFrame {
 	private DataManager data;
 	private Timer timer1;
 	private ShowProgressWindow progress;
+	private JButton btnControlloIntegritaDati;
 
 	public OptionsWindow(DataManager _data) {
 		data = _data;
@@ -39,21 +40,28 @@ public class OptionsWindow extends JFrame {
 				.addActionListener(new BtnSalvaFileDiActionListener());
 		btnSalvaFileBackup.setIcon(new ImageIcon(OptionsWindow.class
 				.getResource("/ico_small/filesaveas.png")));
+		btnControlloIntegritaDati = new JButton("Controllo Integrit\u00E0 Dati");
+		btnControlloIntegritaDati.addActionListener(new BtnControlloIntegritaDatiActionListener());
+		btnControlloIntegritaDati.setIcon(new ImageIcon(OptionsWindow.class.getResource("/ico_small/preferences_system_session.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane.createSequentialGroup().addContainerGap()
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnSalvaFileBackup)
-						.addContainerGap(303, Short.MAX_VALUE)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane
-						.createSequentialGroup()
-						.addGap(24)
-						.addComponent(btnSalvaFileBackup,
-								GroupLayout.PREFERRED_SIZE, 83,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(196, Short.MAX_VALUE)));
+						.addComponent(btnControlloIntegritaDati, GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(303, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(24)
+					.addComponent(btnSalvaFileBackup, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(btnControlloIntegritaDati, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(95, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -89,6 +97,12 @@ public class OptionsWindow extends JFrame {
 				}
 			});
 			timer1.start();
+		}
+	}
+	private class BtnControlloIntegritaDatiActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg) {
+			//si crea il report
+			
 		}
 	}
 }
