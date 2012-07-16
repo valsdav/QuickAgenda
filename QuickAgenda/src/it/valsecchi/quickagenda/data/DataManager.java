@@ -37,7 +37,7 @@ import it.valsecchi.quickagenda.data.exception.FileDataVersionNotValid;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.exception.InvalidPasswordException;
 import it.valsecchi.quickagenda.data.interfaces.*;
-import it.valsecchi.quickagenda.data.report.DataIntegrityReport;
+import it.valsecchi.quickagenda.data.report.DataIntegrityReportResult;
 
 /**
  * Classe che gestisce l'intera banca dati dell'applicazione. Il carimento dei
@@ -595,7 +595,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 * controllando che non ci siano elementi non collegati, ricalcolando le
 	 * hash e i collegamenti nella struttura session->work->costumer.
 	 */
-	public DataIntegrityReport checkDataIntegrity() {
+	public DataIntegrityReportResult checkDataIntegrity() {
 		List<Work> work_errors = new ArrayList<>();
 		List<Session> session_errors = new ArrayList<>();
 		// si controllano i costumer
@@ -620,7 +620,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			}
 		}
 		// si crea l'oggetto risultato
-		return new DataIntegrityReport(work_errors.size()
+		return new DataIntegrityReportResult(work_errors.size()
 				+ session_errors.size(), this.getTotalNumberOfElement(),
 				this.costumersMan.getNumberOfElements(),
 				this.worksMan.getNumberOfElements(),

@@ -12,7 +12,7 @@ import java.util.List;
  * @version 1.0
  * 
  */
-public class DataIntegrityReport {
+public class DataIntegrityReportResult {
 
 	private int n_errors;
 	private int n_tot_elements;
@@ -22,7 +22,7 @@ public class DataIntegrityReport {
 	private List<Work> work_errors;
 	private List<Session> session_errors;
 
-	public DataIntegrityReport(int n_Errors, int n_Tot, int n_Costumers,
+	public DataIntegrityReportResult(int n_Errors, int n_Tot, int n_Costumers,
 			int n_Works, int n_Sessions, List<Work> work_Errors,
 			List<Session> session_Errors) {
 		n_errors = n_Errors;
