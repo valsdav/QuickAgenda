@@ -148,216 +148,101 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 		txtNote = new JTextArea();
 		txtNote.setWrapStyleWord(true);
 		txtNote.setLineWrap(true);
+		
+		label = new JLabel("");
+		label.setIcon(new ImageIcon(AddSessionWindow.class.getResource("/ico_small/tools.png")));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addGap(200)
-								.addComponent(lblImmagine,
-										GroupLayout.PREFERRED_SIZE, 79,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(239, Short.MAX_VALUE))
-				.addGroup(
-						layout.createSequentialGroup().addContainerGap()
-								.addComponent(lblAvviso)
-								.addContainerGap(123, Short.MAX_VALUE))
-				.addGroup(
-						layout.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(
-										layout.createParallelGroup(
-												Alignment.TRAILING)
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGroup(
-																		layout.createParallelGroup(
-																				Alignment.TRAILING)
-																				.addComponent(
-																						lblIstruzioni,
-																						Alignment.LEADING,
-																						GroupLayout.DEFAULT_SIZE,
-																						362,
-																						Short.MAX_VALUE)
-																				.addGroup(
-																						layout.createSequentialGroup()
-																								.addComponent(
-																										lblData,
-																										GroupLayout.PREFERRED_SIZE,
-																										70,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addPreferredGap(
-																										ComponentPlacement.RELATED)
-																								.addComponent(
-																										dateChooser,
-																										GroupLayout.DEFAULT_SIZE,
-																										287,
-																										Short.MAX_VALUE)))
-																.addGap(144))
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGroup(
-																		layout.createParallelGroup(
-																				Alignment.LEADING)
-																				.addGroup(
-																						layout.createSequentialGroup()
-																								.addComponent(
-																										lblIDLavoro,
-																										GroupLayout.PREFERRED_SIZE,
-																										70,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addPreferredGap(
-																										ComponentPlacement.RELATED)
-																								.addComponent(
-																										txtIDLavoro,
-																										GroupLayout.PREFERRED_SIZE,
-																										219,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addPreferredGap(
-																										ComponentPlacement.RELATED)
-																								.addComponent(
-																										btnIDLavoro))
-																				.addGroup(
-																						layout.createParallelGroup(
-																								Alignment.LEADING,
-																								false)
-																								.addGroup(
-																										layout.createSequentialGroup()
-																												.addComponent(
-																														lblNote,
-																														GroupLayout.PREFERRED_SIZE,
-																														70,
-																														GroupLayout.PREFERRED_SIZE)
-																												.addPreferredGap(
-																														ComponentPlacement.RELATED)
-																												.addComponent(
-																														txtNote,
-																														GroupLayout.PREFERRED_SIZE,
-																														317,
-																														GroupLayout.PREFERRED_SIZE))
-																								.addGroup(
-																										layout.createSequentialGroup()
-																												.addComponent(
-																														lblSpesa,
-																														GroupLayout.PREFERRED_SIZE,
-																														70,
-																														GroupLayout.PREFERRED_SIZE)
-																												.addPreferredGap(
-																														ComponentPlacement.RELATED)
-																												.addComponent(
-																														txtSpesa))
-																								.addGroup(
-																										layout.createSequentialGroup()
-																												.addComponent(
-																														lblOre,
-																														GroupLayout.PREFERRED_SIZE,
-																														70,
-																														GroupLayout.PREFERRED_SIZE)
-																												.addPreferredGap(
-																														ComponentPlacement.RELATED)
-																												.addComponent(
-																														txtOre,
-																														287,
-																														287,
-																														287))))
-																.addContainerGap(
-																		114,
-																		Short.MAX_VALUE))))
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(jToolBar,
-										GroupLayout.PREFERRED_SIZE, 334,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(184, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout
-				.createParallelGroup(Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(jToolBar,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lblIstruzioni,
-										GroupLayout.PREFERRED_SIZE, 38,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(
-										layout.createParallelGroup(
-												Alignment.BASELINE)
-												.addComponent(
-														lblIDLavoro,
-														GroupLayout.PREFERRED_SIZE,
-														31,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														txtIDLavoro,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(btnIDLavoro))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(
-										layout.createParallelGroup(
-												Alignment.TRAILING)
-												.addComponent(
-														lblData,
-														GroupLayout.PREFERRED_SIZE,
-														31,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														dateChooser,
-														GroupLayout.PREFERRED_SIZE,
-														25,
-														GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(
-										layout.createParallelGroup(
-												Alignment.BASELINE)
-												.addComponent(
-														lblOre,
-														GroupLayout.PREFERRED_SIZE,
-														31,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														txtOre,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(
-										layout.createParallelGroup(
-												Alignment.BASELINE)
-												.addComponent(
-														lblSpesa,
-														GroupLayout.PREFERRED_SIZE,
-														31,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														txtSpesa,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-								.addGap(12)
-								.addGroup(
-										layout.createParallelGroup(
-												Alignment.BASELINE)
-												.addComponent(
-														lblNote,
-														GroupLayout.PREFERRED_SIZE,
-														31,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														txtNote,
-														GroupLayout.PREFERRED_SIZE,
-														85,
-														GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED,
-										35, Short.MAX_VALUE)
-								.addComponent(lblAvviso).addGap(18)
-								.addComponent(lblImmagine).addContainerGap()));
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGap(200)
+					.addComponent(lblImmagine, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(239, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblAvviso)
+					.addContainerGap(123, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup()
+							.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblIstruzioni, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup()
+									.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)))
+							.addGap(144))
+						.addGroup(layout.createSequentialGroup()
+							.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
+									.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, 219, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnIDLavoro))
+								.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+									.addGroup(layout.createSequentialGroup()
+										.addComponent(lblNote, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtNote, GroupLayout.PREFERRED_SIZE, 317, GroupLayout.PREFERRED_SIZE))
+									.addGroup(layout.createSequentialGroup()
+										.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtSpesa))
+									.addGroup(layout.createSequentialGroup()
+										.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtOre, 287, 287, 287))))
+							.addContainerGap(114, Short.MAX_VALUE))))
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(label)
+					.addGap(13)
+					.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(265, Short.MAX_VALUE))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup()
+							.addGap(24)
+							.addComponent(label)))
+					.addGap(15)
+					.addComponent(lblIstruzioni, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnIDLavoro))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblData, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblOre, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtOre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSpesa, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(12)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNote, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtNote, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+					.addComponent(lblAvviso)
+					.addGap(18)
+					.addComponent(lblImmagine)
+					.addContainerGap())
+		);
 		getContentPane().setLayout(layout);
 		getRootPane().setDefaultButton(addButton);
 		pack();
@@ -381,6 +266,7 @@ public class AddSessionWindow extends javax.swing.JFrame implements
 	private JDateChooser dateChooser;
 	private AddSessionWindow currentWindow;
 	private JTextArea txtNote;
+	private JLabel label;
 
 	public void setWorkID(String workID) {
 		txtIDLavoro.setText(workID);
