@@ -95,6 +95,7 @@ public class WorkDetailWindow extends JFrame {
 	private JTextField txtTotOre;
 	private JLabel lblSpesaTotale;
 	private JTextField txtTotSpesa;
+	private JButton btnAnnulla;
 
 	public WorkDetailWindow(String workId, DataManager _data) {
 		setTitle("Dettagli Lavoro");
@@ -208,7 +209,7 @@ public class WorkDetailWindow extends JFrame {
 			table.addMouseListener(new TableMouseListener());
 			table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
-			panel.add(table, BorderLayout.CENTER);
+			panel.add(table, BorderLayout.SOUTH);
 			panel.add(table.getTableHeader(), BorderLayout.PAGE_START);
 		}
 		txtCerca = new JTextField();
@@ -254,485 +255,208 @@ public class WorkDetailWindow extends JFrame {
 			txtTotSpesa.setEditable(false);
 			txtTotSpesa.setColumns(10);
 		}
+		btnAnnulla = new JButton("Annulla");
+		btnAnnulla.addActionListener(new BtnAnnullaActionListener());
+		btnAnnulla.setEnabled(false);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addComponent(immagine1)
-										.addGap(18)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblIDLavoro,
-																				GroupLayout.PREFERRED_SIZE,
-																				79,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(5)
-																		.addComponent(
-																				txtIDLavoro,
-																				GroupLayout.PREFERRED_SIZE,
-																				122,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(12)
-																		.addComponent(
-																				lblIdCliente,
-																				GroupLayout.PREFERRED_SIZE,
-																				66,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(5)
-																		.addComponent(
-																				txtIDCliente,
-																				GroupLayout.PREFERRED_SIZE,
-																				128,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(12)
-																		.addComponent(
-																				btnCambiaCliente)
-																		.addGap(29)
-																		.addComponent(
-																				btnDettagliCliente))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblNomeLavoro)
-																		.addGap(18)
-																		.addComponent(
-																				txtNomeLavoro,
-																				GroupLayout.PREFERRED_SIZE,
-																				256,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(12)
-																		.addComponent(
-																				lblIndirizzoLavoro)
-																		.addGap(5)
-																		.addComponent(
-																				txtIndirizzoLavoro,
-																				GroupLayout.PREFERRED_SIZE,
-																				254,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblInizioLavori,
-																				GroupLayout.PREFERRED_SIZE,
-																				95,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(5)
-																		.addComponent(
-																				txtInizioLavori,
-																				GroupLayout.PREFERRED_SIZE,
-																				254,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(12)
-																		.addComponent(
-																				lblFineLavori,
-																				GroupLayout.PREFERRED_SIZE,
-																				95,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(5)
-																		.addComponent(
-																				txtFineLavori,
-																				GroupLayout.PREFERRED_SIZE,
-																				254,
-																				GroupLayout.PREFERRED_SIZE))))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(146)
-										.addComponent(lblCompletato,
-												GroupLayout.PREFERRED_SIZE, 95,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(1)
-										.addComponent(checkCompletato))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(12)
-										.addComponent(separator,
-												GroupLayout.PREFERRED_SIZE, 1,
-												GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(1)
-										.addComponent(separator_1,
-												GroupLayout.PREFERRED_SIZE,
-												882, GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(14)
-										.addComponent(label,
-												GroupLayout.PREFERRED_SIZE, 72,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(12)
-										.addComponent(lblSessioniDelLavoro))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(14)
-										.addComponent(txtCerca,
-												GroupLayout.PREFERRED_SIZE,
-												193, GroupLayout.PREFERRED_SIZE)
-										.addGap(12)
-										.addComponent(cbCerca,
-												GroupLayout.PREFERRED_SIZE,
-												133, GroupLayout.PREFERRED_SIZE)
-										.addGap(12)
-										.addComponent(btnCerca)
-										.addGap(7)
-										.addComponent(btnVisualizzaTutto)
-										.addGap(9)
-										.addComponent(lblIstr_1,
-												GroupLayout.PREFERRED_SIZE,
-												262, GroupLayout.PREFERRED_SIZE))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(12)
-										.addComponent(panel,
-												GroupLayout.DEFAULT_SIZE, 865,
-												Short.MAX_VALUE).addGap(13))
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGap(16)
-										.addComponent(btnAggiungiSessione)
-										.addGap(5)
-										.addComponent(
-												btnRimuoviSessioniSelezionate,
-												GroupLayout.PREFERRED_SIZE,
-												285, GroupLayout.PREFERRED_SIZE)
-										.addGap(13)
-										.addComponent(btnStampaTabellaSessioni))
-						.addGroup(
-								gl_contentPane
-										.createParallelGroup(Alignment.LEADING,
-												false)
-										.addGroup(
-												gl_contentPane
-														.createSequentialGroup()
-														.addGap(7)
-														.addComponent(
-																btnModifica)
-														.addGap(12)
-														.addComponent(btnSalva)
-														.addGap(18)
-														.addComponent(
-																lblIstrLavoro,
-																GroupLayout.PREFERRED_SIZE,
-																342,
-																GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(
-																ComponentPlacement.RELATED,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																btnResocontoLavoro))
-										.addGroup(
-												gl_contentPane
-														.createSequentialGroup()
-														.addGap(12)
-														.addComponent(
-																lblTotaleNumeroSessioni)
-														.addGap(22)
-														.addComponent(
-																txtNSessioni,
-																GroupLayout.PREFERRED_SIZE,
-																128,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(44)
-														.addComponent(
-																lblNTotaleDi,
-																GroupLayout.PREFERRED_SIZE,
-																104,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(5)
-														.addComponent(
-																txtTotOre,
-																GroupLayout.PREFERRED_SIZE,
-																136,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(12)
-														.addComponent(
-																lblSpesaTotale,
-																GroupLayout.PREFERRED_SIZE,
-																95,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(12)
-														.addComponent(
-																txtTotSpesa,
-																GroupLayout.PREFERRED_SIZE,
-																158,
-																GroupLayout.PREFERRED_SIZE))));
-		gl_contentPane
-				.setVerticalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(immagine1)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(24)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(3)
-																										.addComponent(
-																												lblIDLavoro))
-																						.addComponent(
-																								txtIDLavoro,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(3)
-																										.addComponent(
-																												lblIdCliente))
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(1)
-																										.addComponent(
-																												txtIDCliente,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE))
-																						.addComponent(
-																								btnCambiaCliente)
-																						.addComponent(
-																								btnDettagliCliente))
-																		.addGap(23)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(3)
-																										.addComponent(
-																												lblNomeLavoro))
-																						.addComponent(
-																								txtNomeLavoro,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(3)
-																										.addComponent(
-																												lblIndirizzoLavoro))
-																						.addComponent(
-																								txtIndirizzoLavoro,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addGap(18)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(3)
-																										.addComponent(
-																												lblInizioLavori))
-																						.addComponent(
-																								txtInizioLavori,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(3)
-																										.addComponent(
-																												lblFineLavori))
-																						.addComponent(
-																								txtFineLavori,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))))
-										.addGap(18)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																lblCompletato)
-														.addComponent(
-																checkCompletato))
-										.addComponent(separator,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(21)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(3)
-																		.addComponent(
-																				lblTotaleNumeroSessioni))
-														.addComponent(
-																txtNSessioni,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(3)
-																		.addComponent(
-																				lblNTotaleDi))
-														.addComponent(
-																txtTotOre,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(3)
-																		.addComponent(
-																				lblSpesaTotale))
-														.addComponent(
-																txtTotSpesa,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(33)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addGroup(
-																gl_contentPane
-																		.createParallelGroup(
-																				Alignment.LEADING)
-																		.addGroup(
-																				gl_contentPane
-																						.createSequentialGroup()
-																						.addGap(1)
-																						.addComponent(
-																								btnModifica))
-																		.addGroup(
-																				gl_contentPane
-																						.createSequentialGroup()
-																						.addGap(1)
-																						.addComponent(
-																								btnSalva))
-																		.addGroup(
-																				gl_contentPane
-																						.createSequentialGroup()
-																						.addGap(4)
-																						.addComponent(
-																								lblIstrLavoro,
-																								GroupLayout.PREFERRED_SIZE,
-																								22,
-																								GroupLayout.PREFERRED_SIZE)))
-														.addComponent(
-																btnResocontoLavoro))
-										.addGap(19)
-										.addComponent(separator_1,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(13)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(label)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(19)
-																		.addComponent(
-																				lblSessioniDelLavoro)))
-										.addGap(11)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(17)
-																		.addComponent(
-																				txtCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(17)
-																		.addComponent(
-																				cbCerca,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(btnCerca)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(16)
-																		.addComponent(
-																				btnVisualizzaTutto))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(16)
-																		.addComponent(
-																				lblIstr_1,
-																				GroupLayout.PREFERRED_SIZE,
-																				25,
-																				GroupLayout.PREFERRED_SIZE)))
-										.addGap(15)
-										.addComponent(panel,
-												GroupLayout.DEFAULT_SIZE, 344,
-												Short.MAX_VALUE)
-										.addGap(13)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																btnAggiungiSessione)
-														.addComponent(
-																btnRimuoviSessioniSelezionate)
-														.addComponent(
-																btnStampaTabellaSessioni))
-										.addGap(2)));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(immagine1)
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblIDLavoro, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(lblIdCliente, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(btnCambiaCliente)
+							.addGap(29)
+							.addComponent(btnDettagliCliente))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblNomeLavoro)
+							.addGap(18)
+							.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(lblIndirizzoLavoro)
+							.addGap(5)
+							.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(146)
+					.addComponent(lblCompletato, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(checkCompletato))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(1)
+					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 882, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(14)
+					.addComponent(label, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
+					.addComponent(lblSessioniDelLavoro))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(14)
+					.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
+					.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
+					.addGap(12)
+					.addComponent(btnCerca)
+					.addGap(7)
+					.addComponent(btnVisualizzaTutto)
+					.addGap(9)
+					.addComponent(lblIstr_1, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(12)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
+					.addGap(13))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(16)
+					.addComponent(btnAggiungiSessione)
+					.addGap(5)
+					.addComponent(btnRimuoviSessioniSelezionate, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
+					.addGap(13)
+					.addComponent(btnStampaTabellaSessioni))
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addGap(7)
+						.addComponent(btnModifica)
+						.addGap(12)
+						.addComponent(btnSalva)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnAnnulla, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
+						.addGap(53)
+						.addComponent(btnResocontoLavoro))
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addGap(12)
+						.addComponent(lblTotaleNumeroSessioni)
+						.addGap(22)
+						.addComponent(txtNSessioni, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+						.addGap(44)
+						.addComponent(lblNTotaleDi, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+						.addGap(5)
+						.addComponent(txtTotOre, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+						.addGap(12)
+						.addComponent(lblSpesaTotale, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+						.addGap(12)
+						.addComponent(txtTotSpesa, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(immagine1)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(24)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblIDLavoro))
+								.addComponent(txtIDLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblIdCliente))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(1)
+									.addComponent(txtIDCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnCambiaCliente)
+								.addComponent(btnDettagliCliente))
+							.addGap(23)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblNomeLavoro))
+								.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblIndirizzoLavoro))
+								.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblInizioLavori))
+								.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblFineLavori))
+								.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblCompletato)
+						.addComponent(checkCompletato))
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(21)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblTotaleNumeroSessioni))
+						.addComponent(txtNSessioni, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblNTotaleDi))
+						.addComponent(txtTotOre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSpesaTotale))
+						.addComponent(txtTotSpesa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(35)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addComponent(btnModifica)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnSalva)
+								.addComponent(btnAnnulla)))
+						.addComponent(btnResocontoLavoro)
+						.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addGap(19)
+					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(13)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(label)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(19)
+							.addComponent(lblSessioniDelLavoro)))
+					.addGap(11)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(17)
+							.addComponent(txtCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(17)
+							.addComponent(cbCerca, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnCerca)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(16)
+							.addComponent(btnVisualizzaTutto))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(16)
+							.addComponent(lblIstr_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)))
+					.addGap(15)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+					.addGap(13)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnAggiungiSessione)
+						.addComponent(btnRimuoviSessioniSelezionate)
+						.addComponent(btnStampaTabellaSessioni))
+					.addGap(2))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -904,6 +628,7 @@ public class WorkDetailWindow extends JFrame {
 			checkCompletato.setEnabled(true);
 			btnModifica.setEnabled(false);
 			btnSalva.setEnabled(true);
+			btnAnnulla.setEnabled(true);
 		}
 	}
 
@@ -932,13 +657,13 @@ public class WorkDetailWindow extends JFrame {
 			boolean completed = checkCompletato.isSelected();
 			// si modifica il Work
 			try {
-				data.modifyWork(workID, nome, indirizzo, costumerid, iniziolavori,
-						finelavori, completed);
+				data.modifyWork(workID, nome, indirizzo, costumerid,
+						iniziolavori, finelavori, completed);
 			} catch (WorkAlreadyExistsException e1) {
 				lblIstrLavoro.setText("Lavoro già presente nei dati!");
 				return;
 			} catch (IDNotFoundException e1) {
-				if(e1.getType()== ElementType.Costumer){
+				if (e1.getType() == ElementType.Costumer) {
 					lblIstrLavoro.setText("Il Cliente indicato non esiste!");
 					return;
 				}
@@ -1007,6 +732,38 @@ public class WorkDetailWindow extends JFrame {
 			SessionTableModel m = (SessionTableModel) table.getModel();
 			m.changeData(workID, "", "");
 			table.updateUI();
+		}
+	}
+
+	private class BtnAnnullaActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg) {
+			//si mostrano i dati originali
+			// si inizializzano i dati
+			// si ricava il work
+			try {
+				work = data.getWorkByID(workID);
+			} catch (IDNotFoundException e) {
+				// non si puo verificare questo errore
+				Log.error("id " + e.getID() + ", non trovato");
+			}
+			txtIDLavoro.setText(work.getID());
+			txtIDCliente.setText(work.getCostumerID());
+			txtNomeLavoro.setText(work.getNome());
+			txtIndirizzoLavoro.setText(work.getIndirizzo());
+			txtInizioLavori.setText(work.getInizioLavoriString());
+			txtFineLavori.setText(work.getInizioLavoriString());
+			checkCompletato.setSelected(work.isCompleted());
+			// Si disabilita
+			txtIDCliente.setEditable(false);
+			btnCambiaCliente.setEnabled(false);
+			txtNomeLavoro.setEditable(false);
+			txtIndirizzoLavoro.setEditable(false);
+			txtInizioLavori.setEditable(false);
+			txtFineLavori.setEditable(false);
+			checkCompletato.setEnabled(false);
+			btnModifica.setEnabled(true);
+			btnSalva.setEnabled(false);
+			btnAnnulla.setEnabled(false);
 		}
 	}
 

@@ -3,9 +3,11 @@ package it.valsecchi.quickagenda.windows.detail;
 import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.Utility;
 import it.valsecchi.quickagenda.data.component.Costumer;
+import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Session;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
+import it.valsecchi.quickagenda.data.interfaces.DataUpdateListener;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import java.awt.Toolkit;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class SessionDetailWindow extends JFrame {
 
@@ -89,12 +92,17 @@ public class SessionDetailWindow extends JFrame {
 	private JTextField txtEmailCliente;
 	private JLabel lblIstrSessione;
 	private JButton btnDettagliLavoro;
+	private JLabel lblNomeLavoro;
+	private JTextField txtNomeLavoro;
 
 	public SessionDetailWindow(String sessionId, DataManager _manager) {
 		setTitle("Dettagli Sessione");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				SessionDetailWindow.class.getResource("/ico_small/tools.png")));
 		data = _manager;
+		data.addDataUpdateListener(new UpdateListener(), ElementType.Session);
+		data.addDataUpdateListener(new UpdateListener(), ElementType.Work);
+		data.addDataUpdateListener(new UpdateListener(), ElementType.Costumer);
 		sessionID = sessionId;
 		initComponent();
 		initData();
@@ -293,6 +301,13 @@ public class SessionDetailWindow extends JFrame {
 		btnDettagliLavoro = new JButton("Dettagli Lavoro...");
 		btnDettagliLavoro
 				.addActionListener(new BtnDettagliLavoroActionListener());
+		lblNomeLavoro = new JLabel("Indirizzo:");
+		lblNomeLavoro.setForeground(Color.BLUE);
+		lblNomeLavoro.setFont(new Font("Tahoma", Font.BOLD, 14));
+		txtNomeLavoro = new JTextField();
+		txtNomeLavoro.setText((String) null);
+		txtNomeLavoro.setEditable(false);
+		txtNomeLavoro.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -350,22 +365,6 @@ public class SessionDetailWindow extends JFrame {
 					.addGap(5)
 					.addComponent(txtClienteID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(12)
-					.addComponent(lblIndirizzo, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-					.addGap(31)
-					.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(12)
-					.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-					.addGap(5)
-					.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE)
-					.addGap(12)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(99)
-							.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
-				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(5)
 					.addComponent(lblCompletato, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
 					.addGap(1)
@@ -415,6 +414,29 @@ public class SessionDetailWindow extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(793)
 					.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(12)
+							.addComponent(lblInizioLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtInizioLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblNomeLavoro, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+							.addGap(31)
+							.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblIndirizzo, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+							.addGap(31)
+							.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(99)
+							.addComponent(txtFineLavori, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblFineLavori, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+					.addGap(299))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -479,13 +501,19 @@ public class SessionDetailWindow extends JFrame {
 							.addGap(2)
 							.addComponent(label_1))
 						.addComponent(txtClienteID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addGap(20)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(2)
-							.addComponent(lblIndirizzo))
-						.addComponent(txtIndirizzoLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(13)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addGap(2)
+										.addComponent(lblNomeLavoro, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+									.addComponent(txtNomeLavoro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblIndirizzo))))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(2)
@@ -495,7 +523,7 @@ public class SessionDetailWindow extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(2)
 							.addComponent(lblFineLavori)))
-					.addGap(22)
+					.addGap(20)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblCompletato)
 						.addComponent(cbCompleted))
@@ -578,6 +606,7 @@ public class SessionDetailWindow extends JFrame {
 		}
 		txtIDLavoroSessione.setText(work.getID());
 		txtLavoroID.setText(work.getID());
+		txtNomeLavoro.setText(work.getNome());
 		txtClienteID.setText(work.getCostumerID());
 		txtIndirizzoLavoro.setText(work.getIndirizzo());
 		txtInizioLavori.setText(f.format(work.getInizioLavori().getTime()));
@@ -654,5 +683,12 @@ public class SessionDetailWindow extends JFrame {
 			detail.setVisible(true);
 		}
 	}
-
+	
+	private class  UpdateListener implements DataUpdateListener{
+		@Override
+		public void DataUpdatePerformed(ElementType type) {
+			//si mostrano di nuovo i dati
+			initData();
+		}
+	}
 }
