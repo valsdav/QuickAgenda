@@ -263,6 +263,13 @@ public class SessionsManager {
 	}
 
 	/**
+	 * Metodo che restituisce il numero di elementi presenti nel SessionsManager
+	 */
+	public int getNumberOfElements() {
+		return sessionsMap.size();
+	}
+
+	/**
 	 * Metodo che modifica i dati di una Session impostando la nuova hash ed
 	 * inserendola nella lista {@link #hashMap}.
 	 * 
@@ -274,8 +281,7 @@ public class SessionsManager {
 	 * @throws IDNotFoundException
 	 */
 	public void modifySession(String sessionID, Calendar sessiondata,
-			int hours, int spesa, String note) throws IDNotFoundException
-			 {
+			int hours, int spesa, String note) throws IDNotFoundException {
 		// si ricava la sessione
 		if (sessionsMap.containsKey(sessionID)) {
 			Session s = sessionsMap.get(sessionID);

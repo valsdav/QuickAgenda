@@ -37,6 +37,7 @@ import it.valsecchi.quickagenda.data.exception.FileDataVersionNotValid;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.exception.InvalidPasswordException;
 import it.valsecchi.quickagenda.data.interfaces.*;
+import it.valsecchi.quickagenda.data.report.DataIntegrityReport;
 
 /**
  * Classe che gestisce l'intera banca dati dell'applicazione. Il carimento dei
@@ -587,6 +588,44 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		}
 		// si restituisce il document aggiornato4
 		return doc;
+	}
+
+	/**
+	 * Metodo che esegue un approfondito controllo dell'integrità dei dati,
+	 * controllando che non ci siano elementi non collegati, ricalcolando le
+	 * hash e i collegamenti nella struttura session->work->costumer.
+	 */
+	public DataIntegrityReport checkDataIntegrity() {
+		List<Work> work_errors = new ArrayList<>();
+		List<Session> session_errors = new ArrayList<>();
+		// si controllano i costumer
+		for (Costumer c : costumersMan.getAllCostumers()) {
+			c.recalculateCostumerHash();
+		}
+		// si controllano i Work
+		for (Work w : worksMan.getAllWorks()) {
+			w.recalculateWorkHash();
+			// ora si controlla che esista il costumer
+			if (!costumersMan.exists(w.getCostumerID())) {
+				// si inserisce negli errori
+				work_errors.add(w);
+			}
+		}
+		// Si controllano le sessioni
+		for (Session s : sessionsMan.getAllSessions()) {
+			s.recalculateSessionHash();
+			// si controlla che esista il work
+			if (!worksMan.exists(s.getWorkID())) {
+				session_errors.add(s);
+			}
+		}
+		// si crea l'oggetto risultato
+		return new DataIntegrityReport(work_errors.size()
+				+ session_errors.size(), this.getTotalNumberOfElement(),
+				this.costumersMan.getNumberOfElements(),
+				this.worksMan.getNumberOfElements(),
+				this.sessionsMan.getNumberOfElements(), work_errors,
+				session_errors);
 	}
 
 	/**
@@ -1150,11 +1189,19 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 * SessionManager
 	 */
 	public void modifySession(String sessionID, Calendar sessiondata,
-			int hours, int spesa, String note)
-			throws  IDNotFoundException {
+			int hours, int spesa, String note) throws IDNotFoundException {
 		// si modifica la sessione
 		sessionsMan.modifySession(sessionID, sessiondata, hours, spesa, note);
 		// si lancia l'aggiornamento
 		this.fireDataUpdatePerformed(ElementType.Session);
+	}
+
+	/**
+	 * Metodo che restituisce il numero totale di elementi presenti nel database
+	 */
+	public int getTotalNumberOfElement() {
+		return costumersMan.getNumberOfElements()
+				+ worksMan.getNumberOfElements()
+				+ sessionsMan.getNumberOfElements();
 	}
 }

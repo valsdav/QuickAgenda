@@ -53,9 +53,8 @@ public class Costumer {
 		indirizzo = _indirizzo;
 		tel = _tel;
 		email = _email;
-		// si ricava l'hash
-		// si uniscono id, cognome e indirizzo per cercare l'hash
-		hash = Utility.getHash(nome + cognome + indirizzo + azienda);
+		// si ricava l'hash con l'indirizzo
+		hash = Utility.getHash(indirizzo);
 	}
 
 	/** Costruttore comprensivo di Hash */
@@ -77,6 +76,15 @@ public class Costumer {
 	 */
 	public static String calculateCostumerHash(String indirizzo) {
 		return Utility.getHash(indirizzo);
+	}
+	
+	/**
+	 * Metodo che ricalcola l'hash del Costumer. La assegna al Costumer e la restituisce.
+	 * @return restituisce la nuova hash del Costumer
+	 */
+	public String recalculateCostumerHash(){
+		this.hash = Utility.getHash(this.indirizzo);
+		return hash;
 	}
 
 	public String getAzienda() {

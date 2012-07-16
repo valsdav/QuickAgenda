@@ -263,6 +263,14 @@ public class CostumersManager {
 	}
 
 	/**
+	 * Metodo che restituisce il numero di elementi presenti nel
+	 * CostumersManager
+	 */
+	public int getNumberOfElements() {
+		return costumersMap.size();
+	}
+
+	/**
 	 * Metodo che filtra i Costumer a seconda dei parametri passati e li
 	 * restituisce. I parametri sono questi:
 	 * Nome|Cognome|Azienda|Indirizzo|Tel|Email.

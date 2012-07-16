@@ -274,6 +274,13 @@ public class WorksManager {
 		}
 		return id;
 	}
+	
+	/**
+	 * Metodo che restituisce il numero di elementi presenti nel WorksManager
+	 */
+	public int getNumberOfElements() {
+		return worksMap.size();
+	}
 
 	/**
 	 * Metodo che modifica i dati di un Work impostando la nuova hash ed
