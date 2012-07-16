@@ -33,16 +33,20 @@ public class Costumer {
 	/**
 	 * Costruttore di Costumer
 	 * 
-	 * @param ID
+	 * @param id
 	 *            l'id viene fornito dal creatore
-	 * @param nome
+	 * @param _nome
 	 *            nome del cliente
-	 * @param cognome
+	 * @param _cognome
 	 *            cognome del cliente
-	 * @param azienda
+	 * @param _azienda
 	 *            azienda del cliente
-	 * @param indirizzo
+	 * @param _indirizzo
 	 *            indirizzo del cliente
+	 * @param _tel
+	 *            telefono del cliente
+	 * @param _email
+	 *            email del cliente
 	 */
 	public Costumer(String id, String _nome, String _cognome, String _azienda,
 			String _indirizzo, String _tel, String _email) {
@@ -77,12 +81,14 @@ public class Costumer {
 	public static String calculateCostumerHash(String indirizzo) {
 		return Utility.getHash(indirizzo);
 	}
-	
+
 	/**
-	 * Metodo che ricalcola l'hash del Costumer. La assegna al Costumer e la restituisce.
+	 * Metodo che ricalcola l'hash del Costumer. La assegna al Costumer e la
+	 * restituisce.
+	 * 
 	 * @return restituisce la nuova hash del Costumer
 	 */
-	public String recalculateCostumerHash(){
+	public String recalculateCostumerHash() {
 		this.hash = Utility.getHash(this.indirizzo);
 		return hash;
 	}
