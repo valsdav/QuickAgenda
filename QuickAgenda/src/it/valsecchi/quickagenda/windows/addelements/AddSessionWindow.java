@@ -12,7 +12,6 @@ import it.valsecchi.quickagenda.data.DataManager;
 import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
-import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.interfaces.*;
 import it.valsecchi.quickagenda.windows.WorksManagerWindow;

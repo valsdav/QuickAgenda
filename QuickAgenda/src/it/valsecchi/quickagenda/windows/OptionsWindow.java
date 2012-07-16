@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class OptionsWindow extends JFrame {
 	private static final long serialVersionUID = -3600033074228709942L;
@@ -36,7 +37,7 @@ public class OptionsWindow extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				OptionsWindow.class.getResource("/ico_small/option.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 582, 358);
+		setBounds(100, 100, 587, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -51,38 +52,24 @@ public class OptionsWindow extends JFrame {
 		btnControlloIntegritaDati.setIcon(new ImageIcon(OptionsWindow.class
 				.getResource("/ico_small/preferences_system_session.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																btnSalvaFileBackup)
-														.addComponent(
-																btnControlloIntegritaDati,
-																GroupLayout.PREFERRED_SIZE,
-																239,
-																GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(303, Short.MAX_VALUE)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane
-						.createSequentialGroup()
-						.addGap(24)
-						.addComponent(btnSalvaFileBackup,
-								GroupLayout.PREFERRED_SIZE, 83,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addComponent(btnControlloIntegritaDati,
-								GroupLayout.PREFERRED_SIZE, 83,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(95, Short.MAX_VALUE)));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnSalvaFileBackup)
+					.addGap(33)
+					.addComponent(btnControlloIntegritaDati, GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(36, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(24)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSalvaFileBackup, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnControlloIntegritaDati, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(131, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -126,8 +113,8 @@ public class OptionsWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg) {
 			// si crea il report
 			progress = new ShowProgressWindow(
-					"Creazione report integrità dati...",
-					"Creazione report integrità dati",
+					"Controllo integrità dati...",
+					"Controllo integrità dati",
 					new ImageIcon(
 							OptionsWindow.class
 									.getResource("/ico_small/preferences_system_session.png")));
