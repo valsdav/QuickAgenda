@@ -1,7 +1,6 @@
 package it.valsecchi.quickagenda.data.interfaces;
 
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
-import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import java.util.Calendar;
 
@@ -27,12 +26,11 @@ public interface AddSessionInterface {
 	 * @param hours
 	 * @param spesa
 	 * @param note
-	 * @throws SessionAlreadyExistsException
 	 * @throws InsufficientDataException
 	 * @throws IDNotFoundException
 	 */
 	public void addSession(String workid, Calendar calendar, int hours,
-			int spesa, String note) throws SessionAlreadyExistsException,
-			InsufficientDataException, IDNotFoundException;
+			int spesa, String note) throws InsufficientDataException,
+			IDNotFoundException;
 
 }

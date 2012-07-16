@@ -18,7 +18,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.output.XMLOutputter;
-
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import it.valsecchi.quickagenda.data.component.Costumer;
 import it.valsecchi.quickagenda.data.component.CostumersManager;
@@ -30,13 +29,13 @@ import it.valsecchi.quickagenda.data.component.WorksManager;
 import it.valsecchi.quickagenda.data.component.exception.CostumerAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.IDAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
-import it.valsecchi.quickagenda.data.component.exception.SessionAlreadyExistsException;
 import it.valsecchi.quickagenda.data.component.exception.WorkAlreadyExistsException;
 import it.valsecchi.quickagenda.data.exception.CryptographyException;
 import it.valsecchi.quickagenda.data.exception.FileDataVersionNotValid;
 import it.valsecchi.quickagenda.data.exception.InsufficientDataException;
 import it.valsecchi.quickagenda.data.exception.InvalidPasswordException;
 import it.valsecchi.quickagenda.data.interfaces.*;
+import it.valsecchi.quickagenda.data.report.DataIntegrityReportResult;
 
 /**
  * Classe che gestisce l'intera banca dati dell'applicazione. Il carimento dei
@@ -107,7 +106,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			try {
 				costumersMan.addCostumer(c);
 			} catch (CostumerAlreadyExistsException | IDAlreadyExistsException e) {
-				// in caso si errore si tralascia
+				// in caso di errore si tralascia
 				continue;
 			}
 		}
@@ -128,7 +127,7 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 		for (Session s : sessions) {
 			try {
 				sessionsMan.addSession(s);
-			} catch (SessionAlreadyExistsException | IDAlreadyExistsException e) {
+			} catch (IDAlreadyExistsException e) {
 				// in caso si errore si tralascia
 				continue;
 			}
@@ -590,6 +589,44 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
+	 * Metodo che esegue un approfondito controllo dell'integrità dei dati,
+	 * controllando che non ci siano elementi non collegati, ricalcolando le
+	 * hash e i collegamenti nella struttura session->work->costumer.
+	 */
+	public DataIntegrityReportResult checkDataIntegrity() {
+		List<Work> work_errors = new ArrayList<>();
+		List<Session> session_errors = new ArrayList<>();
+		// si controllano i costumer
+		for (Costumer c : costumersMan.getAllCostumers()) {
+			c.recalculateCostumerHash();
+		}
+		// si controllano i Work
+		for (Work w : worksMan.getAllWorks()) {
+			w.recalculateWorkHash();
+			// ora si controlla che esista il costumer
+			if (!costumersMan.exists(w.getCostumerID())) {
+				// si inserisce negli errori
+				work_errors.add(w);
+			}
+		}
+		// Si controllano le sessioni
+		for (Session s : sessionsMan.getAllSessions()) {
+			s.recalculateSessionHash();
+			// si controlla che esista il work
+			if (!worksMan.exists(s.getWorkID())) {
+				session_errors.add(s);
+			}
+		}
+		// si crea l'oggetto risultato
+		return new DataIntegrityReportResult(work_errors.size()
+				+ session_errors.size(), this.getTotalNumberOfElement(),
+				this.costumersMan.getNumberOfElements(),
+				this.worksMan.getNumberOfElements(),
+				this.sessionsMan.getNumberOfElements(), work_errors,
+				session_errors);
+	}
+
+	/**
 	 * Metodo che imposta la password che il DataManager utilizzerà per le
 	 * operazioni di lettura/scrittura dei dati.
 	 * 
@@ -782,8 +819,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	 */
 	@Override
 	public void addSession(String workid, Calendar sessiondata, int hours,
-			int spesa, String note) throws SessionAlreadyExistsException,
-			InsufficientDataException, IDNotFoundException {
+			int spesa, String note) throws InsufficientDataException,
+			IDNotFoundException {
 		// si controlla che workid,costumerid,sessiondata non siano
 		// nulli
 		if (workid == null || workid.equals("") || (sessiondata == null)) {
@@ -1103,30 +1140,66 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 	}
 
 	/**
-	 * Metodo che cambia il Costumer a cui è riferito un Work. Per far questo
-	 * bisogna anche cambiare il CostumerID anche di tutte le session del Work.
+	 * Metodo di collegamento al metodo di modifica dei Work del WorkManager.
+	 * Inoltre il metodo aggiorna tutte le sessioni al corretto costumerID del
+	 * Work.
 	 * 
-	 * @param workid
-	 *            id del work a cui cambiare il costumerID
-	 * @param newCostumerid
-	 *            ID del nuovo costumer del Work
+	 * @param workID
+	 * @param nome
+	 * @param indirizzo
+	 * @param costumerid
+	 * @param iniziolavori
+	 * @param finelavori
+	 * @param completed
 	 * @throws IDNotFoundException
-	 *             lanciato nel caso non si trovi il Work o il Costumer
+	 * @throws WorkAlreadyExistsException
 	 */
-	public void changeWorkCostumerID(String workID, String newCostumerID)
-			throws IDNotFoundException {
-		if (!costumersMan.exists(newCostumerID)) {
-			throw new IDNotFoundException(ElementType.Costumer, newCostumerID);
+	public void modifyWork(String workID, String nome, String indirizzo,
+			String costumerid, Calendar iniziolavori, Calendar finelavori,
+			boolean completed) throws IDNotFoundException,
+			WorkAlreadyExistsException {
+		// si controlla prima di tutto che esista il costumerid
+		if (!costumersMan.exists(costumerid)) {
+			throw new IDNotFoundException(ElementType.Costumer, costumerid);
 		}
-		// si cambia l'id al work
-		worksMan.getWorkByID(workID).setCostumerID(newCostumerID);
+		// si modifica il Work
+		try {
+			worksMan.modifyWork(workID, nome, indirizzo, costumerid,
+					iniziolavori, finelavori, completed);
+		} catch (WorkAlreadyExistsException e) {
+			Log.error("impossibile cambiare dati, Work esiste già.");
+			throw e;
+		}
+		// ora bisogna aggiornare tutte le sessioni al corretto costumerid
 		// si ricavano le sessioni
 		List<Session> sessions = sessionsMan.queryByWorkID(workID);
 		for (Session s : sessions) {
-			s.setCostumerID(newCostumerID);
+			s.setCostumerID(costumerid);
 		}
-		// si lancia un aggiornamento delle session. l'aggiornamento dei Work
-		// verrà lanciato dal codice chiamante
+		// si lancia un aggiornamento delle Session
 		this.fireDataUpdatePerformed(ElementType.Session);
+		// si lancia l'aggiornamento dei Work
+		this.fireDataUpdatePerformed(ElementType.Work);
+	}
+
+	/**
+	 * Metodo di collegamento al metodo di modifica delle Session del
+	 * SessionManager
+	 */
+	public void modifySession(String sessionID, Calendar sessiondata,
+			int hours, int spesa, String note) throws IDNotFoundException {
+		// si modifica la sessione
+		sessionsMan.modifySession(sessionID, sessiondata, hours, spesa, note);
+		// si lancia l'aggiornamento
+		this.fireDataUpdatePerformed(ElementType.Session);
+	}
+
+	/**
+	 * Metodo che restituisce il numero totale di elementi presenti nel database
+	 */
+	public int getTotalNumberOfElement() {
+		return costumersMan.getNumberOfElements()
+				+ worksMan.getNumberOfElements()
+				+ sessionsMan.getNumberOfElements();
 	}
 }

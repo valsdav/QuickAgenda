@@ -274,6 +274,60 @@ public class WorksManager {
 		}
 		return id;
 	}
+	
+	/**
+	 * Metodo che restituisce il numero di elementi presenti nel WorksManager
+	 */
+	public int getNumberOfElements() {
+		return worksMap.size();
+	}
+
+	/**
+	 * Metodo che modifica i dati di un Work impostando la nuova hash ed
+	 * inserendola nella lista {@link #hashMap}.
+	 * 
+	 * @param workID
+	 * @param nome
+	 * @param indirizzo
+	 * @param costumerid
+	 * @param iniziolavori
+	 * @param finelavori
+	 * @param completed
+	 * @throws WorkAlreadyExistsException
+	 * @throws IDNotFoundException
+	 */
+	public void modifyWork(String workID, String nome, String indirizzo,
+			String costumerid, Calendar iniziolavori, Calendar finelavori,
+			boolean completed) throws WorkAlreadyExistsException,
+			IDNotFoundException {
+		// si ricava il Work
+		if (worksMap.containsKey(workID)) {
+			Work w = worksMap.get(workID);
+			String vecchiaHash = w.getHash();
+			// viene calcolata la nuova hash
+			String newHash = Work.calculateWorkHash(costumerid, nome,
+					indirizzo, iniziolavori);
+			// si controlla se esiste già
+			if (hashMap.containsKey(newHash)) {
+				// si lancia l'eccezione WorkAlreadyExistsException
+				throw new WorkAlreadyExistsException(w);
+			}
+			// si impostano i nuovi dati
+			w.setNome(nome);
+			w.setIndirizzo(indirizzo);
+			w.setCostumerID(costumerid);
+			w.setInizioLavori(iniziolavori);
+			w.setFineLavori(finelavori);
+			w.setCompleted(completed);
+			// si cancella la vecchia hash
+			hashMap.remove(vecchiaHash);
+			// si aggiunge quella nuova
+			hashMap.put(newHash, w.getID());
+		} else {
+			// si restituisce l'eccezione IDNotFoundException
+			throw new IDNotFoundException(ElementType.Work, workID);
+		}
+	}
 
 	/**
 	 * Metodo pubblico che filtra i Work secondo vari parametri. Se non si vuole

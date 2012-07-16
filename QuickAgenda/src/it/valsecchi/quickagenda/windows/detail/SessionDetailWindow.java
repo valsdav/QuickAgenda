@@ -1,8 +1,8 @@
 package it.valsecchi.quickagenda.windows.detail;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.Utility;
 import it.valsecchi.quickagenda.data.component.Costumer;
-import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Session;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
@@ -18,6 +18,8 @@ import java.awt.Font;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -68,8 +70,6 @@ public class SessionDetailWindow extends JFrame {
 	private JLabel lblCompletato;
 	private JCheckBox cbCompleted;
 	private JSeparator separator_1;
-	private JButton btnSalvaLavoro;
-	private JButton btnModificaLavoro;
 	private JLabel lblIstrLavoro;
 	private JLabel label_2;
 	private JTextField textField;
@@ -87,14 +87,13 @@ public class SessionDetailWindow extends JFrame {
 	private JTextField txtTelefonoCliente;
 	private JLabel lblEmail;
 	private JTextField txtEmailCliente;
-	private JButton btnModificaCliente;
-	private JButton btnSalvaCliente;
 	private JLabel lblIstrSessione;
 	private JButton btnDettagliLavoro;
 
 	public SessionDetailWindow(String sessionId, DataManager _manager) {
 		setTitle("Dettagli Sessione");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(SessionDetailWindow.class.getResource("/ico_small/tools.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				SessionDetailWindow.class.getResource("/ico_small/tools.png")));
 		data = _manager;
 		sessionID = sessionId;
 		initComponent();
@@ -178,7 +177,8 @@ public class SessionDetailWindow extends JFrame {
 		txtNote.setEditable(false);
 		txtNote.setColumns(10);
 		btnSalvaSessione = new JButton("Salva");
-		btnSalvaSessione.addActionListener(new BtnSalvaSessioneActionListener());
+		btnSalvaSessione
+				.addActionListener(new BtnSalvaSessioneActionListener());
 		btnSalvaSessione.setEnabled(false);
 		btnSalvaSessione.setFont(new Font("Tahoma", Font.BOLD, 14));
 
@@ -220,14 +220,6 @@ public class SessionDetailWindow extends JFrame {
 		cbCompleted = new JCheckBox("");
 		cbCompleted.setEnabled(false);
 		separator_1 = new JSeparator();
-		btnSalvaLavoro = new JButton("Salva");
-		btnSalvaLavoro.addActionListener(new BtnSalvaLavoroActionListener());
-		btnSalvaLavoro.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnSalvaLavoro.setEnabled(false);
-		btnModificaLavoro = new JButton("Modifica");
-		btnModificaLavoro
-				.addActionListener(new BtnModificaLavoroActionListener());
-		btnModificaLavoro.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		lblIstrLavoro = new JLabel("");
 
@@ -296,20 +288,11 @@ public class SessionDetailWindow extends JFrame {
 		txtEmailCliente.setEditable(false);
 		txtEmailCliente.setColumns(10);
 
-		btnModificaCliente = new JButton("Modifica");
-		btnModificaCliente
-				.addActionListener(new BtnModificaClienteActionListener());
-		btnModificaCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
-
-		btnSalvaCliente = new JButton("Salva");
-		btnSalvaCliente.addActionListener(new BtnSalvaClienteActionListener());
-		btnSalvaCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnSalvaCliente.setEnabled(false);
-		
 		lblIstrSessione = new JLabel("");
-		
+
 		btnDettagliLavoro = new JButton("Dettagli Lavoro...");
-		btnDettagliLavoro.addActionListener(new BtnDettagliLavoroActionListener());
+		btnDettagliLavoro
+				.addActionListener(new BtnDettagliLavoroActionListener());
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -388,11 +371,7 @@ public class SessionDetailWindow extends JFrame {
 					.addGap(1)
 					.addComponent(cbCompleted))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(5)
-					.addComponent(btnModificaLavoro)
-					.addGap(12)
-					.addComponent(btnSalvaLavoro)
-					.addGap(12)
+					.addGap(187)
 					.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(5)
@@ -430,11 +409,6 @@ public class SessionDetailWindow extends JFrame {
 					.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
 					.addGap(12)
 					.addComponent(txtEmailCliente, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(5)
-					.addComponent(btnModificaCliente)
-					.addGap(12)
-					.addComponent(btnSalvaCliente))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(759)
 					.addComponent(label_2))
@@ -525,13 +499,8 @@ public class SessionDetailWindow extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblCompletato)
 						.addComponent(cbCompleted))
-					.addGap(5)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnModificaLavoro)
-						.addComponent(btnSalvaLavoro)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+					.addGap(10)
+					.addComponent(lblIstrLavoro, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addGap(13)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
@@ -570,11 +539,7 @@ public class SessionDetailWindow extends JFrame {
 							.addGap(2)
 							.addComponent(lblEmail))
 						.addComponent(txtEmailCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(10)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnModificaCliente)
-						.addComponent(btnSalvaCliente))
-					.addGap(430)
+					.addGap(465)
 					.addComponent(label_2)
 					.addGap(191)
 					.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -649,18 +614,28 @@ public class SessionDetailWindow extends JFrame {
 	private class BtnSalvaSessioneActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			lblIstrSessione.setText("");
+			Calendar _data = null;
 			// si salvano i nuovi dati
 			try {
-				session.setSessionData(txtDataSessione.getText());
+				_data = Utility
+						.parseStringToCalendar(txtDataSessione.getText());
 			} catch (ParseException e1) {
 				// si notifica l'errore
 				lblIstrSessione
 						.setText("Inserire la data nel formato giorno/mese/anno");
 				return;
 			}
-			session.setHours(Integer.parseInt(txtOre.getText()));
-			session.setSpesa(Integer.parseInt(txtSpesa.getText()));
-			session.setNote(txtNote.getText());
+			int hours = Integer.parseInt(txtOre.getText());
+			int spesa = Integer.parseInt(txtSpesa.getText());
+			String note = txtNote.getText();
+			// si modifica
+			try {
+				data.modifySession(sessionID, _data, hours, spesa, note);
+			} catch (IDNotFoundException e1) {
+				// non dovrebbe verificarsi questa eccezione
+				Log.error("Sessione non trovata! " + e1.getID());
+				return;
+			}
 			// si disabilitano i pulsanti
 			lblIstrSessione.setText("");
 			btnModificaSessione.setEnabled(true);
@@ -669,86 +644,13 @@ public class SessionDetailWindow extends JFrame {
 			txtOre.setEditable(false);
 			txtSpesa.setEditable(false);
 			txtNote.setEditable(false);
-			//si lancia l'aggiornamento
-			data.fireDataUpdatePerformed(ElementType.Session);
 		}
 	}
 
-	private class BtnModificaLavoroActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			// si rendono editabili
-			txtIndirizzoLavoro.setEditable(true);
-			txtInizioLavori.setEditable(true);
-			txtFineLavori.setEditable(true);
-			cbCompleted.setEnabled(true);
-			btnSalvaLavoro.setEnabled(true);
-			btnModificaLavoro.setEnabled(false);
-		}
-	}
-
-	private class BtnSalvaLavoroActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			lblIstrLavoro.setText("");
-			// si salvano i nuovi dati
-			try {
-				work.setInizioLavori(txtInizioLavori.getText());
-				work.setFineLavori(txtFineLavori.getText());
-			} catch (ParseException e1) {
-				// si notifica l'errore
-				lblIstrLavoro
-						.setText("Inserire la data nel formato giorno/mese/anno");
-				return;
-			}
-			work.setIndirizzo(txtIndirizzoLavoro.getText());
-			work.setCompleted(cbCompleted.isSelected());
-			//si lancia l'aggiornamento
-			data.fireDataUpdatePerformed(ElementType.Work);
-			btnSalvaLavoro.setEnabled(false);
-			btnModificaLavoro.setEnabled(true);
-			txtIndirizzoLavoro.setEditable(false);
-			txtInizioLavori.setEditable(false);
-			txtFineLavori.setEditable(false);
-			cbCompleted.setEnabled(false);
-		}
-	}
-
-	private class BtnModificaClienteActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			txtNome.setEditable(true);
-			txtCognome.setEditable(true);
-			txtIndirizzoCliente.setEditable(true);
-			txtAzienda.setEditable(true);
-			txtEmailCliente.setEditable(true);
-			txtTelefonoCliente.setEditable(true);
-			btnModificaCliente.setEnabled(false);
-			btnSalvaCliente.setEnabled(true);
-		}
-	}
-
-	private class BtnSalvaClienteActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			costumer.setNome(txtNome.getText());
-			costumer.setCognome(txtCognome.getText());
-			costumer.setIndirizzo(txtIndirizzoCliente.getText());
-			costumer.setAzienda(txtAzienda.getText());
-			costumer.setEmail(txtEmailCliente.getText());
-			costumer.setTelefono(txtTelefonoCliente.getText());
-			btnModificaCliente.setEnabled(true);
-			btnSalvaCliente.setEnabled(false);
-			txtNome.setEditable(false);
-			txtCognome.setEditable(false);
-			txtIndirizzoCliente.setEditable(false);
-			txtAzienda.setEditable(false);
-			txtEmailCliente.setEditable(false);
-			txtTelefonoCliente.setEditable(false);
-			//si lancia l'aggiornamento
-			data.fireDataUpdatePerformed(ElementType.Costumer);
-		}
-	}
 	private class BtnDettagliLavoroActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			//si apre la finestra dettagli lavoro
-			WorkDetailWindow detail = new WorkDetailWindow (work.getID(),data);
+			// si apre la finestra dettagli lavoro
+			WorkDetailWindow detail = new WorkDetailWindow(work.getID(), data);
 			detail.setVisible(true);
 		}
 	}

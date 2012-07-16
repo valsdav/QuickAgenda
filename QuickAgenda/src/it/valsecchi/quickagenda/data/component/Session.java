@@ -45,7 +45,7 @@ public class Session {
 		spesa = _spesa;
 		note = _note;
 		// si ricava l'hash unendo (id,workid,costumerid)
-		hash = Utility.getHash(workid + costumerid + sessiondata.toString());
+		hash = Utility.getHash(workid + costumerid + this.getSessionDataString());
 	}
 
 	/** Costruttore di Session con Hash fornita */
@@ -66,8 +66,17 @@ public class Session {
 	 * dati parametro.
 	 */
 	public static String calculateSessionHash(String workid, String costumerid,
-			Calendar sessiondata2) {
-		return Utility.getHash(workid + costumerid + sessiondata2.toString());
+			Calendar sessiondata) {
+		return Utility.getHash(workid + costumerid +Utility.formatCalendarToString(sessiondata));
+	}
+	
+	/**
+	 * Metodo che ricalcola l'hash della Session. La assegna alla Session e la restituisce.
+	 * @return restituisce la nuova hash della Session
+	 */
+	public String recalculateSessionHash(){
+		this.hash = Utility.getHash(this.workID+this.costumerID+this.getSessionDataString());
+		return this.hash;
 	}
 
 	public Calendar getSessionData() {

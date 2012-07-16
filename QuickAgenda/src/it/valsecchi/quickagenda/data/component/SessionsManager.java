@@ -26,34 +26,22 @@ public class SessionsManager {
 	}
 
 	/**
-	 * Metodo che aggiunge una Session ai dati, controllando prima la sua
-	 * esistenza. L'identità della session viene controllata con la sua hash. Se
-	 * esiste già viene lanciata una SessionAlreadyExistsException. Viene anche
-	 * controllata l'esistenza dell'id e se esiste già si lancia un
-	 * IDAlreadyExistsException.
+	 * Metodo che aggiunge una Session ai dati. Viene controllata l'esistenza
+	 * dell'id e se esiste già si lancia un IDAlreadyExistsException.
 	 * 
 	 * @param session
 	 *            session da aggiungere
-	 * @throws SessionAlreadyExistsException
 	 * @throws IDAlreadyExistsException
 	 */
-	public void addSession(Session session)
-			throws SessionAlreadyExistsException, IDAlreadyExistsException {
-		// si aggiunge la sessione se non è già presente
-		// si controlla l'hash, che identifica in modo univoco una session
-		if (hashMap.containsKey(session.getHash())) {
-			// si lancia l'eccezione
-			throw new SessionAlreadyExistsException(session);
+	public void addSession(Session session) throws IDAlreadyExistsException {
+		// si controlla se l'id della sessione esiste già
+		if (sessionsMap.containsKey(session.getID())) {
+			throw new IDAlreadyExistsException(ElementType.Session,
+					session.getID(), session);
 		} else {
-			// si controlla se l'id della sessione esiste già
-			if (sessionsMap.containsKey(session.getID())) {
-				throw new IDAlreadyExistsException(ElementType.Session,
-						session.getID(), session);
-			} else {
-				// si aggiunge
-				sessionsMap.put(session.getID(), session);
-				hashMap.put(session.getHash(), session.getID());
-			}
+			// si aggiunge
+			sessionsMap.put(session.getID(), session);
+			hashMap.put(session.getHash(), session.getID());
 		}
 	}
 
@@ -66,7 +54,6 @@ public class SessionsManager {
 	 * 
 	 * @param sessions
 	 *            lista di Session da aggiungere
-	 * @throws SessionAlreadyExistsException
 	 * @throws IDAlreadyExistsException
 	 */
 	public void addSessions(List<Session> sessions)
@@ -78,8 +65,7 @@ public class SessionsManager {
 
 	/**
 	 * Metodo che aggiunge ai dati una Session creandola in base ai dati passati
-	 * come parametro. L'esistenza della Session viene controllata con l'hash.
-	 * Se esiste già si lancia l'eccezione SessionAlreadyExistsException.
+	 * come parametro.
 	 * 
 	 * @param workid
 	 *            ID del Work a cui appartiene la session
@@ -92,14 +78,9 @@ public class SessionsManager {
 	 * @param spesa
 	 *            spesa della Session
 	 * @param materiali
-	 *            materiali della Session
-	 * @throws SessionAlreadyExistsException
-	 *             eccezione che viene lanciata quando la session da aggiungere
-	 *             esiste già-
 	 */
 	public void addSession(String workid, String costumerid,
-			Calendar sessiondata, int hours, int spesa, String note)
-			throws SessionAlreadyExistsException {
+			Calendar sessiondata, int hours, int spesa, String note) {
 		// si ricava un id valido
 		String id = this.getValidID();
 		// si ricava l'hash
@@ -108,15 +89,9 @@ public class SessionsManager {
 		// si crea la session
 		Session newSes = new Session(id, hash, workid, costumerid, sessiondata,
 				hours, spesa, note);
-		// si controlla se esiste già con l'hash
-		if (hashMap.containsKey(hash)) {
-			// si lancia l'eccezione
-			throw new SessionAlreadyExistsException(newSes);
-		} else {
-			// si aggiunge
-			sessionsMap.put(id, newSes);
-			hashMap.put(hash, id);
-		}
+		// si aggiunge
+		sessionsMap.put(id, newSes);
+		hashMap.put(hash, id);
 	}
 
 	/**
@@ -285,6 +260,48 @@ public class SessionsManager {
 			}
 		}
 		return id;
+	}
+
+	/**
+	 * Metodo che restituisce il numero di elementi presenti nel SessionsManager
+	 */
+	public int getNumberOfElements() {
+		return sessionsMap.size();
+	}
+
+	/**
+	 * Metodo che modifica i dati di una Session impostando la nuova hash ed
+	 * inserendola nella lista {@link #hashMap}.
+	 * 
+	 * @param sessionID
+	 * @param sessiondata
+	 * @param hours
+	 * @param spesa
+	 * @param note
+	 * @throws IDNotFoundException
+	 */
+	public void modifySession(String sessionID, Calendar sessiondata,
+			int hours, int spesa, String note) throws IDNotFoundException {
+		// si ricava la sessione
+		if (sessionsMap.containsKey(sessionID)) {
+			Session s = sessionsMap.get(sessionID);
+			String vecchiaHash = s.getHash();
+			// viene calcolata la nuova hash
+			String newHash = Session.calculateSessionHash(s.getWorkID(),
+					s.getCostumerID(), sessiondata);
+			// si impostano i nuovi dati
+			s.setSessionData(sessiondata);
+			s.setHours(hours);
+			s.setSpesa(spesa);
+			s.setNote(note);
+			// si cancella l'hash vecchia
+			hashMap.remove(vecchiaHash);
+			// si inserisce quella nuova
+			hashMap.put(newHash, s.getID());
+		} else {
+			// si restituisce l'eccezione IDNotFoundException
+			throw new IDNotFoundException(ElementType.Session, sessionID);
+		}
 	}
 
 	/**

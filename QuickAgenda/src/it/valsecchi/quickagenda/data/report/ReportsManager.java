@@ -77,4 +77,17 @@ public class ReportsManager {
 		// si restituisce il report
 		return new CostumerReportResult(nworks, nsessions, hours, spesa);
 	}
+
+	/**
+	 * Metodo che chiama il metodo di controllo integrità sul DataManager e
+	 * restituisce un DataIntegrityReportResult contenente tutti i dati relativi
+	 * al numero di elementi e agli eventuali errori di struttura.
+	 * 
+	 * @param data DataManager che contiene i dati da elaborare.
+	 * @return restituisce un oggetto DataIntegrityReportResult
+	 */
+	public static DataIntegrityReportResult performDataIntegrityReport(
+			DataManager data) {
+		return data.checkDataIntegrity();
+	}
 }

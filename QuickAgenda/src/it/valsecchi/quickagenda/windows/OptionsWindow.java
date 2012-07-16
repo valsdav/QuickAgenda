@@ -1,6 +1,10 @@
 package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.report.DataIntegrityReportResult;
+import it.valsecchi.quickagenda.data.report.ReportsManager;
+import it.valsecchi.quickagenda.windows.detail.DataIntegrityReportDetailWindow;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -15,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class OptionsWindow extends JFrame {
 	private static final long serialVersionUID = -3600033074228709942L;
@@ -22,7 +27,9 @@ public class OptionsWindow extends JFrame {
 	private JButton btnSalvaFileBackup;
 	private DataManager data;
 	private Timer timer1;
+	private Timer timer2;
 	private ShowProgressWindow progress;
+	private JButton btnControlloIntegritaDati;
 
 	public OptionsWindow(DataManager _data) {
 		data = _data;
@@ -30,7 +37,7 @@ public class OptionsWindow extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				OptionsWindow.class.getResource("/ico_small/option.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 582, 358);
+		setBounds(100, 100, 587, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -39,21 +46,30 @@ public class OptionsWindow extends JFrame {
 				.addActionListener(new BtnSalvaFileDiActionListener());
 		btnSalvaFileBackup.setIcon(new ImageIcon(OptionsWindow.class
 				.getResource("/ico_small/filesaveas.png")));
+		btnControlloIntegritaDati = new JButton("Controllo Integrit\u00E0 Dati");
+		btnControlloIntegritaDati
+				.addActionListener(new BtnControlloIntegritaDatiActionListener());
+		btnControlloIntegritaDati.setIcon(new ImageIcon(OptionsWindow.class
+				.getResource("/ico_small/preferences_system_session.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane.createSequentialGroup().addContainerGap()
-						.addComponent(btnSalvaFileBackup)
-						.addContainerGap(303, Short.MAX_VALUE)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane
-						.createSequentialGroup()
-						.addGap(24)
-						.addComponent(btnSalvaFileBackup,
-								GroupLayout.PREFERRED_SIZE, 83,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(196, Short.MAX_VALUE)));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnSalvaFileBackup)
+					.addGap(33)
+					.addComponent(btnControlloIntegritaDati, GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(36, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(24)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSalvaFileBackup, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnControlloIntegritaDati, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(131, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -89,6 +105,36 @@ public class OptionsWindow extends JFrame {
 				}
 			});
 			timer1.start();
+		}
+	}
+
+	private class BtnControlloIntegritaDatiActionListener implements
+			ActionListener {
+		public void actionPerformed(ActionEvent arg) {
+			// si crea il report
+			progress = new ShowProgressWindow(
+					"Controllo integrità dati...",
+					"Controllo integrità dati",
+					new ImageIcon(
+							OptionsWindow.class
+									.getResource("/ico_small/preferences_system_session.png")));
+			progress.setVisible(true);
+			final DataIntegrityReportResult report = ReportsManager
+					.performDataIntegrityReport(data);
+			// timer
+			timer2 = new Timer(1500, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// si ferma il timer
+					timer2.stop();
+					// si chiude progress.
+					progress.dispose();
+					//si apre la finestra dettagli
+					DataIntegrityReportDetailWindow detail = new DataIntegrityReportDetailWindow(report,data);
+					detail.setVisible(true);
+				}
+			});
+			timer2.start();
 		}
 	}
 }
