@@ -77,7 +77,8 @@ public class SessionsManager {
 	 *            numero di ore della Session
 	 * @param spesa
 	 *            spesa della Session
-	 * @param materiali
+	 * @param note
+	 *            note della Session
 	 */
 	public void addSession(String workid, String costumerid,
 			Calendar sessiondata, int hours, int spesa, String note) {

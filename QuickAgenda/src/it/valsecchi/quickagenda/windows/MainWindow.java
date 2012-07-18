@@ -48,6 +48,14 @@ import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
 import javax.swing.ListSelectionModel;
 
+/**
+ * Finestra principale dellì'applicazione. La finestra mostra l'agenda con il
+ * calendario e i pulsanti per aprire i vari manager.
+ * 
+ * @author Davide Valsecchi
+ * @version 1.0
+ * 
+ */
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -2881568803908491595L;

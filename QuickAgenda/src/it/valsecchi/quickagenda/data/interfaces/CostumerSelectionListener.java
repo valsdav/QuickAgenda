@@ -16,7 +16,7 @@ public interface CostumerSelectionListener {
 	 * essere implementato per permettere la memorizzazione del Costumer
 	 * selezionato.
 	 * 
-	 * @param selected Costumer selezionato
+	 * @param selected_costumer Costumer selezionato
 	 */
 	public void registerSelectedCostumer(Costumer selected_costumer);
 

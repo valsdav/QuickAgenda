@@ -19,8 +19,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
+/**
+ * Finestra che mostra opzioni e funzioni aggiuntive dell'applicazione.
+ * @author Davide Valsecchi
+ * @version 1.0
+ *
+ */
 public class OptionsWindow extends JFrame {
 	private static final long serialVersionUID = -3600033074228709942L;
 	private JPanel contentPane;

@@ -28,6 +28,13 @@ import java.io.IOException;
 import static it.valsecchi.quickagenda.data.Utility.Log;
 import java.awt.Font;
 
+/**
+ * Finestra che permette di creare un nuovo file dati per l'applicazione.
+ * 
+ * @author Davide Valsecchi
+ * @version 1.0
+ * 
+ */
 public class CreateNewDataFileWindow extends JFrame {
 
 	private static final long serialVersionUID = 1581007532616177256L;
@@ -72,11 +79,12 @@ public class CreateNewDataFileWindow extends JFrame {
 
 		txtPass = new JPasswordField();
 		txtPass.setEnabled(false);
-		txtPass.addCaretListener(new CaretListener(){
+		txtPass.addCaretListener(new CaretListener() {
 			@Override
 			public void caretUpdate(CaretEvent arg0) {
 				// si rende disponibile il pulsante next
-				if (txtPass.getPassword().length != 0 && txtPass.getPassword().length <=7 ) {
+				if (txtPass.getPassword().length != 0
+						&& txtPass.getPassword().length <= 7) {
 					btnNext.setEnabled(true);
 				} else {
 					btnNext.setEnabled(false);
@@ -98,72 +106,145 @@ public class CreateNewDataFileWindow extends JFrame {
 		immagine2 = new JLabel("");
 		immagine2.setIcon(new ImageIcon(CreateNewDataFileWindow.class
 				.getResource("/ico_128/edit.png")));
-		
-		//eventi finestra
-		addWindowListener(new WindowAdapter(){
+
+		// eventi finestra
+		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				//si riapre la finestra di inizio
+				// si riapre la finestra di inizio
 				Log.info("riapertura finestra di avvio");
 				StartWindow form = new StartWindow();
 				form.setVisible(true);
-				//si chiude questa finestra
+				// si chiude questa finestra
 				dispose();
 			}
 		});
-		
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(immagine1)
-									.addGap(29)
-									.addComponent(lblPath))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblPassword)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE))
-								.addComponent(lblInserireUnPassoword))
-							.addGap(73)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnSfoglia, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
-							.addGap(0))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(229)
-							.addComponent(immagine2)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(37)
-							.addComponent(lblPath))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(23)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnSfoglia)
-								.addComponent(immagine1))))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblInserireUnPassoword)
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPassword)
-								.addComponent(txtPass, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(btnNext, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(immagine2)
-					.addContainerGap(17, Short.MAX_VALUE))
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.TRAILING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING,
+																false)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addContainerGap()
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addComponent(
+																												immagine1)
+																										.addGap(29)
+																										.addComponent(
+																												lblPath))
+																						.addGroup(
+																								gl_contentPane
+																										.createSequentialGroup()
+																										.addComponent(
+																												lblPassword)
+																										.addPreferredGap(
+																												ComponentPlacement.UNRELATED)
+																										.addComponent(
+																												txtPass,
+																												GroupLayout.PREFERRED_SIZE,
+																												244,
+																												GroupLayout.PREFERRED_SIZE))
+																						.addComponent(
+																								lblInserireUnPassoword))
+																		.addGap(73)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.TRAILING,
+																								false)
+																						.addComponent(
+																								btnSfoglia,
+																								GroupLayout.PREFERRED_SIZE,
+																								147,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btnNext,
+																								GroupLayout.PREFERRED_SIZE,
+																								91,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addGap(0))
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(229)
+																		.addComponent(
+																				immagine2)))
+										.addContainerGap()));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(37)
+																		.addComponent(
+																				lblPath))
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(23)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								btnSfoglia)
+																						.addComponent(
+																								immagine1))))
+										.addGap(18)
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addComponent(
+																				lblInserireUnPassoword)
+																		.addGap(18)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.BASELINE)
+																						.addComponent(
+																								lblPassword)
+																						.addComponent(
+																								txtPass,
+																								GroupLayout.PREFERRED_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.PREFERRED_SIZE)))
+														.addComponent(
+																btnNext,
+																GroupLayout.PREFERRED_SIZE,
+																67,
+																GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(
+												ComponentPlacement.UNRELATED)
+										.addComponent(immagine2)
+										.addContainerGap(17, Short.MAX_VALUE)));
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -179,48 +260,51 @@ public class CreateNewDataFileWindow extends JFrame {
 
 			if (res == JFileChooser.APPROVE_OPTION) {
 				// si aggiunge il percorso al testo
-				String newPath = fc.getSelectedFile().toString()+".qad";
+				String newPath = fc.getSelectedFile().toString() + ".qad";
 				lblPath.setText(newPath);
-				//si abilita il campo password
-                txtPass.setEnabled(true);
+				// si abilita il campo password
+				txtPass.setEnabled(true);
 			}
 		}
 	}
-	
-	private class NextClickHandler implements ActionListener{
+
+	private class NextClickHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// se la password c'è
 			if (txtPass.getPassword().length != 0) {
 				// allora si recupera la password e la path
 				String path = (String) lblPath.getText();
-				//nuovo DataManager
+				// nuovo DataManager
 				try {
-					newData = DataManager.createVoidDataManager(path,txtPass.getPassword());
+					newData = DataManager.createVoidDataManager(path,
+							txtPass.getPassword());
 				} catch (IOException e1) {
-					immagine2.setIcon(new ImageIcon(CreateNewDataFileWindow.class
-				.getResource("/ico_128/attention.png")));
+					immagine2.setIcon(new ImageIcon(
+							CreateNewDataFileWindow.class
+									.getResource("/ico_128/attention.png")));
 					lblPath.setText("Errore! Scegliere un'altro percorso!");
 					return;
 				}
-				//si imposta l'immagine
+				// si imposta l'immagine
 				immagine2.setIcon(new ImageIcon(CreateNewDataFileWindow.class
-				.getResource("/ico_128/yes.png")));
-				//si aggiunge alle preferenze
+						.getResource("/ico_128/yes.png")));
+				// si aggiunge alle preferenze
 				SettingsManager.addDataPath(path);
-				time1 = new Timer(1000,new ActionListener(){
+				time1 = new Timer(1000, new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						time1.stop();
-						//si apre la finestra principale
+						// si apre la finestra principale
 						MainWindow form = new MainWindow(newData);
 						form.setVisible(true);
-						//si chiude questa
+						// si chiude questa
 						dispose();
 					}
 				});
 				time1.start();
 			}
+		}
 	}
-}}
+}
