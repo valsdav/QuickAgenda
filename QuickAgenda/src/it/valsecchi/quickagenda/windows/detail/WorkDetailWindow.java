@@ -45,6 +45,7 @@ import java.awt.print.PrinterException;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ListSelectionModel;
 
 public class WorkDetailWindow extends JFrame {
 
@@ -206,10 +207,12 @@ public class WorkDetailWindow extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 		{
 			table = new JTable(new SessionTableModel(workID));
+			table.setAutoCreateRowSorter(true);
+			table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			table.addMouseListener(new TableMouseListener());
 			table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
-			panel.add(table, BorderLayout.SOUTH);
+			panel.add(table, BorderLayout.CENTER);
 			panel.add(table.getTableHeader(), BorderLayout.PAGE_START);
 		}
 		txtCerca = new JTextField();
