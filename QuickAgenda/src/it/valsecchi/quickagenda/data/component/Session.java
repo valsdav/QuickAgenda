@@ -11,7 +11,7 @@ import it.valsecchi.quickagenda.data.Utility;
  * @author Davide Valsecchi
  * @version 1.0
  */
-public class Session {
+public class Session implements Comparable{
 
 	/** Codice di 8 cifre */
 	private String ID;
@@ -146,5 +146,10 @@ public class Session {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	@Override
+	public int compareTo(Object arg) {
+		return Utility.compareDate(this.sessionData,(Calendar) arg);
 	}
 }

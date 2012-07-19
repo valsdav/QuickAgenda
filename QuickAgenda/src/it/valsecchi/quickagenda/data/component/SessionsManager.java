@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class SessionsManager {
 
@@ -21,7 +22,7 @@ public class SessionsManager {
 
 	/** Costruttore in cui si inizializzano le Map */
 	public SessionsManager() {
-		sessionsMap = new HashMap<>();
+		sessionsMap = new TreeMap<>();
 		hashMap = new HashMap<>();
 	}
 

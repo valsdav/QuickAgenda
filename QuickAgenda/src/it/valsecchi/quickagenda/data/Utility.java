@@ -144,10 +144,12 @@ public class Utility {
 	}
 
 	/**
-	 * Metodo che confronta due Calendar. Restituisce true solo se essi rappresentano lo stesso giorno.
+	 * Metodo che confronta l'eguaglianza di due Calendar. Restituisce true solo
+	 * se essi rappresentano lo stesso giorno.
+	 * 
 	 * @param d1
 	 * @param d2
-	 * @return  Restituisce true solo se essi rappresentano lo stesso giorno.
+	 * @return Restituisce true solo se essi rappresentano lo stesso giorno.
 	 */
 	public static boolean equalsDate(Calendar d1, Calendar d2) {
 		if (d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR)) {
@@ -162,29 +164,66 @@ public class Utility {
 	}
 
 	/**
+	 * Metodo che confronta due calendar. Restituisce 0 se sono uguali, 1 se la
+	 * prima è maggiore, -1 se la prima è minore.
+	 * 
+	 * @param d1
+	 * @param d2
+	 * @return
+	 */
+	public static int compareDate(Calendar d1, Calendar d2) {
+		int y1, y2;
+		y1 = d1.get(Calendar.YEAR);
+		y2 = d2.get(Calendar.YEAR);
+		if (y1 < y2) {
+			return -1;
+		} else if (y1 == y2) {
+			int g1, g2;
+			g1 = d1.get(Calendar.DAY_OF_YEAR);
+			g2 = d2.get(Calendar.DAY_OF_YEAR);
+			if (g1 < g2) {
+				return -1;
+			} else if (g1 == g2) {
+				return 0;
+			} else if (g1 > g2) {
+				return 1;
+			}
+		} else {
+			return 1;
+		}
+		return 0;
+	}
+
+	/**
 	 * Metodo che formatta un Calendar in una stringa nel formato "dd/MM/yy".
-	 * @param c Calendar da formattare
+	 * 
+	 * @param c
+	 *            Calendar da formattare
 	 * @return restituisce una stringa nel formato "dd/MM/yy"
 	 */
-	public static String formatCalendarToString(Calendar c){
+	public static String formatCalendarToString(Calendar c) {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 		return formatter.format(c.getTime());
 	}
-	
+
 	/**
 	 * Metodo che formatta una String nel formato "dd/MM/yy" in un Calendar
-	 * @param string_data Stringa da formattare
+	 * 
+	 * @param string_data
+	 *            Stringa da formattare
 	 * @return restituisce il Calendar corrispondente
-	 * @throws ParseException eccezione lanciata se la String non è nel formato "dd/MM/yy"
+	 * @throws ParseException
+	 *             eccezione lanciata se la String non è nel formato "dd/MM/yy"
 	 */
-	public static Calendar parseStringToCalendar(String string_data) throws ParseException{
+	public static Calendar parseStringToCalendar(String string_data)
+			throws ParseException {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 		Date d = formatter.parse(string_data);
 		Calendar c = Calendar.getInstance();
 		c.setTime(d);
 		return c;
 	}
-	
+
 	/**
 	 * Classe che fornisce i metodi per creare un log utile per il test e il
 	 * debug
