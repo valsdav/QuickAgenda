@@ -5,6 +5,7 @@ import it.valsecchi.quickagenda.data.component.exception.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -230,12 +231,16 @@ public class WorksManager {
 		}
 	}
 
-	/** Metodo che restituisce tutti gli Work contenuti nei dati */
+	/**
+	 * Metodo che restituisce tutti gli Work contenuti nei dati ordinati secondo
+	 * il loro ordine naturale.
+	 */
 	public List<Work> getAllWorks() {
 		List<Work> all = new ArrayList<>();
 		for (Work w : worksMap.values()) {
 			all.add(w);
 		}
+		Collections.sort(all);
 		return all;
 	}
 
@@ -274,7 +279,7 @@ public class WorksManager {
 		}
 		return id;
 	}
-	
+
 	/**
 	 * Metodo che restituisce il numero di elementi presenti nel WorksManager
 	 */
