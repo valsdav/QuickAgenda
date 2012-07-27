@@ -589,7 +589,7 @@ public class WorkDetailWindow extends JFrame {
 			if (arg.getClickCount() == 2) {
 				// si ricava l'id
 				String id = (String) table
-						.getValueAt(table.getSelectedRow(), 0);
+						.getValueAt(table.getSelectedRow(), 4);
 				// si apre la finestra di dettagli
 				SessionDetailWindow detail = new SessionDetailWindow(id, data);
 				detail.setVisible(true);
