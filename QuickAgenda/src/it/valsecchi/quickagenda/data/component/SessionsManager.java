@@ -12,7 +12,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class SessionsManager {
 
@@ -220,7 +219,10 @@ public class SessionsManager {
 		}
 	}
 
-	/** Metodo che restituisce tutte le Session nei dati */
+	/**
+	 * Metodo che restituisce tutte le Session nei dati ordinati secondo il loro
+	 * ordine naturale
+	 */
 	public List<Session> getAllSessions() {
 		List<Session> all = new ArrayList<>();
 		for (Session s : sessionsMap.values()) {

@@ -12,7 +12,7 @@ import it.valsecchi.quickagenda.data.Utility.DateString;
  * @author Davide Valsecchi
  * @version 1.0
  */
-public class Session implements Comparable{
+public class Session implements Comparable<Session>{
 
 	/** Codice di 8 cifre */
 	private String ID;
@@ -91,7 +91,7 @@ public class Session implements Comparable{
 	
 	/** Metodo che restituisce la SessionData come oggetto DateString che possiede capacità di ordinamento*/
 	public DateString getSessionDataDateString(){
-		return new Utility.DateString(Utility.formatCalendarToString(this.sessionData));
+		return new Utility.DateString(this.sessionData);
 	}
 
 	public void setSessionData(Calendar calendar) {
@@ -155,7 +155,11 @@ public class Session implements Comparable{
 	}
 
 	@Override
-	public int compareTo(Object arg) {
-		return Utility.compareDate(this.sessionData,((Session) arg).getSessionData());
+	/** 
+	 * Metodo che compara le Session per l'interfaccia Comparable.
+	 * L'ordinamento naturale delle Session è secondo la SessionData
+	 */
+	public int compareTo(Session arg) {
+		return Utility.compareDate(this.sessionData,arg.getSessionData());
 	}
 }

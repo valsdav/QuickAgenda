@@ -1,6 +1,7 @@
 package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
+import it.valsecchi.quickagenda.data.Utility;
 import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
@@ -463,10 +464,10 @@ public class WorksManagerWindow extends JFrame {
 			case 4:
 				return lavori.get(row).getIndirizzo();
 			case 5:
-				return f.format(lavori.get(row).getInizioLavori().getTime());
+				return lavori.get(row).getInizioLavoriDateString();
 			case 6:
 				if (lavori.get(row).getFineLavori() != null) {
-					return f.format(lavori.get(row).getFineLavori().getTime());
+					return  lavori.get(row).getFineLavoriDateString();
 				} else {
 					return "";
 				}
