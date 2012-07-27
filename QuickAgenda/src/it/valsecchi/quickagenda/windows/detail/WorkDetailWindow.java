@@ -527,7 +527,7 @@ public class WorkDetailWindow extends JFrame {
 			case 0:
 				return sessions.get(row).getID();
 			case 1:
-				return sessions.get(row).getSessionDataString();
+				return sessions.get(row).getSessionDataDateString();
 			case 2:
 				return sessions.get(row).getHours();
 			case 3:

@@ -225,6 +225,53 @@ public class Utility {
 	}
 
 	/**
+	 * Classe interna pubblica che rappresenta una Data come stringa. La classe
+	 * permette di ordinare le date, anche se sono sotto forma di stringa.
+	 * 
+	 * @author Davide Valsecchi
+	 * @version 1.0
+	 * 
+	 */
+	public static class DateString implements Comparable {
+		private String sdate;
+
+		/** Costruttore che richiede la stringa che contiene la data */
+		public DateString(String date) {
+			sdate = date;
+		}
+
+		/**
+		 * Costruttore che richiede un calendar che viene poi trasformato in
+		 * stringa
+		 */
+		public DateString(Calendar date) {
+			sdate = Utility.formatCalendarToString(date);
+		}
+
+		@Override
+		public String toString() {
+			return sdate;
+		}
+
+		@Override
+		public int compareTo(Object arg) {
+			// vengono di nuovo trasformate in date
+			Calendar d1;
+			Calendar d2;
+			try {
+				d1 = Utility.parseStringToCalendar(this.sdate);
+				d2 = Utility.parseStringToCalendar(((DateString) arg)
+						.toString());
+			} catch (ParseException e) {
+				//in caso di eccezione si ritorna 1
+				return 1;
+			}
+			// si confrontano
+			return Utility.compareDate(d1, d2);
+		}
+	}
+
+	/**
 	 * Classe che fornisce i metodi per creare un log utile per il test e il
 	 * debug
 	 * 

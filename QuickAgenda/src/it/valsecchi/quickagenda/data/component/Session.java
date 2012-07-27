@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import it.valsecchi.quickagenda.data.Utility;
+import it.valsecchi.quickagenda.data.Utility.DateString;
 
 /**
  * La classe rappresenta una singola sessione di lavoro in un certo Work
@@ -86,6 +87,11 @@ public class Session implements Comparable{
 	/** Metodo che restituisce la SessionData come stringa già formattata */
 	public String getSessionDataString() {
 		return Utility.formatCalendarToString(this.sessionData);
+	}
+	
+	/** Metodo che restituisce la SessionData come oggetto DateString che possiede capacità di ordinamento*/
+	public DateString getSessionDataDateString(){
+		return new Utility.DateString(Utility.formatCalendarToString(this.sessionData));
 	}
 
 	public void setSessionData(Calendar calendar) {
