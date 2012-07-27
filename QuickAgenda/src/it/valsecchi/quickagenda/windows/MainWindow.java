@@ -626,6 +626,15 @@ public class MainWindow extends JFrame {
 		public boolean isCellEditable(int a, int b) {
 			return false;
 		}
+		
+		@Override
+		public Class<?> getColumnClass(int c) {
+			Object o = getValueAt(0, c);
+			if (o == null) {
+				o = new Object();
+			}
+			return o.getClass();
+		}
 	}
 
 	/**

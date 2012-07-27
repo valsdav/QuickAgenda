@@ -487,7 +487,7 @@ public class WorkDetailWindow extends JFrame {
 		// si recuperano le session
 		List<Session> sessions = new ArrayList<>();
 		// colonne
-		String[] columns = { "ID", "Data", "N° di ore", "Spesa", "Note" };
+		String[] columns = { "Data", "N° di ore", "Spesa", "Note" ,"ID"};
 
 		public SessionTableModel(String _workID) {
 			try {
@@ -525,15 +525,15 @@ public class WorkDetailWindow extends JFrame {
 		public Object getValueAt(int row, int column) {
 			switch (column) {
 			case 0:
-				return sessions.get(row).getID();
-			case 1:
 				return sessions.get(row).getSessionDataDateString();
-			case 2:
+			case 1:
 				return sessions.get(row).getHours();
-			case 3:
+			case 2:
 				return sessions.get(row).getSpesa();
-			case 4:
+			case 3:
 				return sessions.get(row).getNote();
+			case 4:
+				return sessions.get(row).getID();
 			default:
 				return null;
 			}
@@ -542,6 +542,15 @@ public class WorkDetailWindow extends JFrame {
 		@Override
 		public boolean isCellEditable(int a, int b) {
 			return false;
+		}
+		
+		@Override
+		public Class<?> getColumnClass(int c) {
+			Object o = getValueAt(0, c);
+			if (o == null) {
+				o = new Object();
+			}
+			return o.getClass();
 		}
 	}
 

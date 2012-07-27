@@ -22,7 +22,7 @@ public class SessionsManager {
 
 	/** Costruttore in cui si inizializzano le Map */
 	public SessionsManager() {
-		sessionsMap = new TreeMap<>();
+		sessionsMap = new HashMap<>();
 		hashMap = new HashMap<>();
 	}
 

@@ -156,6 +156,6 @@ public class Session implements Comparable{
 
 	@Override
 	public int compareTo(Object arg) {
-		return Utility.compareDate(this.sessionData,(Calendar) arg);
+		return Utility.compareDate(this.sessionData,((Session) arg).getSessionData());
 	}
 }
