@@ -232,7 +232,7 @@ public class Utility {
 	 * @version 1.0
 	 * 
 	 */
-	public static class DateString implements Comparable {
+	public static class DateString implements Comparable<DateString> {
 		private String sdate;
 
 		/** Costruttore che richiede la stringa che contiene la data */
@@ -254,16 +254,15 @@ public class Utility {
 		}
 
 		@Override
-		public int compareTo(Object arg) {
+		public int compareTo(DateString arg) {
 			// vengono di nuovo trasformate in date
 			Calendar d1;
 			Calendar d2;
 			try {
 				d1 = Utility.parseStringToCalendar(this.sdate);
-				d2 = Utility.parseStringToCalendar(((DateString) arg)
-						.toString());
+				d2 = Utility.parseStringToCalendar(arg.toString());
 			} catch (ParseException e) {
-				//in caso di eccezione si ritorna 1
+				// in caso di eccezione si ritorna 1
 				return 1;
 			}
 			// si confrontano
