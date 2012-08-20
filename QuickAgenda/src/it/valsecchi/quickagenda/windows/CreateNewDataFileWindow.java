@@ -274,7 +274,7 @@ public class CreateNewDataFileWindow extends JFrame {
 			// se la password c'è
 			if (txtPass.getPassword().length != 0) {
 				// allora si recupera la password e la path
-				String path = (String) lblPath.getText();
+				String path = lblPath.getText();
 				// nuovo DataManager
 				try {
 					newData = DataManager.createVoidDataManager(path,

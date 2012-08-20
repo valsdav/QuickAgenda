@@ -29,7 +29,7 @@ public class Work implements Comparable<Work>{
 	private String indirizzo;
 	private Calendar inizioLavori;
 	private Calendar fineLavori;
-	private boolean completed = false;
+	private boolean completed;
 
 	/** Costruttore di Word */
 	public Work(String id, String costumerid, String _nome, String _indirizzo,

@@ -15,7 +15,7 @@ public class IDAlreadyExistsException extends Exception {
 	private static final long serialVersionUID = 5581183550670962768L;
 	private ElementType type;
 	private String ID;
-	private Object object = null;
+	private Object object;
 
 	/**
 	 * Costruttore che richiede il tipo di elemento, l'id e il messaggio

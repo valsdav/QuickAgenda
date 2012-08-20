@@ -1,7 +1,6 @@
 package it.valsecchi.quickagenda.windows;
 
 import it.valsecchi.quickagenda.data.DataManager;
-import it.valsecchi.quickagenda.data.Utility;
 import it.valsecchi.quickagenda.data.component.ElementType;
 import it.valsecchi.quickagenda.data.component.Work;
 import it.valsecchi.quickagenda.data.component.exception.IDNotFoundException;
@@ -19,7 +18,6 @@ import javax.swing.table.TableModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -437,7 +435,6 @@ public class WorksManagerWindow extends JFrame {
 
 		@Override
 		public Object getValueAt(int row, int column) {
-			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
 			switch (column) {
 			case 0:
 				return lavori.get(row).getID();

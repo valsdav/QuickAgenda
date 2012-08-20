@@ -284,8 +284,8 @@ public class DataManager implements AddCostumerInterface, AddSessionInterface,
 			sessiondata = (GregorianCalendar) GregorianCalendar.getInstance();
 			sessiondata
 					.setTime(formatdata.parse(s.getChildText("sessiondata")));
-			hours = Integer.parseInt("+" + s.getChildText("hours"));
-			spesa = Integer.parseInt("+" + s.getChildText("spesa"));
+			hours = Integer.parseInt('+' + s.getChildText("hours"));
+			spesa = Integer.parseInt('+' + s.getChildText("spesa"));
 			note = s.getChildText("note");
 			// creazione della session
 			Session newSes = new Session(id, hash, workid, costumerid,

@@ -18,7 +18,7 @@ public class Main {
 					StartWindow form = new StartWindow();
 					form.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.error("errore apertura programma!\n"+ e.getMessage());
 				}
 			}
 		});

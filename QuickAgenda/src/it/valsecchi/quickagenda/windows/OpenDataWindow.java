@@ -390,7 +390,6 @@ public class OpenDataWindow extends JFrame {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileHidingEnabled(true);
 			fc.setFileFilter(new FileFilter() {
-				private final String qad = "qad";
 
 				public boolean accept(File f) {
 					if (f.isDirectory()) {

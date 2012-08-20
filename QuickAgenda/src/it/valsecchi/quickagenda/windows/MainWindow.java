@@ -25,7 +25,6 @@ import com.toedter.calendar.JCalendar;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -105,9 +104,6 @@ public class MainWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		// si ricavano i dati per la tabella
-		AbstractTableModel model = this.getTableModel(GregorianCalendar
-				.getInstance());
 		calendar = new JCalendar();
 		calendar.setTodayButtonVisible(true);
 		calendar.setTodayButtonText("Oggi");
